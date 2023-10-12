@@ -35,6 +35,7 @@ cython_debug/
 # Virtual Environments
 .env
 .venv
+/chainflow-gui/venv
 env/
 venv/
 ENV/
@@ -56,6 +57,7 @@ celerybeat-schedule
 celerybeat.pid
 
 # Next.js and Node.js
+/chainflow-gui/node_modules
 /node_modules
 /.next/
 /out/

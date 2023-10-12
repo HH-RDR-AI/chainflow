@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+pydantic
+pydantic-settings
+pydantic_core
+Jinja2
+logstash-formatter
+passlib
+python-jose
+python-logstash-async
+python-multipart
+requests
+starlette
+uvicorn
