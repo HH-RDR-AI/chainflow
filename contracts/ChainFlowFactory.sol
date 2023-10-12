@@ -33,7 +33,7 @@ contract ChainFlowFactory {
         return copyOfAllDefinitions;
     }
 
-    function createDefinition(bytes32 _hash) external {
+    function createDefinition(bytes32 _hash, uint _processPrice) external {
         require(deployedDefinitions[_hash] == address(0), "Process definition already created!");
         bytes memory bytecode = type(ProcessDefinition).creationCode;
         bytes32 salt = keccak256(abi.encodePacked(_hash));
@@ -41,7 +41,7 @@ contract ChainFlowFactory {
         assembly {
             newProcessDefinition := create2(0, add(bytecode, 32), mload(bytecode), salt)
         }
-        ProcessDefinition(newProcessDefinition).setOwner(msg.sender);
+        ProcessDefinition(newProcessDefinition).initialize(msg.sender, owner, _processPrice);
         deployedDefinitions[_hash] = newProcessDefinition;
         allDefinitions.push(_hash);
         emit ProcessDefinitionCreated(_hash, newProcessDefinition);

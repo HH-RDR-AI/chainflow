@@ -9,6 +9,38 @@
     "inputs": [
       {
         "indexed": false,
+        "internalType": "address",
+        "name": "newFeeClaimer",
+        "type": "address"
+      }
+    ],
+    "name": "ChangeFeeClaimer",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "from",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "Deposit",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
         "internalType": "string",
         "name": "processInstanceId",
         "type": "string"
@@ -44,6 +76,70 @@
     "type": "event"
   },
   {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "Transfer",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
+    ],
+    "name": "TransferOwnership",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "Withdraw",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_feeClaimer",
+        "type": "address"
+      }
+    ],
+    "name": "changeFeeClaimer",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "deposit",
     "outputs": [],
@@ -53,6 +149,32 @@
   {
     "inputs": [],
     "name": "factory",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "fee",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "feeClaimer",
     "outputs": [
       {
         "internalType": "address",
@@ -109,6 +231,29 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "_owner",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "_feeClaimer",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_price",
+        "type": "uint256"
+      }
+    ],
+    "name": "initialize",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "owner",
     "outputs": [
@@ -141,16 +286,16 @@
     "type": "function"
   },
   {
-    "inputs": [
+    "inputs": [],
+    "name": "processPrice",
+    "outputs": [
       {
-        "internalType": "address",
-        "name": "_newOwner",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
       }
     ],
-    "name": "setOwner",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {

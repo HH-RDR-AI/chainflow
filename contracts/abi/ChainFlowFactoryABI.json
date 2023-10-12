@@ -29,6 +29,11 @@
         "internalType": "bytes32",
         "name": "_hash",
         "type": "bytes32"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_processPrice",
+        "type": "uint256"
       }
     ],
     "name": "createDefinition",

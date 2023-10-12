@@ -11,7 +11,13 @@ contract ProcessDefinition {
     mapping(string => address) public processInstanceOwners;
     // List of all started process instance IDs.
     string[] private list;
+
     address public owner;
+    uint public processPrice;
+
+    address public feeClaimer;
+    // 5% fee
+    uint public fee = 5;
 
     enum ProcessInstanceStatus {
         Created,
@@ -27,6 +33,12 @@ contract ProcessDefinition {
     event ProcessInstanceStarted(string processInstanceId);
     event ProcessInstanceCompleted(string processInstanceId);
     event ProcessInstanceFailed(string processInstanceId);
+    event TransferOwnership(address newOwner);
+    event ChangeFeeClaimer(address newFeeClaimer);
+    event Deposit(address from, uint amount);
+    event Withdraw(address to, uint amount);
+    event Transfer(address to, uint amount);
+
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Only owner can call this function.");
@@ -34,21 +46,36 @@ contract ProcessDefinition {
     }
 
     // Set owner of ProcessDefinition. Can be called by factory only.
-    function setOwner(address _newOwner) external {
+
+    function initialize(address _owner, address _feeClaimer, uint _price) external {
         require(msg.sender == factory, "Only factory can set onwer");
         require(owner == address(0), "Contract already has owner");
-        owner = _newOwner;
+        owner = _owner;
+        feeClaimer = _feeClaimer;
+        processPrice = _price;
+    }
+
+    function changeFeeClaimer(address _feeClaimer) external {
+        require(msg.sender == feeClaimer, "Only feeClaimer can change feeClaimer");
+        feeClaimer = _feeClaimer;
+        emit ChangeFeeClaimer(_feeClaimer);
     }
 
     function transferOwnership(address _newOwner) external onlyOwner {
         owner = _newOwner;
+        emit TransferOwnership(_newOwner);
     }
 
     // Starts a new process instance.
     function start(string memory processInstanceId) external payable {
         require(startedProcessInstances[processInstanceId] == ProcessInstanceStatus.Created, "Process instance already started.");
         // deposit before starting process instance
-        require(msg.value > 0, "Deposit must be greater than 0");
+        require(msg.value > processPrice, "Deposit must be greater than process price");
+        // send fee to feeClaimer
+        uint feeAmount = msg.value * fee / 100;
+        (bool success, ) = payable(feeClaimer).call{value: feeAmount}("");
+        require(success, "Failed to send fee to feeClaimer");
+        emit Transfer(feeClaimer, feeAmount);
 
         startedProcessInstances[processInstanceId] = ProcessInstanceStatus.InProgress;
         list.push(processInstanceId);
@@ -77,15 +104,21 @@ contract ProcessDefinition {
 
     // Gets the list of all started process instance IDs.
     function getList() public view returns (string[] memory) {
-        return list;
+        string[] memory copyOfList = new string[](list.length);
+        for (uint i = 0; i < list.length; i++) {
+            copyOfList[i] = list[i];
+        }
+        return copyOfList;
     }
 
     function deposit() public payable {
         require(msg.value > 0, "Deposit must be greater than 0");
+        emit Deposit(msg.sender, msg.value);
     }
 
     function withdraw() public onlyOwner {
         payable(msg.sender).transfer(address(this).balance);
+        emit Withdraw(msg.sender, address(this).balance);
     }
 
     function getBalance() public view returns (uint) {
