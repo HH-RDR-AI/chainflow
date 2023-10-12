@@ -1,20 +1,38 @@
 [
   {
+    "inputs": [],
+    "stateMutability": "nonpayable",
+    "type": "constructor"
+  },
+  {
+    "anonymous": false,
     "inputs": [
       {
-        "internalType": "string",
-        "name": "_hash",
-        "type": "string"
-      }
-    ],
-    "name": "createDefinition",
-    "outputs": [
+        "indexed": true,
+        "internalType": "bytes32",
+        "name": "bpmnHash",
+        "type": "bytes32"
+      },
       {
+        "indexed": false,
         "internalType": "address",
-        "name": "newProcessDefinition",
+        "name": "processAddress",
         "type": "address"
       }
     ],
+    "name": "ProcessDefinitionCreated",
+    "type": "event"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "bytes",
+        "name": "_hash",
+        "type": "bytes"
+      }
+    ],
+    "name": "createDefinition",
+    "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
@@ -23,9 +41,9 @@
     "name": "getAllDefinitions",
     "outputs": [
       {
-        "internalType": "string[]",
+        "internalType": "bytes32[]",
         "name": "",
-        "type": "string[]"
+        "type": "bytes32[]"
       }
     ],
     "stateMutability": "view",
@@ -34,9 +52,9 @@
   {
     "inputs": [
       {
-        "internalType": "string",
+        "internalType": "bytes32",
         "name": "_defHash",
-        "type": "string"
+        "type": "bytes32"
       }
     ],
     "name": "getContractAddressOfDefinition",
@@ -58,6 +76,19 @@
         "internalType": "uint256",
         "name": "",
         "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
       }
     ],
     "stateMutability": "view",
