@@ -12,10 +12,20 @@ camunda.bpm:
     lastName: Demo
   filter:
     create: All Tasks
+  authorization:
+    enabled: true
+    tenant-check-enabled: true
   webapp:
     index-redirect-enabled: false
 #  default-serialization-format: application/json
 server.port: 8080
+
+# health check
+management.health.defaults.enabled: false
+management.endpoints.enabled-by-default: false
+management.endpoint.health.enabled: true
+management.endpoints.web.base-path: /
+management.endpoints.web.path-mapping.health: health_check
 spring:
   mvc:
     pathmatch:
