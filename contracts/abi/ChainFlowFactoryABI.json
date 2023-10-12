@@ -26,9 +26,9 @@
   {
     "inputs": [
       {
-        "internalType": "bytes",
+        "internalType": "bytes32",
         "name": "_hash",
-        "type": "bytes"
+        "type": "bytes32"
       }
     ],
     "name": "createDefinition",
