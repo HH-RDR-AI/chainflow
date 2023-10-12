@@ -58,8 +58,8 @@ celerybeat.pid
 
 # Next.js and Node.js
 /chainflow-gui/node_modules
-node_modules/
 /node_modules
+node_modules
 /.next/
 /out/
 /build
