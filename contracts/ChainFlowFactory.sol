@@ -70,7 +70,7 @@ contract ChainFlowFactory {
     address public owner;
 
     constructor() {
-        onwer = msg.sender;
+        owner = msg.sender;
     }
 
     event ProcessDefinitionCreated(bytes32 indexed bpmnHash, address processAddress);
@@ -100,6 +100,7 @@ contract ChainFlowFactory {
         assembly {
             newProcessDefinition := create2(0, add(bytecode, 32), mload(bytecode), salt)
         }
+        ProcessDefinition(newProcessDefinition).setOwner(msg.sender);
         deployedDefinitions[bytes32(_hash)] = newProcessDefinition;
         allDefinitions.push(bytes32(_hash));
         emit ProcessDefinitionCreated(bytes32(_hash), newProcessDefinition);
