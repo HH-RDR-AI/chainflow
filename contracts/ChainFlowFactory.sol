@@ -7,6 +7,8 @@ contract ProcessDefinition {
     address public factory;
     // Mapping of started process instance IDs to their statuses.
     mapping(string => ProcessInstanceStatus) public startedProcessInstances;
+    // Mapping of started process instance IDs to their owners.
+    mapping(string => address) public processInstanceOwners;
     // List of all started process instance IDs.
     string[] private list;
     address public owner;
@@ -22,15 +24,16 @@ contract ProcessDefinition {
         factory = msg.sender;
     }
 
+    event ProcessInstanceStarted(string processInstanceId);
+    event ProcessInstanceCompleted(string processInstanceId);
+    event ProcessInstanceFailed(string processInstanceId);
+
+    // Set owner of ProcessDefinition. Can be called by factory only.
     function setOwner(address _newOwner) external {
         require(msg.sender == factory, "Only factory can set onwer");
         require(owner == address(0), "Contract already has owner");
         owner = _newOwner;
     }
-
-    event ProcessInstanceStarted(string processInstanceId);
-    event ProcessInstanceCompleted(string processInstanceId);
-    event ProcessInstanceFailed(string processInstanceId);
 
     // Starts a new process instance.
     function start(string memory processInstanceId) external {
@@ -38,6 +41,7 @@ contract ProcessDefinition {
 
         startedProcessInstances[processInstanceId] = ProcessInstanceStatus.InProgress;
         list.push(processInstanceId);
+        processInstanceOwners[processInstanceId] = msg.sender;
         emit ProcessInstanceStarted(processInstanceId);
     }
 
