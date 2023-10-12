@@ -47,6 +47,8 @@ contract ProcessDefinition {
     // Starts a new process instance.
     function start(string memory processInstanceId) external payable {
         require(startedProcessInstances[processInstanceId] == ProcessInstanceStatus.Created, "Process instance already started.");
+        // deposit before starting process instance
+        require(msg.value > 0, "Deposit must be greater than 0");
 
         startedProcessInstances[processInstanceId] = ProcessInstanceStatus.InProgress;
         list.push(processInstanceId);
