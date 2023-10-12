@@ -67,6 +67,11 @@ contract ProcessDefinition {
 contract ChainFlowFactory {
     mapping(bytes32 => address) private deployedDefinitions;
     bytes32[] private allDefinitions;
+    address public owner;
+
+    constructor() {
+        onwer = msg.sender;
+    }
 
     event ProcessDefinitionCreated(bytes32 indexed bpmnHash, address processAddress);
 
