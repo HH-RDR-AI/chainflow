@@ -7,6 +7,8 @@
 .mtj.tmp/
 hs_err_pid*
 replay_pid*
+# DB File
+camunda-db*
 
 # IntelliJ IDEA
 .idea
