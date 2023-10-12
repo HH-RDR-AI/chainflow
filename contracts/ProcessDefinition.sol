@@ -28,6 +28,11 @@ contract ProcessDefinition {
     event ProcessInstanceCompleted(string processInstanceId);
     event ProcessInstanceFailed(string processInstanceId);
 
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner can call this function.");
+        _;
+    }
+
     // Set owner of ProcessDefinition. Can be called by factory only.
     function setOwner(address _newOwner) external {
         require(msg.sender == factory, "Only factory can set onwer");
@@ -51,7 +56,7 @@ contract ProcessDefinition {
     }
 
     // Updates the status of a process instance.
-    function update(string memory processInstanceId, ProcessInstanceStatus status) external {
+    function update(string memory processInstanceId, ProcessInstanceStatus status) external onlyOwner {
         require(startedProcessInstances[processInstanceId] != ProcessInstanceStatus.Created, "Process instance not started.");
 
         startedProcessInstances[processInstanceId] = status;
@@ -72,4 +77,17 @@ contract ProcessDefinition {
     function getList() public view returns (string[] memory) {
         return list;
     }
+
+    function deposit() public payable {
+        require(msg.value > 0, "Deposit must be greater than 0");
+    }
+
+    function withdraw() public onlyOwner {
+        payable(msg.sender).transfer(address(this).balance);
+    }
+
+    function getBalance() public view returns (uint) {
+        return address(this).balance;
+    }
+
 }
