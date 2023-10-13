@@ -76,3 +76,19 @@ To learn more about Next.js, take a look at the following resources:
 - [FastAPI Documentation](https://fastapi.tiangolo.com/) - learn about FastAPI features and API.
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+
+
+### Build and deploy
+
+Docker build:
+
+```
+docker buildx build --push --tag docker-registry.dexguru.biz/dex.guru/chainflow_api/chainflow_api:1 --platform=linux/arm64,linux/amd64 . -f ./Dockerfile.chainflow_api
+```
+
+Deploy:
+
+```
+export KUBECONFIG=~/Downloads/stage-k8s.yaml                        
+helm upgrade --install chainflow-api ./helm/gui  --wait -n stage --set imageTag=1 --set appName=chainflow-api --set kubeNamespace=stage
+```

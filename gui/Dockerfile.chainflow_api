@@ -18,4 +18,4 @@ RUN apt-get purge -y gcc
 # Copying actuall application
 COPY . /app/src/
 
-CMD ["/usr/local/bin/python", "-m", "uvicorn", "niche_app.__main__:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["/usr/local/bin/python", "-m", "uvicorn", "chainflow_api.__main__:app", "--host", "0.0.0.0", "--port", "8000"]

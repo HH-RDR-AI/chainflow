@@ -3,8 +3,7 @@ image: 'docker-registry.dexguru.biz/dex.guru/chainflow_api/chainflow_api'
 imageTag: ''
 registrySecretName: registry-harbor
 
-niche-app:
-  # internal api
+chainflow-api:
   replicas:
     default: 1
   port: 8000
@@ -21,6 +20,6 @@ niche-app:
     port: '8000'
   env:
     ENVIRONMENT: "stage"
-  ingressHost1: "niche.sandbox.vakhteev.com"
+  ingressHost1: "chainflow.dexguru.biz"
   letsencrypt:
     issuer: "letsencrypt-prod"
