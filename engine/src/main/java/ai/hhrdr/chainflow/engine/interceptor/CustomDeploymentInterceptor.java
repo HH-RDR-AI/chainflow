@@ -2,16 +2,13 @@ package ai.hhrdr.chainflow.engine.interceptor;
 
 import ai.hhrdr.chainflow.engine.ethereum.EthereumService;
 import org.camunda.bpm.engine.ProcessEngineException;
+import org.camunda.bpm.engine.impl.cmd.DeployCmd;
 import org.camunda.bpm.engine.impl.interceptor.Command;
 import org.camunda.bpm.engine.impl.interceptor.CommandInterceptor;
-
-import org.camunda.bpm.engine.impl.cmd.DeployCmd;
+import org.camunda.bpm.engine.impl.repository.DeploymentBuilderImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.web3j.protocol.Web3j;
-import org.web3j.protocol.http.HttpService;
-import org.web3j.abi.FunctionEncoder;
 
-import java.util.Arrays;
+import java.lang.reflect.Field;
 
 public class CustomDeploymentInterceptor extends CommandInterceptor {
 
@@ -26,25 +23,23 @@ public class CustomDeploymentInterceptor extends CommandInterceptor {
         if (command instanceof DeployCmd) {
             // Your custom logic after the actual deployment
 
-            //TODO: Add logic, checking that deployment already exist
             System.out.println("Before deploying: " + command.getClass().getName());
+            try {
+                //TODO: Tech debt. Introspection using not clean
+                Field field = DeployCmd.class.getDeclaredField("deploymentBuilder");
+                field.setAccessible(true);
+                DeploymentBuilderImpl builder = (DeploymentBuilderImpl) field.get(command);
+                String deploymentName = builder.getDeployment().getName();
+                String transaction = ethereumService.createDefinition(deploymentName);
 
-            org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                    "createDefinition",
-                    Arrays.asList(new org.web3j.abi.datatypes.Utf8String("some_hash")),
-                    Arrays.asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>() {})
-            );
-
-            String encodedFunction = FunctionEncoder.encode(function);
-
-            String transaction = ethereumService.sendRawTransaction("0xC59C109a50F9bE2f8bb02B02e30a043Fc51A7427", encodedFunction);
-
-            if (transaction.isEmpty()) {
+                if (transaction.isEmpty()) {
                 // Prevent the deployment
-                throw new ProcessEngineException("Deployment is prevented cause of blockchain transaction fail");
+                    throw new ProcessEngineException("Deployment is prevented cause of blockchain transaction fail");
+                }
+
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                e.printStackTrace(); // You can log this or handle it as appropriate for your application
             }
-
-
         }
 
         T result = next.execute(command);  // Continue with the next interceptor in the chain
