@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 //@Slf4j
-@Component
+//@Component
 @Path("/evm/deployment/create")
 public class CustomRestService {
 
