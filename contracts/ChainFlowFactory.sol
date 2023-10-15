@@ -46,4 +46,9 @@ contract ChainFlowFactory {
         allDefinitions.push(_hash);
         emit ProcessDefinitionCreated(_hash, newProcessDefinition);
     }
+
+    function changeOwner(address _newOwner) external {
+        require(msg.sender == owner, "Only owner can call this function.");
+        owner = _newOwner;
+    }
 }

@@ -37,7 +37,7 @@ contract ProcessDefinition {
     event ChangeFeeClaimer(address newFeeClaimer);
     event Deposit(address from, uint amount);
     event Withdraw(address to, uint amount);
-    event Transfer(address to, uint amount);
+    event TransferFee(address to, uint amount);
 
 
     modifier onlyOwner() {
@@ -49,7 +49,7 @@ contract ProcessDefinition {
 
     function initialize(address _owner, address _feeClaimer, uint _price) external {
         require(msg.sender == factory, "Only factory can set onwer");
-        require(owner == address(0), "Contract already has owner");
+        require(owner == address(0), "Contract already initialized");
         owner = _owner;
         feeClaimer = _feeClaimer;
         processPrice = _price;
@@ -75,7 +75,7 @@ contract ProcessDefinition {
         uint feeAmount = msg.value * fee / 100;
         (bool success, ) = payable(feeClaimer).call{value: feeAmount}("");
         require(success, "Failed to send fee to feeClaimer");
-        emit Transfer(feeClaimer, feeAmount);
+        emit TransferFee(feeClaimer, feeAmount);
 
         startedProcessInstances[processInstanceId] = ProcessInstanceStatus.InProgress;
         list.push(processInstanceId);
@@ -87,6 +87,7 @@ contract ProcessDefinition {
     // Updates the status of a process instance.
     function update(string memory processInstanceId, ProcessInstanceStatus status) external onlyOwner {
         require(startedProcessInstances[processInstanceId] != ProcessInstanceStatus.Created, "Process instance not started.");
+        require(startedProcessInstances[processInstanceId] < status, "Cannot update to a lower status.");
 
         startedProcessInstances[processInstanceId] = status;
 
