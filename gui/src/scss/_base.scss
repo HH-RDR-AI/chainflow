@@ -1,0 +1,35 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-size: 16px;
+  line-height: 28px;
+  min-width: 320px;
+}
+
+a {
+  transition: 0.25s ease;
+  color: var(--color-main);
+
+  &:hover {
+    color: var(--color-accent);
+  }
+}
+
+img {
+  object-fit: cover;
+  object-position: center;
+}
+
+[hidden],
+.hidden {
+  @include visually-hidden;
+}

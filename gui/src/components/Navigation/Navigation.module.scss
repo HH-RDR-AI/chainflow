@@ -1,0 +1,53 @@
+.container {
+  font-weight: 500;
+  padding: 8px;
+  width: 48px;
+  transition: 0.25s ease;
+  background: #efefef;
+  height: 100%;
+  overflow: hidden;
+  box-shadow: none;
+  display: flex;
+  flex-flow: column;
+  gap: 16px;
+
+  &:hover {
+    width: 200px;
+    transition-delay: 1s;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.logo {
+  &Icon {
+    font-size: 32px;
+  }
+}
+
+.sections {
+  &List {
+    margin: 0 -8px;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-flow: column;
+    font-size: 18px;
+  }
+
+  &Link {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    text-decoration: none;
+    background: none;
+    padding: 8px;
+
+    &:hover {
+      background: #ddd;
+    }
+
+    &Icon {
+      font-size: 32px;
+    }
+  }
+}
