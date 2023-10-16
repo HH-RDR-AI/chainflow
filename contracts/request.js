@@ -8,7 +8,7 @@ const {
   decodeResult,
   FulfillmentCode
 } = require("@chainlink/functions-toolkit");
-const functionsConsumerAbi = require("../../abi/functionsClient.json");
+const functionsConsumerAbi = require("./abi/ScriptTaskABI.json");
 const ethers = require("ethers");
 require("@chainlink/env-enc").config();
 
@@ -32,13 +32,14 @@ const makeRequestMumbai = async () => {
   const gasLimit = 300000;
 
   // Initialize ethers signer and provider to interact with the contracts onchain
-  const privateKey = process.env.PRIVATE_KEY; // fetch PRIVATE_KEY
+  const privateKey = "0xad2ab40f2556454a75575f4708f7092802f33ea106bb5467d440df37cb3dc343"; // fetch PRIVATE_KEY
   if (!privateKey)
     throw new Error(
       "private key not provided - check your environment variables"
     );
 
-  const rpcUrl = process.env.POLYGON_MUMBAI_RPC_URL; // fetch mumbai RPC URL
+  // const rpcUrl = process.env.POLYGON_MUMBAI_RPC_URL; // fetch mumbai RPC URL
+  const rpcUrl = "https://rpc-mumbai.maticvigil.com"
 
   if (!rpcUrl)
     throw new Error(`rpcUrl not provided  - check your environment variables`);
@@ -48,32 +49,6 @@ const makeRequestMumbai = async () => {
   const wallet = new ethers.Wallet(privateKey);
   const signer = wallet.connect(provider); // create ethers signer for signing transactions
 
-  ///////// START SIMULATION ////////////
-
-  console.log("Start simulation...");
-
-  const response = await simulateScript({
-    source: source,
-    args: args,
-    bytesArgs: [], // bytesArgs - arguments can be encoded off-chain to bytes.
-    secrets: {}, // no secrets in this example
-  });
-
-  console.log("Simulation result", response);
-  const errorString = response.errorString;
-  if (errorString) {
-    console.log(`❌ Error during simulation: `, errorString);
-  } else {
-    const returnType = ReturnType.uint256;
-    const responseBytesHexstring = response.responseBytesHexstring;
-    if (ethers.utils.arrayify(responseBytesHexstring).length > 0) {
-      const decodedResponse = decodeResult(
-        response.responseBytesHexstring,
-        returnType
-      );
-      console.log(`✅ Decoded response to ${returnType}: `, decodedResponse);
-    }
-  }
 
   //////// ESTIMATE REQUEST COSTS ////////
   console.log("\nEstimate request costs...");
