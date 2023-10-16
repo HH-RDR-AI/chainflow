@@ -11,7 +11,7 @@ import { NextResponse } from "next/server";
 
 const sismoConnect = SismoConnect({
   config: {
-    appId: "0xf4977993e52606cfd67b7a1cde717069",
+    appId: "0x26c0bb84bb9f17935c0f727cf033d841",
     vault: {
       // For development purposes insert the Data Sources that you want to impersonate here
       // Never use this in production
