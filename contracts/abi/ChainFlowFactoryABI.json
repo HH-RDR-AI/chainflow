@@ -9,9 +9,9 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "bytes32",
-        "name": "bpmnHash",
-        "type": "bytes32"
+        "internalType": "string",
+        "name": "definitionId",
+        "type": "string"
       },
       {
         "indexed": false,
@@ -39,14 +39,9 @@
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "_hash",
-        "type": "bytes32"
-      },
-      {
-        "internalType": "uint256",
-        "name": "_processPrice",
-        "type": "uint256"
+        "internalType": "string",
+        "name": "definitionId",
+        "type": "string"
       }
     ],
     "name": "createDefinition",
@@ -59,9 +54,9 @@
     "name": "getAllDefinitions",
     "outputs": [
       {
-        "internalType": "bytes32[]",
+        "internalType": "string[]",
         "name": "",
-        "type": "bytes32[]"
+        "type": "string[]"
       }
     ],
     "stateMutability": "view",
@@ -70,9 +65,9 @@
   {
     "inputs": [
       {
-        "internalType": "bytes32",
-        "name": "_defHash",
-        "type": "bytes32"
+        "internalType": "string",
+        "name": "definitionId",
+        "type": "string"
       }
     ],
     "name": "getContractAddressOfDefinition",
