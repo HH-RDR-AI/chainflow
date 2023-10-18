@@ -34,9 +34,11 @@ contract ChainFlowFactory {
     }
 
     function createDefinition(
-        string memory definitionId
+        string memory definitionId,
+        uint feeBps
     ) external {
         require(deployedDefinitions[definitionId] == address(0), "Process definition already created!");
+        require(bytes(definitionId).length > 0, "Process definition id cannot be empty!");
         bytes memory bytecode = type(ProcessDefinitionToken).creationCode;
         bytes memory constructorArgs = abi.encode(
             msg.sender,
@@ -44,7 +46,7 @@ contract ChainFlowFactory {
             definitionId,
             owner,
             definitionId,
-            uint(500)
+            feeBps
         );
         bytes32 salt = keccak256(abi.encodePacked(
             definitionId,
