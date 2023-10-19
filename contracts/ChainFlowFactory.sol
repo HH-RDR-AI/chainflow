@@ -15,6 +15,7 @@ contract ChainFlowFactory {
     }
 
     event ProcessDefinitionCreated(string indexed definitionId, address processAddress);
+    event OwnerChanged(address indexed oldOwner, address indexed newOwner);
 
     function getContractAddressOfDefinition(string memory definitionId) public view returns (address) {
         return deployedDefinitions[definitionId];
@@ -67,5 +68,6 @@ contract ChainFlowFactory {
     function changeOwner(address _newOwner) external {
         require(msg.sender == owner, "Only owner can call this function.");
         owner = _newOwner;
+        emit OwnerChanged(msg.sender, _newOwner);
     }
 }

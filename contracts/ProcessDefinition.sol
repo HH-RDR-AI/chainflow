@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts@5.0.0/token/ERC20/ERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 
 contract ProcessDefinitionToken is ERC20 {
@@ -68,7 +68,7 @@ contract ProcessDefinitionToken is ERC20 {
     }
 
     modifier processInstanceCompleted(string memory _processInstanceId) {
-        if (_processInstances[_processInstanceId].status != ProcessInstanceStatus.Completed) {
+        if (_processInstances[_processInstanceId].status >= ProcessInstanceStatus.Completed) {
             revert("Process instance not completed!");
         }
         _;
@@ -219,5 +219,4 @@ contract ProcessDefinitionToken is ERC20 {
 
         emit Withdraw(msg.sender, reward);
     }
-
 }
