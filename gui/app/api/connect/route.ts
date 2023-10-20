@@ -59,6 +59,7 @@ export async function POST(req: Request) {
         signature: { message: "I vote Yes to Privacy" },
       }
     );
+
     return NextResponse.json(result, { status: 200 });
   } catch (e: any) {
     console.error(e);
