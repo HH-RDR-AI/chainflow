@@ -1,0 +1,11 @@
+{
+  "devDependencies": {
+    "@nomicfoundation/hardhat-verify": "^1.1.1",
+    "hardhat": "^2.18.1",
+    "truffle-debugger": "^5.0.26"
+  },
+  "dependencies": {
+    "@chainlink/contracts": "^0.8.0",
+    "@openzeppelin/contracts": "^5.0.0"
+  }
+}
