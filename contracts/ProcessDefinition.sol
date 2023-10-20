@@ -1,129 +1,222 @@
 // SPDX-License-Identifier: MIT
-// compiler version must be greater than or equal to 0.8.20 and less than 0.9.0
 pragma solidity ^0.8.20;
 
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
-contract ProcessDefinition {
-    address public factory;
-    // Mapping of started process instance IDs to their statuses.
-    mapping(string => ProcessInstanceStatus) public startedProcessInstances;
-    // Mapping of started process instance IDs to their owners.
-    mapping(string => address) public processInstanceOwners;
-    // List of all started process instance IDs.
-    string[] private list;
 
-    address public owner;
-    uint public processPrice;
+contract ProcessDefinitionToken is ERC20 {
+    /// declare state variables
+    address private _factory;
+    address private _feeClaimer;
+    address private _owner;
+    string private _processDefinitionId;
+    // fee in basis points (1% = 100 bps)
+    uint private _feeBps = 500;
 
-    address public feeClaimer;
-    // 5% fee
-    uint public fee = 5;
+    // all started process instances
+    string[] private _startedProcessInstancesList;
+
+    struct ProcessInstance {
+        string processInstanceId;
+        ProcessInstanceStatus status;
+        uint claimedAmount;
+        uint neededAmount;
+        uint revenue;
+        address[] participants;
+    }
+    mapping(string => ProcessInstance) private _processInstances;
 
     enum ProcessInstanceStatus {
+        NotCreated,
         Created,
         InProgress,
         Completed,
         Failed
     }
 
-    constructor() {
-        factory = msg.sender;
+    constructor(
+        address initialOwner,
+        string memory _name,
+        string memory _symbol,
+        address __feeClaimer,
+        string memory __processDefinitionId,
+        uint __feeBps
+    ) ERC20(_name, _symbol)
+    {
+        _factory = msg.sender;
+        _feeClaimer = __feeClaimer;
+        _owner = initialOwner;
+        _processDefinitionId = __processDefinitionId;
+        _mint(address(this), type(uint256).max);
+        _feeBps = __feeBps;
     }
 
-    event ProcessInstanceStarted(string processInstanceId);
-    event ProcessInstanceCompleted(string processInstanceId);
-    event ProcessInstanceFailed(string processInstanceId);
+    /// declare modifiers
+
+    modifier onlyOwner() {
+        if (msg.sender != _owner) {
+            revert("Function can be called by owner only");
+        }
+        _;
+    }
+
+    modifier processInstanceCreated(string memory _processInstanceId) {
+        if (_processInstances[_processInstanceId].status != ProcessInstanceStatus.Created) {
+            revert("Process instance not created!");
+        }
+        _;
+    }
+
+    modifier processInstanceCompleted(string memory _processInstanceId) {
+        if (_processInstances[_processInstanceId].status >= ProcessInstanceStatus.Completed) {
+            revert("Process instance not completed!");
+        }
+        _;
+    }
+
+    /// declare view functions
+
+    function owner() public view returns (address) {
+        return _owner;
+    }
+
+    function processDefinitionId() public view returns (string memory) {
+        return _processDefinitionId;
+    }
+
+    function feeClaimer() public view returns (address) {
+        return _feeClaimer;
+    }
+
+    function factory() public view returns (address) {
+        return _factory;
+    }
+
+    function startedProcessInstances() public view returns (string[] memory) {
+        return _startedProcessInstancesList;
+    }
+
+    function processInstance(string memory _processInstanceId) public view returns (ProcessInstance memory) {
+        return _processInstances[_processInstanceId];
+    }
+
+    /// declare events
+
+    event ProcessInstanceCreated(string processInstanceId, uint neededAmount);
+    event ProcessInstanceStarted(string processInstanceId, uint claimedAmount);
+    event ProcessInstanceCompleted(string processInstanceId, uint revenue);
+    event ProcessInstanceFailed(string processInstanceId, string reason);
     event TransferOwnership(address newOwner);
     event ChangeFeeClaimer(address newFeeClaimer);
     event Deposit(address from, uint amount);
     event Withdraw(address to, uint amount);
     event TransferFee(address to, uint amount);
 
+    /// declare owner's functions
 
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Only owner can call this function.");
-        _;
+    function sendFee(string memory _processInstanceId) private onlyOwner processInstanceCompleted(_processInstanceId) {
+        // send fee to feeClaimer
+        if (_processInstances[_processInstanceId].revenue == 0) {
+            // no revenue, nothing to send
+            return;
+        }
+        if (_processInstances[_processInstanceId].revenue * _feeBps <= 10000) {
+            // fee amount is 0
+            return;
+        }
+
+        uint feeAmount = _processInstances[_processInstanceId].revenue * _feeBps / 10000;
+        require(address(this).balance >= feeAmount, "Not enough funds!");
+
+        _processInstances[_processInstanceId].revenue -= feeAmount;
+        (bool success, ) = payable(_feeClaimer).call{value: feeAmount}("");
+        if (!success) {
+            revert("Transfer failed.");
+        }
+        emit TransferFee(_feeClaimer, feeAmount);
     }
 
-    // Set owner of ProcessDefinition. Can be called by factory only.
-
-    function initialize(address _owner, address _feeClaimer, uint _price) external {
-        require(msg.sender == factory, "Only factory can set onwer");
-        require(owner == address(0), "Contract already initialized");
-        owner = _owner;
-        feeClaimer = _feeClaimer;
-        processPrice = _price;
-    }
-
-    function changeFeeClaimer(address _feeClaimer) external {
-        require(msg.sender == feeClaimer, "Only feeClaimer can change feeClaimer");
-        feeClaimer = _feeClaimer;
-        emit ChangeFeeClaimer(_feeClaimer);
+    function changeFeeClaimer(address _newFeeClaimer) external {
+        require(msg.sender == _feeClaimer, "Only fee claimer can call this function.");
+        _feeClaimer = _newFeeClaimer;
+        emit ChangeFeeClaimer(_newFeeClaimer);
     }
 
     function transferOwnership(address _newOwner) external onlyOwner {
-        owner = _newOwner;
+        _owner = _newOwner;
         emit TransferOwnership(_newOwner);
     }
 
-    // Starts a new process instance.
-    function start(string memory processInstanceId) external payable {
-        require(startedProcessInstances[processInstanceId] == ProcessInstanceStatus.Created, "Process instance already started.");
-        // deposit before starting process instance
-        require(msg.value > processPrice, "Deposit must be greater than process price");
-        // send fee to feeClaimer
-        uint feeAmount = msg.value * fee / 100;
-        (bool success, ) = payable(feeClaimer).call{value: feeAmount}("");
-        require(success, "Failed to send fee to feeClaimer");
-        emit TransferFee(feeClaimer, feeAmount);
-
-        startedProcessInstances[processInstanceId] = ProcessInstanceStatus.InProgress;
-        list.push(processInstanceId);
-        processInstanceOwners[processInstanceId] = msg.sender;
-
-        emit ProcessInstanceStarted(processInstanceId);
+    function createProcessInstance(string memory _processInstanceId, uint _neededAmount) onlyOwner external {
+        require(_processInstances[_processInstanceId].status == ProcessInstanceStatus.NotCreated, "Process instance already created!");
+        _processInstances[_processInstanceId] = ProcessInstance(
+            _processInstanceId,
+            ProcessInstanceStatus.Created,
+            0,
+            _neededAmount,
+            0,
+            new address[](0)
+        );
+        emit ProcessInstanceCreated(_processInstanceId, _neededAmount);
     }
 
-    // Updates the status of a process instance.
-    function update(string memory processInstanceId, ProcessInstanceStatus status) external onlyOwner {
-        require(startedProcessInstances[processInstanceId] != ProcessInstanceStatus.Created, "Process instance not started.");
-        require(startedProcessInstances[processInstanceId] < status, "Cannot update to a lower status.");
+    function startProcessInstance(string memory _processInstanceId) external onlyOwner processInstanceCreated(_processInstanceId) {
+        require(_processInstances[_processInstanceId].neededAmount <= _processInstances[_processInstanceId].claimedAmount, "Not enough funds!");
+        require(address(this).balance >= _processInstances[_processInstanceId].claimedAmount, "Not enough funds!");
 
-        startedProcessInstances[processInstanceId] = status;
-
-        if (status == ProcessInstanceStatus.Completed) {
-            emit ProcessInstanceCompleted(processInstanceId);
-        } else if (status == ProcessInstanceStatus.Failed) {
-            emit ProcessInstanceFailed(processInstanceId);
+        _processInstances[_processInstanceId].status = ProcessInstanceStatus.InProgress;
+        // transfer native token to owner
+        (bool success, ) = payable(_owner).call{value: _processInstances[_processInstanceId].claimedAmount}("");
+        if (!success) {
+            revert("Transfer failed.");
         }
+
+        emit ProcessInstanceStarted(_processInstanceId, _processInstances[_processInstanceId].claimedAmount);
     }
 
-    // Gets the status of a process instance.
-    function getStatus(string memory processInstanceId) public view returns (ProcessInstanceStatus) {
-        return startedProcessInstances[processInstanceId];
+    function completeProcessInstance(string memory _processInstanceId) external payable onlyOwner {
+        // get native token from owner and complete process instance
+        require(_processInstances[_processInstanceId].status == ProcessInstanceStatus.InProgress, "Process instance not in progress!");
+        require(msg.value > 0, "No value sent!");
+
+        _processInstances[_processInstanceId].status = ProcessInstanceStatus.Completed;
+        _processInstances[_processInstanceId].revenue += msg.value;
+        sendFee(_processInstanceId);
+        emit ProcessInstanceCompleted(_processInstanceId, _processInstances[_processInstanceId].revenue);
     }
 
-    // Gets the list of all started process instance IDs.
-    function getList() public view returns (string[] memory) {
-        string[] memory copyOfList = new string[](list.length);
-        for (uint i = 0; i < list.length; i++) {
-            copyOfList[i] = list[i];
-        }
-        return copyOfList;
+    function failProcessInstance(string memory _processInstanceId, string calldata _reason) external onlyOwner {
+        require(_processInstances[_processInstanceId].status == ProcessInstanceStatus.InProgress, "Process instance not in progress!");
+        _processInstances[_processInstanceId].status = ProcessInstanceStatus.Failed;
+        emit ProcessInstanceFailed(_processInstanceId, _reason);
     }
 
-    function deposit() public payable {
-        require(msg.value > 0, "Deposit must be greater than 0");
+    /// declare participant's functions
+
+    function deposit(string memory _processInstanceId) external payable processInstanceCreated(_processInstanceId) {
+        require(msg.value > 0, "No value sent!");
+        _processInstances[_processInstanceId].claimedAmount += msg.value;
+        _processInstances[_processInstanceId].participants.push(msg.sender);
+        _transfer(address(this), msg.sender, msg.value);
         emit Deposit(msg.sender, msg.value);
     }
 
-    function withdraw() public onlyOwner {
-        payable(msg.sender).transfer(address(this).balance);
-        emit Withdraw(msg.sender, address(this).balance);
-    }
+    function withdraw(string memory _processInstanceId, uint _amount) external processInstanceCompleted(_processInstanceId) {
+        require(_processInstances[_processInstanceId].participants.length > 0, "No participants!");
+        require(_amount > 0, "Amount must be greater than 0!");
+        require(_amount <= balanceOf(msg.sender), "Not enough tokens!");
+        require(_amount <= _processInstances[_processInstanceId].claimedAmount, "Not enough funds!");
+        _transfer(msg.sender, address(this), _amount);
 
-    function getBalance() public view returns (uint) {
-        return address(this).balance;
-    }
+        _amount = _amount * 10_000;
+        uint reward = _amount / _processInstances[_processInstanceId].claimedAmount * _processInstances[_processInstanceId].revenue;
+        reward = reward / 10_000;
 
+        (bool success, ) = payable(msg.sender).call{value: reward}("");
+        if (!success) {
+            revert("Transfer failed.");
+        }
+
+        emit Withdraw(msg.sender, reward);
+    }
 }
