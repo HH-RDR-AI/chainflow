@@ -8,12 +8,12 @@ const {
   decodeResult,
   FulfillmentCode
 } = require("@chainlink/functions-toolkit");
-const functionsConsumerAbi = require("./abi/ScriptTaskABI.json");
+const functionsConsumerAbi = require("./abi/ProcessDefinitionABI.json");
 const ethers = require("ethers");
 require("@chainlink/env-enc").config();
 
-const consumerAddress = "0xC8881ffCEAC5Bd720B1da5e32e494A4F0525c671"; // REPLACE this with your Functions consumer address
-const subscriptionId = 419; // REPLACE this with your subscription ID
+const consumerAddress = "0x0F5289b1F0e2b872b699f826113dA8ceB5315201"; // REPLACE this with your Functions consumer address
+const subscriptionId = 449; // REPLACE this with your subscription ID
 
 // hardcoded for Polygon Mumbai
 const makeRequestMumbai = async () => {
@@ -32,7 +32,7 @@ const makeRequestMumbai = async () => {
   const gasLimit = 300000;
 
   // Initialize ethers signer and provider to interact with the contracts onchain
-  const privateKey = "0xad2ab40f2556454a75575f4708f7092802f33ea106bb5467d440df37cb3dc343"; // fetch PRIVATE_KEY
+  const privateKey = "0x611f00b791a44ccde1158140b9ec5360b2a14fe86701b0f9483c289692721843"; // fetch PRIVATE_KEY
   if (!privateKey)
     throw new Error(
       "private key not provided - check your environment variables"
@@ -89,7 +89,8 @@ const makeRequestMumbai = async () => {
   );
 
   // To simulate the call and get the requestId.
-  const requestId = await functionsConsumer.callStatic.sendRequest(
+  const requestId = await functionsConsumer.callStatic.startProcessInstance(
+    "test_test", // processInstanceId
     source, // source
     "0x", // user hosted secrets - encryptedSecretsUrls - empty in this example
     0, // don hosted secrets - slot ID - empty in this example
@@ -102,7 +103,8 @@ const makeRequestMumbai = async () => {
   );
 
   // Actual transaction call
-  const transaction = await functionsConsumer.sendRequest(
+  const transaction = await functionsConsumer.startProcessInstance(
+    "test_test", // processInstanceId
     source, // source
     "0x", // user hosted secrets - encryptedSecretsUrls - empty in this example
     0, // don hosted secrets - slot ID - empty in this example
