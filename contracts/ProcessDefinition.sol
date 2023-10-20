@@ -1,14 +1,10 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.19;
+pragma solidity ^0.8.20;
 
-import "@openzeppelin/contracts@5.0/token/ERC20/ERC20.sol";
-import {FunctionsClient} from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/FunctionsClient.sol";
-import {FunctionsRequest} from "@chainlink/contracts/src/v0.8/functions/dev/v1_0_0/libraries/FunctionsRequest.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 
-contract ProcessDefinitionToken is ERC20, FunctionsClient {
-    using FunctionsRequest for FunctionsRequest.Request;
-
+contract ProcessDefinitionToken is ERC20 {
     /// declare state variables
     address private _factory;
     address private _feeClaimer;
@@ -44,9 +40,8 @@ contract ProcessDefinitionToken is ERC20, FunctionsClient {
         string memory _symbol,
         address __feeClaimer,
         string memory __processDefinitionId,
-        uint __feeBps,
-        address chainlinkRouter
-    ) ERC20(_name, _symbol) FunctionsClient(chainlinkRouter)
+        uint __feeBps
+    ) ERC20(_name, _symbol)
     {
         _factory = msg.sender;
         _feeClaimer = __feeClaimer;
@@ -116,8 +111,6 @@ contract ProcessDefinitionToken is ERC20, FunctionsClient {
     event Deposit(address from, uint amount);
     event Withdraw(address to, uint amount);
     event TransferFee(address to, uint amount);
-    error UnexpectedInstanceID(string instanceId);
-    event Response(bytes32 indexed requestId, bytes response, bytes err);
 
     /// declare owner's functions
 
@@ -167,7 +160,7 @@ contract ProcessDefinitionToken is ERC20, FunctionsClient {
         emit ProcessInstanceCreated(_processInstanceId, _neededAmount);
     }
 
-    function _startProcessInstance(string memory _processInstanceId) internal onlyOwner processInstanceCreated(_processInstanceId) {
+    function startProcessInstance(string memory _processInstanceId) external onlyOwner processInstanceCreated(_processInstanceId) {
         require(_processInstances[_processInstanceId].neededAmount <= _processInstances[_processInstanceId].claimedAmount, "Not enough funds!");
         require(address(this).balance >= _processInstances[_processInstanceId].claimedAmount, "Not enough funds!");
 
@@ -225,70 +218,5 @@ contract ProcessDefinitionToken is ERC20, FunctionsClient {
         }
 
         emit Withdraw(msg.sender, reward);
-    }
-
-    /**
-     * @notice Send a simple request
-     * @param source JavaScript source code
-     * @param encryptedSecretsUrls Encrypted URLs where to fetch user secrets
-     * @param donHostedSecretsSlotID Don hosted secrets slotId
-     * @param donHostedSecretsVersion Don hosted secrets version
-     * @param args List of arguments accessible from within the source code
-     * @param bytesArgs Array of bytes arguments, represented as hex strings
-     * @param subscriptionId Billing ID
-     */
-    function startProcessInstance(
-        string memory _processInstanceId,
-        string memory source,
-        bytes memory encryptedSecretsUrls,
-        uint8 donHostedSecretsSlotID,
-        uint64 donHostedSecretsVersion,
-        string[] memory args,
-        bytes[] memory bytesArgs,
-        uint64 subscriptionId,
-        uint32 gasLimit,
-        bytes32 jobId
-    ) external onlyOwner returns (bytes32 requestId) {
-        require(
-            _processInstances[_processInstanceId].neededAmount <= _processInstances[_processInstanceId].claimedAmount,
-            "Not enough funds!"
-        );
-        require(address(this).balance >= _processInstances[_processInstanceId].claimedAmount, "Not enough funds!");
-        FunctionsRequest.Request memory req;
-        req.initializeRequestForInlineJavaScript(source);
-        if (encryptedSecretsUrls.length > 0)
-            req.addSecretsReference(encryptedSecretsUrls);
-        else if (donHostedSecretsVersion > 0) {
-            req.addDONHostedSecrets(
-                donHostedSecretsSlotID,
-                donHostedSecretsVersion
-            );
-        }
-        if (args.length > 0) req.setArgs(args);
-        if (bytesArgs.length > 0) req.setBytesArgs(bytesArgs);
-        requestId = _sendRequest(
-            req.encodeCBOR(),
-            subscriptionId,
-            gasLimit,
-            jobId
-        );
-        return requestId;
-    }
-
-    function fulfillRequest(
-        bytes32 requestId,
-        bytes memory response,
-        bytes memory err
-    ) internal override {
-        if (err.length > 0) {
-            emit Response(requestId, response, err);
-            return;
-        }
-        string memory _instanceId = abi.decode(response, (string));
-        if (bytes(_instanceId).length == 0 || _processInstances[_instanceId].status != ProcessInstanceStatus.Created) {
-            revert UnexpectedInstanceID(_instanceId);
-        }
-        _startProcessInstance(_instanceId);
-        emit Response(requestId, response, err);
     }
 }

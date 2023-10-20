@@ -9,11 +9,9 @@ contract ChainFlowFactory {
     mapping(string => address) private deployedDefinitions;
     string[] private allDefinitions;
     address public owner;
-    address private _chainlinkRouter;
 
-    constructor(address chainlinkRouter) {
+    constructor() {
         owner = msg.sender;
-        _chainlinkRouter = chainlinkRouter;
     }
 
     event ProcessDefinitionCreated(string indexed definitionId, address processAddress);
@@ -49,8 +47,7 @@ contract ChainFlowFactory {
             definitionId,
             owner,
             definitionId,
-            feeBps,
-            _chainlinkRouter
+            feeBps
         );
         bytes32 salt = keccak256(abi.encodePacked(
             definitionId,
