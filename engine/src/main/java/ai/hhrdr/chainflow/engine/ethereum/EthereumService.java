@@ -1,11 +1,11 @@
 package ai.hhrdr.chainflow.engine.ethereum;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
+import org.web3j.abi.datatypes.Address;
 import org.web3j.abi.datatypes.DynamicArray;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.Utf8String;
@@ -25,30 +25,39 @@ import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Map;
+import java.util.HashMap;
 
 @Service
 public class EthereumService {
 
-    private final String RPC_URL = "https://goerli.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161"; // Replace with your Ethereum node RPC URL
+    private final String RPC_URL = "https://rpc.ankr.com/polygon_mumbai"; // Replace with your Ethereum node RPC URL
 
-    private final String FACTORY_ADDRESS = "0xC59C109a50F9bE2f8bb02B02e30a043Fc51A7427";
-//    private final BigInteger GAS_LIMIT = BigInteger.valueOf(60000);
+    private final String FACTORY_ADDRESS = "0x3Ae272A6192fe594D79B87acefd07a8b82225A52";
 
     private final Web3j web3j;
 
     private final Credentials credentials;
 
+    private final Integer fee = 500;
 
-    public EthereumService(@Value("${ethereum.privateKey}") String privateKey) {
+    private final Integer chainId = 80001;
+
+    private BigInteger defaultFundingCommitment;
+
+
+    public EthereumService(@Value("${ethereum.privateKey}") String privateKey,
+                           @Value("${ethereum.defaultFundingCommitment}") Integer defaultFundingCommitment) {
         this.web3j = Web3j.build(new HttpService(RPC_URL));
         this.credentials = Credentials.create(privateKey);
+        this.defaultFundingCommitment = BigInteger.valueOf(defaultFundingCommitment);
     }
 
     public String sendRawTransaction(String contractAddress, String encodedFunction) {
         try {
             BigInteger gasLimit = DefaultGasProvider.GAS_LIMIT;
             BigInteger gasPrice = web3j.ethGasPrice().send().getGasPrice();
-            RawTransactionManager rawTransactionManager = new RawTransactionManager(web3j, this.credentials);
+            RawTransactionManager rawTransactionManager = new RawTransactionManager(web3j, this.credentials, chainId);
             EthSendTransaction ethSendTransaction = rawTransactionManager.sendTransaction(gasPrice, gasLimit, contractAddress, encodedFunction, BigInteger.ZERO);
             return ethSendTransaction.getTransactionHash();
 
@@ -60,8 +69,6 @@ public class EthereumService {
     public String createDefinition(String _hash) {
 
         List<String> allDefinitions = this.getAllDefinitions(FACTORY_ADDRESS);
-        System.out.println(allDefinitions);
-
         // If deployment exists, return it's name
         if (allDefinitions.contains(_hash)) {
             System.out.println("Contract exists");
@@ -70,7 +77,8 @@ public class EthereumService {
         try {
             org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
                     "createDefinition",
-                    Arrays.asList(new org.web3j.abi.datatypes.Utf8String(_hash)),
+                    Arrays.asList(new org.web3j.abi.datatypes.Utf8String(_hash),
+                                  new org.web3j.abi.datatypes.generated.Uint256(500)),
                     Arrays.asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>() {})
             );
 
@@ -78,8 +86,9 @@ public class EthereumService {
 
             BigInteger gasLimit = DefaultGasProvider.GAS_LIMIT;
             BigInteger gasPrice = web3j.ethGasPrice().send().getGasPrice();
-            RawTransactionManager rawTransactionManager = new RawTransactionManager(web3j, this.credentials);
+            RawTransactionManager rawTransactionManager = new RawTransactionManager(web3j, this.credentials, chainId);
             EthSendTransaction ethSendTransaction = rawTransactionManager.sendTransaction(gasPrice, gasLimit, FACTORY_ADDRESS, encodedFunction, BigInteger.ZERO);
+            System.out.println("Deployed process on-chain: " + _hash);
             return ethSendTransaction.getTransactionHash();
 
         } catch (Exception e) {
@@ -87,10 +96,63 @@ public class EthereumService {
         }
     }
 
+    public String getContractAddressOfDefinition(String _hash) {
+
+        org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                "getContractAddressOfDefinition",
+                Arrays.asList(new org.web3j.abi.datatypes.Utf8String(_hash)),
+                Arrays.asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>() {})
+        );
+        String encodedFunction = FunctionEncoder.encode(function);
+        EthCall response;
+        try {
+            response = web3j.ethCall(
+                            Transaction.createEthCallTransaction(
+                                    this.credentials.getAddress(),
+                                    FACTORY_ADDRESS,
+                                    encodedFunction),
+                            DefaultBlockParameterName.LATEST)
+                    .send();
+        } catch (IOException e) {
+            throw new RuntimeException("Error making call", e);
+        }
+
+        List<Type> someTypes = FunctionReturnDecoder.decode(response.getValue(), function.getOutputParameters());
+        Address resultAddress = (Address) someTypes.get(0);
+        return resultAddress.getValue();
+    }
+
+    public String createProcessInstance(String contractAddress, String processInstanceId, BigInteger neededAmount ) {
+
+        if (neededAmount == null) {
+            neededAmount = this.defaultFundingCommitment;
+        }
+
+        try {
+            org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                    "createProcessInstance",
+                    Arrays.asList(new org.web3j.abi.datatypes.Utf8String(processInstanceId),
+                                  new org.web3j.abi.datatypes.generated.Uint256(neededAmount)),
+                    Arrays.asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>() {})
+            );
+
+            String encodedFunction = FunctionEncoder.encode(function);
+            BigInteger gasLimit = DefaultGasProvider.GAS_LIMIT;
+            BigInteger gasPrice = web3j.ethGasPrice().send().getGasPrice();
+            RawTransactionManager rawTransactionManager = new RawTransactionManager(web3j, this.credentials, chainId);
+            EthSendTransaction ethSendTransaction = rawTransactionManager.sendTransaction(gasPrice, gasLimit, contractAddress, encodedFunction, BigInteger.ZERO);
+            System.out.println("Start new process instance on-chain: " + processInstanceId);
+            return ethSendTransaction.getTransactionHash();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error sending raw transaction", e);
+        }
+
+    }
 
     public List<String> getAllDefinitions(String contractAddress) {
         org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
-                "getAllDefenitions",
+                "getAllDefinitions",
                 Arrays.asList(),
                 Arrays.asList(new TypeReference<DynamicArray<Utf8String>>() {})
         );
@@ -121,6 +183,46 @@ public class EthereumService {
                 .stream()
                 .map(Utf8String::getValue)
                 .collect(Collectors.toList());
+    }
+
+    public Map<String, Object> getProcessInstance(String contractAddress, String definitionKey) {
+        org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                "processInstance",
+                Arrays.asList(new org.web3j.abi.datatypes.Utf8String(definitionKey)),
+                Arrays.asList(
+                        new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>() {},            // processInstanceId
+                        new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Uint8>() {},        // status (enum mapped to uint8)
+                        new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Uint256>() {},      // claimedAmount
+                        new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Uint256>() {},      // neededAmount
+                        new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Uint256>() {}      // revenue
+               )
+        );
+        String encodedFunction = FunctionEncoder.encode(function);
+
+        EthCall response;
+        try {
+            response = web3j.ethCall(
+                            Transaction.createEthCallTransaction(
+                                    this.credentials.getAddress(),
+                                    contractAddress,
+                                    encodedFunction),
+                            DefaultBlockParameterName.LATEST)
+                    .send();
+        } catch (IOException e) {
+            throw new RuntimeException("Error making call", e);
+        }
+
+        List<Type> responseDecoded = FunctionReturnDecoder.decode(response.getValue(), function.getOutputParameters());
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("processInstanceId", responseDecoded.get(0).getValue());
+        resultMap.put("status", responseDecoded.get(1).getValue());
+        resultMap.put("claimedAmount", responseDecoded.get(2).getValue());
+        resultMap.put("neededAmount", responseDecoded.get(3).getValue());
+        resultMap.put("revenue", responseDecoded.get(4).getValue());
+
+        return resultMap;
+
     }
 
 }
