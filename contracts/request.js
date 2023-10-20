@@ -8,11 +8,10 @@ const {
   decodeResult,
   FulfillmentCode
 } = require("@chainlink/functions-toolkit");
-const functionsConsumerAbi = require("./abi/ProcessDefinitionABI.json");
+const functionsConsumerAbi = require("./abi/ScriptTaskABI.json");
 const ethers = require("ethers");
-require("@chainlink/env-enc").config();
 
-const consumerAddress = "0x0F5289b1F0e2b872b699f826113dA8ceB5315201"; // REPLACE this with your Functions consumer address
+const consumerAddress = "0xB2Cd6B8818147F027098997b12C247513916D465"; // REPLACE this with your Functions consumer address
 const subscriptionId = 449; // REPLACE this with your subscription ID
 
 // hardcoded for Polygon Mumbai
@@ -28,7 +27,7 @@ const makeRequestMumbai = async () => {
     .readFileSync(path.resolve(__dirname, "source.js"))
     .toString();
 
-  const args = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  const args = ["Process_13p4bvf", {"businessKey": "chainflow-engine-functions"}];
   const gasLimit = 300000;
 
   // Initialize ethers signer and provider to interact with the contracts onchain
@@ -89,8 +88,7 @@ const makeRequestMumbai = async () => {
   );
 
   // To simulate the call and get the requestId.
-  const requestId = await functionsConsumer.callStatic.startProcessInstance(
-    "test_test", // processInstanceId
+  const requestId = await functionsConsumer.callStatic.sendRequest(
     source, // source
     "0x", // user hosted secrets - encryptedSecretsUrls - empty in this example
     0, // don hosted secrets - slot ID - empty in this example
@@ -103,8 +101,7 @@ const makeRequestMumbai = async () => {
   );
 
   // Actual transaction call
-  const transaction = await functionsConsumer.startProcessInstance(
-    "test_test", // processInstanceId
+  const transaction = await functionsConsumer.sendRequest(
     source, // source
     "0x", // user hosted secrets - encryptedSecretsUrls - empty in this example
     0, // don hosted secrets - slot ID - empty in this example
