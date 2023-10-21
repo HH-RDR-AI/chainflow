@@ -512,6 +512,44 @@
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_processInstanceId",
+        "type": "string"
+      }
+    ],
+    "name": "getStatus",
+    "outputs": [
+      {
+        "internalType": "enum ProcessDefinitionToken.ProcessInstanceStatus",
+        "name": "",
+        "type": "uint8"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "string",
+        "name": "_processInstanceId",
+        "type": "string"
+      }
+    ],
+    "name": "isFinanced",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [],
     "name": "name",
     "outputs": [

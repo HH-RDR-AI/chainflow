@@ -100,6 +100,14 @@ contract ProcessDefinitionToken is ERC20 {
         return _processInstances[_processInstanceId];
     }
 
+    function isFinanced(string memory _processInstanceId) public view returns (bool) {
+        return _processInstances[_processInstanceId].neededAmount <= _processInstances[_processInstanceId].claimedAmount;
+    }
+
+    function getStatus(string memory _processInstanceId) public view returns (ProcessInstanceStatus) {
+        return _processInstances[_processInstanceId].status;
+    }
+
     /// declare events
 
     event ProcessInstanceCreated(string processInstanceId, uint neededAmount);
