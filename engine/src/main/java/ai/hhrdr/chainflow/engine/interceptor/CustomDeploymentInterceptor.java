@@ -48,9 +48,20 @@ public class CustomDeploymentInterceptor extends CommandInterceptor {
         if (command instanceof StartProcessInstanceCmd || command instanceof SubmitStartFormCmd) {
 
             try {
-            Field field = SubmitStartFormCmd.class.getDeclaredField("businessKey");
-            field.setAccessible(true);
-            String businessKey = (String) field.get(command);
+                String businessKey;
+                if (command instanceof SubmitStartFormCmd) {
+                    Field field = SubmitStartFormCmd.class.getDeclaredField("businessKey");
+                    field.setAccessible(true);
+                    businessKey = (String) field.get(command);
+                } else  {
+                    Field instantiationBuilderField = StartProcessInstanceCmd.class.getDeclaredField("instantiationBuilder");
+                    instantiationBuilderField.setAccessible(true);
+                    Object instantiationBuilder = instantiationBuilderField.get(command);
+
+                    Field businessKeyField = instantiationBuilder.getClass().getDeclaredField("businessKey");
+                    businessKeyField.setAccessible(true);
+                    businessKey = (String) businessKeyField.get(instantiationBuilder);
+                }
 
             List<ProcessInstance> getProcessInstancesByBusinessKey = runtimeService.createProcessInstanceQuery()
                     .processInstanceBusinessKey(businessKey)
@@ -105,11 +116,10 @@ public class CustomDeploymentInterceptor extends CommandInterceptor {
             try {
                 runtimeService.suspendProcessInstanceById(instance.getProcessInstanceId());
                 Map<String, Object> variables = runtimeService.getVariables(instance.getProcessInstanceId());
-                BigInteger neededAmount = (BigInteger) variables.get("needed_amount");
-                System.out.println(neededAmount);
 
-                //TODO: Check if process instance already created and not finished
-//        Object onChainInstance = ethereumService.getProcessInstance(contractAddress, definitionKey);
+                BigInteger neededAmount = BigInteger.valueOf((Long) variables.get("neededAmount"));
+
+                System.out.println(neededAmount);
 
                 String definitionKey = instance.getProcessDefinitionId();
                 String processInstanceId = instance.getProcessInstanceId();
@@ -117,8 +127,6 @@ public class CustomDeploymentInterceptor extends CommandInterceptor {
                 String contractAddress = ethereumService.getContractAddressOfDefinition(definitionKey);
 
                 System.out.println(contractAddress);
-
-                Object onChainInstance = ethereumService.getProcessInstance(contractAddress, definitionKey);
 
                 if (command instanceof SubmitStartFormCmd) {
                     String transaction = ethereumService.createProcessInstance(
