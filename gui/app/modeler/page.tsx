@@ -14,7 +14,7 @@ export default function ModelerStaticPage() {
   return (
     <Suspense>
       {/* @ts-expect-error Server Component */}
-      <ModelerPage className={styles.container} />;
+      <ModelerPage className={styles.container} />
     </Suspense>
   );
 }

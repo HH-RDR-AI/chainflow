@@ -115,7 +115,7 @@ const ModelerPage: FC<{ className?: string }> = ({ className }) => {
                 formData.append("deployment-name", name);
 
                 const res = await fetch(
-                  "https://chainflow-engine.dexguru.biz/engine-rest/deployment/create",
+                  "http://localhost:3000/dashboard/api/engine/deployment/create",
                   {
                     method: "POST",
                     body: formData,
