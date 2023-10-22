@@ -27,4 +27,6 @@ replay_pid*
 
 # DB File
 camunda-db*
+target*
+
 
