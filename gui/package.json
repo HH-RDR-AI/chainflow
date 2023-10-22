@@ -19,7 +19,6 @@
     "autoprefixer": "10.4.14",
     "babel-plugin-macros": "^3.1.0",
     "bpmn-js-properties-panel": "^5.5.0",
-    "bufferutil": "^4.0.8",
     "camunda-bpmn-js": "^3.4.0",
     "clsx": "^2.0.0",
     "concurrently": "^8.0.1",
@@ -32,7 +31,6 @@
     "react-icons": "^4.11.0",
     "sass": "^1.69.3",
     "tailwindcss": "3.3.2",
-    "typescript": "5.0.4",
-    "utf-8-validate": "^6.0.3"
+    "typescript": "5.0.4"
   }
 }
