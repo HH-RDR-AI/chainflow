@@ -28,7 +28,7 @@ export const Viewer: FC<{ process: string; className?: string }> = ({
     const getXml = async () => {
       try {
         const res = await fetch(
-          `http://localhost:3000/dashboard/api/engine/process-definition/${process}/xml`
+          `http://0.0.0.0:3000/dashboard/api/engine/process-definition/${process}/xml`
         );
 
         if (!res.ok) {
