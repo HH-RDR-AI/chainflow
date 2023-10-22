@@ -3,8 +3,7 @@
   gap: 16px;
 }
 
-.processes,
-.instances {
+.processes {
   flex: 0 0 240px;
   border-right: 1px #ddd solid;
 
@@ -14,7 +13,19 @@
     list-style: none;
     display: flex;
     flex-flow: column;
-    gap: 8px;
+    gap: 16px;
+  }
+
+  &Entry {
+    display: block;
+    cursor: pointer;
+  }
+}
+
+.instances {
+  &List {
+    margin: 0;
+    padding: 0 0 0 1.25em;
   }
 
   &Item {

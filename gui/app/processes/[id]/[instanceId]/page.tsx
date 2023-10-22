@@ -1,27 +1,16 @@
-import {
-  ProcessDefinition,
-  ProcessInstance,
-  ProcessVariables,
-} from "../../types";
+import { getInstance, getVariables } from "@/src/utils/processUtils";
+import { ProcessInstance, ProcessVariables } from "../../types";
 import styles from "./page.module.scss";
-import {
-  FaCheck,
-  FaCircle,
-  FaCircleCheck,
-  FaCircleXmark,
-  FaCross,
-  FaPlay,
-  FaStop,
-} from "react-icons/fa6";
 import Viewer from "@/src/components/Viewer";
 
-export const InstancesPage = async ({
+export const dynamic = "force-dynamic";
+
+export default async function InstancePage({
   params: { instanceId },
 }: {
   params: { instanceId: string };
-}) => {
-  const instance = await getInstance(instanceId);
-  const variables = await getVariables(instanceId);
+}) {
+  const { instance, variables } = await getData(instanceId);
 
   return (
     <div className={styles.container}>
@@ -70,36 +59,11 @@ export const InstancesPage = async ({
       </div>
     </div>
   );
-};
-
-export default InstancesPage;
-
-async function getInstance(id: string): Promise<ProcessInstance> {
-  const res = await fetch(
-    `http://localhost:3000/api/engine/process-instance/${id}`
-  );
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error(`Failed to fetch data: ${res.statusText} [${res.status}]`);
-  }
-
-  const instance: ProcessInstance = await res.json();
-
-  return instance;
 }
 
-async function getVariables(id: string): Promise<ProcessVariables> {
-  const res = await fetch(
-    `http://localhost:3000/api/engine/process-instance/${id}/variables`
-  );
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error(`Failed to fetch data: ${res.statusText} [${res.status}]`);
-  }
-
-  const vars: ProcessVariables = await res.json();
-
-  return vars;
+async function getData(id: string) {
+  return {
+    instance: await getInstance(id),
+    variables: await getVariables(id),
+  };
 }

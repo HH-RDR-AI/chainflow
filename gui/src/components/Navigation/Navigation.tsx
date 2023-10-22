@@ -4,6 +4,7 @@ import Link from "next/link";
 import { FaDatabase, FaHome, FaProjectDiagram, FaList } from "react-icons/fa";
 import { FaCodeBranch, FaUser } from "react-icons/fa6";
 import clsx from "clsx";
+import ConnectButton from "@/src/components/ConnectButton";
 
 export const Navigation: FC = () => {
   return (
@@ -44,12 +45,7 @@ export const Navigation: FC = () => {
       <nav className={clsx(styles.navigation, styles.personal)}>
         <ul className={styles.navigationList}>
           <li className={styles.navigationItem}>
-            <button type="button" className={styles.navigationLink}>
-              <span className={styles.navigationLinkIcon}>
-                <FaUser />
-              </span>
-              <span className={styles.navigationLinkCaption}>Login</span>
-            </button>
+            <ConnectButton />
           </li>
         </ul>
       </nav>

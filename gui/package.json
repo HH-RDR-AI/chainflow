@@ -11,7 +11,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@sismo-core/sismo-connect-react": "^0.0.23",
+    "@sismo-core/sismo-connect-client": "^0.0.23",
     "@sismo-core/sismo-connect-server": "^0.0.23",
     "@types/node": "20.2.4",
     "@types/react": "18.2.7",

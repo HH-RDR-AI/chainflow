@@ -1,0 +1,18 @@
+.container {
+  border: 1px #ddd solid;
+  padding: 16px;
+  display: flex;
+  flex-flow: column;
+  gap: 16px;
+}
+
+.footer {
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+}
+
+.viewer {
+  aspect-ratio: 1.5;
+  pointer-events: none;
+}

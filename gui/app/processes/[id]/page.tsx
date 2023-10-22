@@ -1,23 +1,18 @@
-import { ProcessDefinition, ProcessInstance } from "../types";
+import { getDefinition, getInstances } from "@/src/utils/processUtils";
 import styles from "./page.module.scss";
-import {
-  FaCheck,
-  FaCircle,
-  FaCircleCheck,
-  FaCircleXmark,
-  FaCross,
-  FaPlay,
-  FaStop,
-} from "react-icons/fa6";
 import Viewer from "@/src/components/Viewer";
+import Link from "next/link";
+import { FaPlay } from "react-icons/fa6";
+import InstanceSuspender from "@/src/components/InstanceSuspender";
 
-export const InstancesPage = async ({
+export const dynamic = "force-dynamic";
+
+export default async function InstancesPage({
   params: { id },
 }: {
   params: { id: string };
-}) => {
-  const process = await getDefinition(id);
-  const instances = await getInstances(id);
+}) {
+  const { process, instances } = await getData(id);
 
   return (
     <div className={styles.container}>
@@ -50,14 +45,20 @@ export const InstancesPage = async ({
               <tbody className={styles.instancesTBody}>
                 {instances.map((instance) => {
                   return (
-                    <tr className={styles.instancesTBody}>
+                    <tr className={styles.instancesTBody} key={instance.id}>
                       <th className={styles.instancesTH}>
-                        <a href={`/processes/${process.id}/${instance.id}`}>
+                        <Link href={`/processes/${process.id}/${instance.id}`}>
                           {instance.id}
-                        </a>
+                        </Link>
                       </th>
                       <td className={styles.instancesTD}>
-                        {instance.ended ? "Ended" : "In progress"}
+                        {instance.ended ? "Ended" : "In progress"}{" "}
+                      </td>
+                      <td className={styles.instancesTD}>
+                        {instance.suspended ? "Suspended" : "Active"}
+                      </td>
+                      <td className={styles.instancesTD}>
+                        <InstanceSuspender instance={instance} />
                       </td>
                     </tr>
                   );
@@ -69,36 +70,11 @@ export const InstancesPage = async ({
       </div>
     </div>
   );
-};
-
-export default InstancesPage;
-
-export async function getInstances(id: string): Promise<ProcessInstance[]> {
-  const res = await fetch(
-    `http://localhost:3000/api/engine/process-instance?processDefinitionId=${id}`
-  );
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error(`Failed to fetch data: ${res.statusText} [${res.status}]`);
-  }
-
-  const instances: ProcessInstance[] = await res.json();
-
-  return instances;
 }
 
-export async function getDefinition(id: string): Promise<ProcessDefinition> {
-  const res = await fetch(
-    `http://localhost:3000/api/engine/process-definition?processDefinitionId=${id}`
-  );
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error(`Failed to fetch data: ${res.statusText} [${res.status}]`);
-  }
-
-  const processes: ProcessDefinition[] = await res.json();
-
-  return processes[0];
+async function getData(id: string) {
+  return {
+    process: await getDefinition(id),
+    instances: await getInstances(id),
+  };
 }
