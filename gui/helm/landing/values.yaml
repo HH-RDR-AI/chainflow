@@ -1,23 +1,23 @@
 ---
-image: 'docker-registry.dexguru.biz/dex.guru/chainflow_api/chainflow_api'
+image: 'docker-registry.dexguru.biz/dex.guru/chainflow_landing/chainflow_landing'
 imageTag: ''
 registrySecretName: registry-harbor
 
-chainflow-api:
+chainflow-landing:
   replicas:
     default: 1
-  port: 8000
+  port: 80
   limitsCpu: 1
   limitsMemory: 1G
   requestsCpu: 0.1
   requestsMemory: 125Mi
   strategyType: 'RollingUpdate'
-  readnessProbe:
-    path: '/health_check'
-    port: '8000'
-  livenessProbe:
-    path: '/health_check'
-    port: '8000'
+#  readnessProbe:
+#    path: '/health_check'
+#    port: '8000'
+#  livenessProbe:
+#    path: '/health_check'
+#    port: '8000'
   env:
     ENVIRONMENT: "stage"
   ingressHost1: "chainflow.dexguru.biz"

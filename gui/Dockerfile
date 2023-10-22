@@ -64,4 +64,4 @@ EXPOSE 3000
 
 ENV PORT 3000
 
-CMD ["node", "server-cached.js"]
+CMD ["node", "server.js"]
