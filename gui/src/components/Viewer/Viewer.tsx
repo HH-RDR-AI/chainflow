@@ -27,7 +27,7 @@ export const Viewer: FC<{ process: string; className?: string }> = ({
 
     const getXml = async () => {
       const res = await fetch(
-        `http://localhost:3000/api/engine/process-definition/${process}/xml`
+        `http://localhost:3000/dashboard/api/engine/process-definition/${process}/xml`
       );
 
       if (!res.ok) {
@@ -37,7 +37,8 @@ export const Viewer: FC<{ process: string; className?: string }> = ({
       try {
         const { bpmn20Xml } = await res.json();
         await viewer?.importXML(bpmn20Xml);
-        viewer.get("canvas").zoom("fit-viewport");
+        const canvas = viewer.get("canvas") as any;
+        canvas.zoom("fit-viewport");
       } catch (e) {
         console.error(e);
       }

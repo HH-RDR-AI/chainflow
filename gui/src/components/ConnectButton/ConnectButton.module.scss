@@ -1,0 +1,30 @@
+.container {
+  border: 0;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  text-decoration: none;
+  background: none;
+  padding: 8px;
+  transition: 0.25s ease;
+  color: #000;
+  width: 100%;
+  font-size: 18px;
+
+  &:hover {
+    background: #ddd;
+  }
+}
+
+.icon {
+  font-size: 32px;
+}
+
+.caption {
+  flex: 1 0 0;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left;
+  font-weight: 500;
+}

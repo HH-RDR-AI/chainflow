@@ -4,37 +4,3 @@
   flex-flow: column;
   gap: 8px;
 }
-
-.header {
-  flex: 0 0 auto;
-  display: flex;
-  gap: 32px;
-  align-items: center;
-}
-
-.tools {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-left: auto;
-
-  &Action {
-    font-size: 20px;
-    padding: 4px;
-    width: 32px;
-    height: 32px;
-  }
-}
-
-.title {
-  margin: 0;
-}
-
-.body {
-  flex: 1 0 auto;
-  display: flex;
-}
-
-.file {
-  composes: hidden from "../../src/scss/common.scss";
-}

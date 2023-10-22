@@ -3,8 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 const handler = async (req: Request, { params }: any) => {
   const { searchParams } = new URL(req.url);
   const requestUrl = params?.slug?.join("/") || "";
-  const requestBody =
-    req.method === "POST" && req.body ? await req.text() : undefined;
+  const requestBody = req.method === "POST" && req.body ? req.body : undefined;
 
   const query = Object.entries(Object.fromEntries(searchParams))
     .map(([key, value]) => `${key}=${value}`)
@@ -17,7 +16,6 @@ const handler = async (req: Request, { params }: any) => {
   try {
     const result = await fetch(url, {
       headers: {
-        "Content-Type": "application/json",
         Authorization: "Basic " + btoa("demo" + ":" + "demo"),
       },
       method: req.method === "POST" ? "POST" : "GET",

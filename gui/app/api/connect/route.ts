@@ -12,21 +12,6 @@ import { NextResponse } from "next/server";
 const sismoConnect = SismoConnect({
   config: {
     appId: "0x26c0bb84bb9f17935c0f727cf033d841",
-    vault: {
-      // For development purposes insert the Data Sources that you want to impersonate here
-      // Never use this in production
-      impersonate: [
-        // EVM
-        "leo21.sismo.eth",
-        "0xa4c94a6091545e40fc9c3e0982aec8942e282f38",
-        // Github
-        "github:leo21",
-        // Twitter
-        "twitter:leo21_eth",
-        // Telegram
-        "telegram:leo21",
-      ],
-    },
   },
 });
 
@@ -39,11 +24,11 @@ export async function POST(req: Request) {
       sismoConnectResponse,
       {
         auths: [
-          { authType: AuthType.VAULT },
-          { authType: AuthType.GITHUB },
-          { authType: AuthType.TWITTER },
           { authType: AuthType.EVM_ACCOUNT },
-          { authType: AuthType.TELEGRAM },
+          // { authType: AuthType.VAULT },
+          // { authType: AuthType.GITHUB },
+          // { authType: AuthType.TWITTER },
+          // { authType: AuthType.TELEGRAM },
         ],
         claims: [
           // ENS DAO Voters
