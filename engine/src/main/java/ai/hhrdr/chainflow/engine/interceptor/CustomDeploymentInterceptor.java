@@ -63,7 +63,7 @@ public class CustomDeploymentInterceptor extends CommandInterceptor {
                     businessKey = (String) businessKeyField.get(instantiationBuilder);
                 }
 
-            if (!businessKey.isEmpty()) {
+            if (businessKey != null && !businessKey.isEmpty()) {
                 List<ProcessInstance> getProcessInstancesByBusinessKey = runtimeService.createProcessInstanceQuery()
                         .processInstanceBusinessKey(businessKey)
                         .list();
