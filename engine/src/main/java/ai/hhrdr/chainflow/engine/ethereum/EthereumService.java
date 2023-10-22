@@ -24,9 +24,9 @@ import java.util.stream.Collectors;
 @Service
 public class EthereumService {
 
-    private final String RPC_URL = "https://rpc.ankr.com/polygon_mumbai"; // Replace with your Ethereum node RPC URL
+    private String RPC_URL;
 
-    private final String FACTORY_ADDRESS = "0x8E1c92D50c4A9DD7ef46C3d77Db0A7Cb6D300f86";
+    private String FACTORY_ADDRESS;
 
     private final Web3j web3j;
 
@@ -40,10 +40,13 @@ public class EthereumService {
 
 
     public EthereumService(@Value("${ethereum.privateKey}") String privateKey,
-                           @Value("${ethereum.defaultFundingCommitment}") Integer defaultFundingCommitment) {
-        this.web3j = Web3j.build(new HttpService(RPC_URL));
+                           @Value("${ethereum.defaultFundingCommitment}") Integer defaultFundingCommitment,
+                           @Value("${ethereum.rpcUrl}") String rpcUrl,
+                           @Value("${ethereum.factoryAddress}") String factoryAddress) {
+        this.web3j = Web3j.build(new HttpService(rpcUrl));
         this.credentials = Credentials.create(privateKey);
         this.defaultFundingCommitment = BigInteger.valueOf(defaultFundingCommitment);
+        this.FACTORY_ADDRESS = factoryAddress;
     }
 
     private EthSendTransaction sendRawTransaction(Function function, String contractAddress) {
@@ -77,7 +80,7 @@ public class EthereumService {
             org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
                     "createDefinition",
                     Arrays.asList(new org.web3j.abi.datatypes.Utf8String(_hash),
-                                  new org.web3j.abi.datatypes.generated.Uint256(500)),
+                                  new org.web3j.abi.datatypes.generated.Uint256(fee)),
                     Arrays.asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>() {})
             );
 
