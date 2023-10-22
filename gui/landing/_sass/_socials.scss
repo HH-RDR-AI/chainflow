@@ -1,0 +1,42 @@
+.socials {
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 64px);
+    gap: 28px;
+
+    @media (max-width: 960px) {
+    justify-content: center;
+  }
+  }
+
+  &__item {
+    margin: 0;
+    padding: 0;
+  }
+
+  &-entry {
+    display: block;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    color: $color-style-white;
+    background: $color-style-blue;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:focus,
+    &:hover {
+      background: $color-style-blue-hover;
+    }
+
+    &__icon {
+      width: 32px;
+      height: 32px;
+      fill: $color-style-white;
+    }
+  }
+}

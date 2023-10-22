@@ -1,0 +1,53 @@
+"use client";
+
+import {
+  FC,
+  useRef,
+  useEffect,
+  ChangeEventHandler,
+  MouseEventHandler,
+} from "react";
+
+import "camunda-bpmn-js/dist/assets/camunda-platform-modeler.css";
+import BpmnModeler from "camunda-bpmn-js/lib/camunda-platform/Modeler";
+
+import styles from "./Modeler.module.scss";
+import {
+  FaDownload,
+  FaRegFolderOpen,
+  FaCheckToSlot,
+  FaFile,
+} from "react-icons/fa6";
+
+export const Modeler: FC<{ onInit: (modeler: BpmnModeler) => void }> = ({
+  onInit,
+}) => {
+  const refCanvas = useRef<HTMLDivElement>(null);
+  const refProps = useRef<HTMLDivElement>(null);
+  const refModeler = useRef<BpmnModeler | null>(null);
+
+  useEffect(() => {
+    if (!refCanvas.current || refModeler.current) {
+      return;
+    }
+
+    const modeler = new BpmnModeler({
+      container: refCanvas.current,
+      propertiesPanel: {
+        parent: refProps.current,
+      },
+    });
+
+    modeler?.createDiagram();
+    refModeler.current = modeler;
+
+    onInit?.(modeler);
+  }, [refCanvas]);
+
+  return (
+    <div className={styles.container}>
+      <div className={styles.canvas} ref={refCanvas}></div>
+      <div className={styles.properties} ref={refProps}></div>
+    </div>
+  );
+};

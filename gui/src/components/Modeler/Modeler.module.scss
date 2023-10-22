@@ -1,0 +1,12 @@
+.container {
+  flex: 0 0 100%;
+  display: flex;
+}
+
+.canvas {
+  flex: 1 0 0;
+}
+
+.properties {
+  flex: 0 0 auto;
+}

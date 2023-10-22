@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "fastapi-dev": "pip3 install -r requirements.txt && python3 -m uvicorn api.index:app --reload",
+    "fastapi-dev": "pip3 install -r requirements.txt && python3 -m uvicorn chainflow_api.__main__.py:app --reload",
     "next-dev": "next dev",
     "dev": "concurrently \"npm run next-dev\" \"npm run fastapi-dev\"",
     "build": "next build",
@@ -11,17 +11,25 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sismo-core/sismo-connect-react": "^0.0.23",
+    "@sismo-core/sismo-connect-server": "^0.0.23",
     "@types/node": "20.2.4",
     "@types/react": "18.2.7",
     "@types/react-dom": "18.2.4",
     "autoprefixer": "10.4.14",
+    "babel-plugin-macros": "^3.1.0",
+    "bpmn-js-properties-panel": "^5.5.0",
+    "camunda-bpmn-js": "^3.4.0",
+    "clsx": "^2.0.0",
     "concurrently": "^8.0.1",
     "eslint": "8.41.0",
     "eslint-config-next": "13.4.4",
-    "next": "13.4.4",
+    "next": "13.5.6",
     "postcss": "8.4.23",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.11.0",
+    "sass": "^1.69.3",
     "tailwindcss": "3.3.2",
     "typescript": "5.0.4"
   }

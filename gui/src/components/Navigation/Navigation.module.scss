@@ -1,0 +1,76 @@
+.container {
+  padding: 8px;
+  width: 48px;
+  transition: 0.1s ease;
+  background: #efefef;
+  height: 100%;
+  overflow: hidden;
+  box-shadow: none;
+  display: flex;
+  flex-flow: column;
+  gap: 16px;
+
+  &:hover {
+    width: 200px;
+    transition-delay: 1s;
+    transition-duration: 0.25s;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.logo {
+  flex: 0 0 auto;
+  &Icon {
+    font-size: 32px;
+  }
+}
+
+.navigation {
+  &List {
+    margin: 0 -8px;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-flow: column;
+  }
+
+  &Link {
+    border: 0;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    text-decoration: none;
+    background: none;
+    padding: 8px;
+    transition: 0.25s ease;
+    color: #000;
+    width: 100%;
+    font-size: 18px;
+
+    &:hover {
+      background: #ddd;
+    }
+
+    &Icon {
+      font-size: 32px;
+    }
+
+    &Caption {
+      flex: 1 0 0;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      text-align: left;
+      font-weight: 500;
+    }
+  }
+}
+
+.sections {
+  flex: 1 0 0;
+}
+
+.personal {
+  flex: 0 0 auto;
+  margin-top: auto;
+}

@@ -1,0 +1,19 @@
+.container {
+  padding-left: 48px;
+}
+
+.panel {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 48px;
+  z-index: 10;
+}
+
+.content {
+  padding: 8px;
+  min-height: 100vh;
+  display: flex;
+  flex-flow: column;
+}
