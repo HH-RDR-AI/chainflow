@@ -183,6 +183,13 @@ spec:
                 name: {{ .Values.appName }}
                 port:
                   number: {{ index .Values .Values.appName "port" }}
+          - path: /dashboard
+              pathType: ImplementationSpecific
+              backend:
+                service:
+                  name: chainflow-dashboard
+                  port:
+                    number: 3000
 {{ end }}
 
 {{if index .Values .Values.appName "ingressHost2" }}
