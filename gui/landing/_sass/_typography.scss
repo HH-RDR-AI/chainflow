@@ -1,0 +1,42 @@
+h1 {
+  font-family: "Sora", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 120%;
+  text-align: center;
+  color: $color-style-white;
+  max-width: 860px;
+  margin: 0 auto;
+
+  @media (max-width: 768px) {
+    font-size: 40px;
+    line-height: 120%;
+  }
+}
+
+.text {
+  & > :first-child {
+    margin-top: 0;
+  }
+
+  & > :last-child {
+    margin-bottom: 0;
+  }
+
+  ul {
+    line-height: 1.4;
+  }
+
+  li {
+    margin: 0.5em;
+  }
+}
+
+p:first-child {
+  margin-top: 0;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}

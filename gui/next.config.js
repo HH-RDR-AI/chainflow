@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  basePath: '/dashboard',
   experimental: {
     serverComponentsExternalPackages: [
       "@sismo-core/sismo-connect-server",

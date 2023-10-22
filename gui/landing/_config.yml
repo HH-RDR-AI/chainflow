@@ -1,0 +1,69 @@
+title: ChainFlow - Bridging Real World Assets (RWAs) On-Chain with Business Process Automation (BPA)
+author:
+  name: chainflow
+  email: team@chanflow.dexguru.biz
+
+# The `>` after `description:` means to ignore line-breaks until next key.
+# If you want to omit the line-break after the end of text, use `>-` instead.
+
+# Build settings
+
+plugins:
+  - jekyll-seo-tag
+#   - jekyll-feed
+
+partners:
+  - { key: shimacapital, url: "#" }
+  - { key: huobiventures, url: "#" }
+  - { key: d1ventures, url: "#" }
+  - { key: wintermute, url: "#" }
+  - { key: honeydao, url: "#" }
+  - { key: mirana, rl: "#" }
+  - { key: impossiblefinance, url: "#" }
+  - { key: woodstock, url: "#" }
+  - { key: legoscapital, url: "#" }
+  - { key: nimacapital, url: "#" }
+  - { key: supernova, url: "#" }
+  - { key: paraficapital, url: "#" }
+  - { key: divergenceventures, url: "#" }
+  - { key: thelao, url: "#" }
+  - { key: lemniscap, url: "#" }
+  - { key: stakecapital, url: "#" }
+  - { key: bitscalecapital, url: "#" }
+
+menu:
+  - {
+      title: Home,
+      url: /
+    }
+  - {
+      title: Contact Us,
+      url: "https://webforms.pipedrive.com/f/6rExdWpdC4j2tsyB09LRGHr6990s7NqeLfhIpT4vPjJOmddqhyIMu7dyvJFAjABNHd"
+    }
+
+aside:
+  - {
+      title: Dashboard,
+      url: /dashboard,
+    }
+
+# Generate social links in footer.
+social_links:
+  - { platform: twitter, user_url: "https://twitter.com/dexguru" }
+  - { platform: telegram, user_url: "https://t.me/dexguru" }
+  - { platform: discord, user_url: "https://discord.gg/dPW8fzwzz9" }
+#   - { platform: devto,          user_url: "https://dev.to/jekyll" }
+#   - { platform: dribbble,       user_url: "https://dribbble.com/jekyll" }
+#   - { platform: facebook,       user_url: "https://www.facebook.com/jekyll" }
+#   - { platform: flickr,         user_url: "https://www.flickr.com/photos/jekyll" }
+#   - { platform: github,         user_url: "https://github.com/jekyll/minima" }
+#   - { platform: google_scholar, user_url: "https://scholar.google.com/citations?user=qc6CJjYAAAAJ" }
+#   - { platform: instagram,      user_url: "https://www.instagram.com/jekyll" }
+#   - { platform: keybase,        user_url: "https://keybase.io/jekyll" }
+#   - { platform: linkedin,       user_url: "https://www.linkedin.com/in/jekyll" }
+#   - { platform: microdotblog,   user_url: "https://micro.blog/jekyll" }
+#   - { platform: pinterest,      user_url: "https://www.pinterest.com/jekyll" }
+#   - { platform: stackoverflow,  user_url: "https://stackoverflow.com/users/1234567/jekyll" }
+#   - { platform: youtube,        user_url: "https://www.youtube.com/jekyll" }
+# If you want to link only specific pages in your header, uncomment this and add the path to the pages in
+# order as they should show up.
