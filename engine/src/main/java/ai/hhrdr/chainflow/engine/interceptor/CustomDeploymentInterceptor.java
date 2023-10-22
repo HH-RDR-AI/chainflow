@@ -47,9 +47,8 @@ public class CustomDeploymentInterceptor extends CommandInterceptor {
 
         // Prevent create duplicated instances
         if (command instanceof StartProcessInstanceCmd || command instanceof SubmitStartFormCmd) {
-
+            String businessKey;
             try {
-                String businessKey;
                 if (command instanceof SubmitStartFormCmd) {
                     Field field = SubmitStartFormCmd.class.getDeclaredField("businessKey");
                     field.setAccessible(true);
@@ -64,15 +63,19 @@ public class CustomDeploymentInterceptor extends CommandInterceptor {
                     businessKey = (String) businessKeyField.get(instantiationBuilder);
                 }
 
-            List<ProcessInstance> getProcessInstancesByBusinessKey = runtimeService.createProcessInstanceQuery()
-                    .processInstanceBusinessKey(businessKey)
-                    .list();
+            if (!businessKey.isEmpty()) {
+                List<ProcessInstance> getProcessInstancesByBusinessKey = runtimeService.createProcessInstanceQuery()
+                        .processInstanceBusinessKey(businessKey)
+                        .list();
+                if (!getProcessInstancesByBusinessKey.isEmpty()) {
+                    shouldStart = false;
+                }
+                System.out.println(getProcessInstancesByBusinessKey);
 
-            if (!getProcessInstancesByBusinessKey.isEmpty()) {
+            } else {
                 shouldStart = false;
             }
 
-            System.out.println(getProcessInstancesByBusinessKey);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 e.printStackTrace(); // You can log this or handle it as appropriate for your application
             }
