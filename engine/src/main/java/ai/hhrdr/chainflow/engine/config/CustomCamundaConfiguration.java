@@ -1,7 +1,6 @@
 package ai.hhrdr.chainflow.engine.config;
 
 import ai.hhrdr.chainflow.engine.interceptor.CustomDeploymentInterceptor;
-//import ai.hhrdr.chainflow.engine.plugins.GlobalExecutionListenerParseListener;
 import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.spring.boot.starter.configuration.Ordering;
@@ -17,8 +16,6 @@ import java.util.ArrayList;
 @Order(Ordering.DEFAULT_ORDER + 1)
 public class CustomCamundaConfiguration extends AbstractCamundaConfiguration {
 
-//    @Autowired
-//    private GlobalExecutionListenerParseListener globalExecutionListenerParseListener;
 
     @Autowired
     @Lazy
@@ -34,7 +31,6 @@ public class CustomCamundaConfiguration extends AbstractCamundaConfiguration {
         if (processEngineConfiguration.getCustomPostBPMNParseListeners() == null) {
             processEngineConfiguration.setCustomPostBPMNParseListeners(new ArrayList<>());
         }
-//        processEngineConfiguration.getCustomPostBPMNParseListeners().add(globalExecutionListenerParseListener);
 
     }
 }
