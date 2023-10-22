@@ -46,14 +46,20 @@ public class EthereumService {
         this.defaultFundingCommitment = BigInteger.valueOf(defaultFundingCommitment);
     }
 
-    public String sendRawTransaction(String contractAddress, String encodedFunction) {
+    private EthSendTransaction sendRawTransaction(Function function, String contractAddress) {
         try {
+            // Encode the function
+            String encodedFunction = FunctionEncoder.encode(function);
+
+            // Get gas parameters
             BigInteger gasLimit = DefaultGasProvider.GAS_LIMIT;
             BigInteger gasPrice = web3j.ethGasPrice().send().getGasPrice();
-            RawTransactionManager rawTransactionManager = new RawTransactionManager(web3j, this.credentials, chainId);
-            EthSendTransaction ethSendTransaction = rawTransactionManager.sendTransaction(gasPrice, gasLimit, contractAddress, encodedFunction, BigInteger.ZERO);
-            return ethSendTransaction.getTransactionHash();
 
+            // Use a RawTransactionManager to send the transaction
+            RawTransactionManager rawTransactionManager = new RawTransactionManager(web3j, this.credentials, chainId);
+
+            return rawTransactionManager
+                    .sendTransaction(gasPrice, gasLimit, contractAddress, encodedFunction, BigInteger.ZERO);
         } catch (Exception e) {
             throw new RuntimeException("Error sending raw transaction", e);
         }
@@ -75,12 +81,7 @@ public class EthereumService {
                     Arrays.asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>() {})
             );
 
-            String encodedFunction = FunctionEncoder.encode(function);
-
-            BigInteger gasLimit = DefaultGasProvider.GAS_LIMIT;
-            BigInteger gasPrice = web3j.ethGasPrice().send().getGasPrice();
-            RawTransactionManager rawTransactionManager = new RawTransactionManager(web3j, this.credentials, chainId);
-            EthSendTransaction ethSendTransaction = rawTransactionManager.sendTransaction(gasPrice, gasLimit, FACTORY_ADDRESS, encodedFunction, BigInteger.ZERO);
+            EthSendTransaction ethSendTransaction = sendRawTransaction(function, FACTORY_ADDRESS);
             System.out.println("Deployed process on-chain: " + _hash);
             return ethSendTransaction.getTransactionHash();
 
@@ -129,12 +130,7 @@ public class EthereumService {
                     Arrays.asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Address>() {})
             );
 
-            String encodedFunction = FunctionEncoder.encode(function);
-            BigInteger gasLimit = DefaultGasProvider.GAS_LIMIT;
-            BigInteger gasPrice = web3j.ethGasPrice().send().getGasPrice();
-            RawTransactionManager rawTransactionManager = new RawTransactionManager(web3j, this.credentials, chainId);
-            EthSendTransaction ethSendTransaction = rawTransactionManager
-                    .sendTransaction(gasPrice, gasLimit, contractAddress, encodedFunction, BigInteger.ZERO);
+            EthSendTransaction ethSendTransaction = sendRawTransaction(function, contractAddress);
             System.out.println("Start new process instance on-chain: " + processInstanceId);
             return ethSendTransaction.getTransactionHash();
 
@@ -246,18 +242,10 @@ public class EthereumService {
                     Collections.emptyList()  // No outputs for the function based on the ABI
             );
 
-            // Encode the function
-            String encodedFunction = FunctionEncoder.encode(function);
+            EthSendTransaction ethSendTransaction = sendRawTransaction(function, contractAddress);
 
-            // Get gas parameters
-            BigInteger gasLimit = DefaultGasProvider.GAS_LIMIT;
-            BigInteger gasPrice = web3j.ethGasPrice().send().getGasPrice();
-
-            // Use a RawTransactionManager to send the transaction
-            RawTransactionManager rawTransactionManager = new RawTransactionManager(web3j, this.credentials, chainId);
-            EthSendTransaction ethSendTransaction = rawTransactionManager.sendTransaction(gasPrice, gasLimit, contractAddress, encodedFunction, BigInteger.ZERO);
-
-            System.out.println("Start new process instance on-chain with txn " + ethSendTransaction);
+            System.out.println("Start new process instance on-chain with txn "
+                    + ethSendTransaction.getTransactionHash());
 
         } catch (Exception e) {
             throw new RuntimeException("Error sending raw transaction", e);
@@ -273,19 +261,10 @@ public class EthereumService {
                     Collections.emptyList()  // No outputs for the function based on the ABI
             );
 
-            // Encode the function
-            String encodedFunction = FunctionEncoder.encode(function);
+            EthSendTransaction ethSendTransaction = sendRawTransaction(function, contractAddress);
 
-            // Get gas parameters
-            BigInteger gasLimit = DefaultGasProvider.GAS_LIMIT;
-            BigInteger gasPrice = web3j.ethGasPrice().send().getGasPrice();
-
-            // Use a RawTransactionManager to send the transaction
-            RawTransactionManager rawTransactionManager = new RawTransactionManager(web3j, this.credentials, chainId);
-            EthSendTransaction ethSendTransaction = rawTransactionManager
-                    .sendTransaction(gasPrice, gasLimit, contractAddress, encodedFunction, BigInteger.ZERO);
-
-            System.out.println("Complete process instance on-chain with txn " + ethSendTransaction);
+            System.out.println("Complete process instance on-chain with txn "
+                    + ethSendTransaction.getTransactionHash());
 
         } catch (Exception e) {
             throw new RuntimeException("Error sending raw transaction", e);
