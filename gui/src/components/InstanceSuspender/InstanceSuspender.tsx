@@ -21,6 +21,11 @@ export const InstanceSuspender: FC<{ instance: ProcessInstance }> = ({
     );
 
     if (!res.ok) {
+      const json = await res.json();
+      if (json?.body?.message) {
+        alert(json?.body?.message);
+      }
+
       console.log(`Failed to deploy data: ${res.statusText} [${res.status}]`);
       return;
     }
