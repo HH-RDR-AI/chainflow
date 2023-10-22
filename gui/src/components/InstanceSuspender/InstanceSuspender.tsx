@@ -13,7 +13,7 @@ export const InstanceSuspender: FC<{ instance: ProcessInstance }> = ({
 
   const makeSuspended = async (id: string, state: boolean) => {
     const res = await fetch(
-      `http://0.0.0.0:3000/dashboard/api/engine/process-instance/${id}/suspended`,
+      `https://chainflow.dexguru.biz/dashboard/api/engine/process-instance/${id}/suspended`,
       {
         method: "PUT",
         body: JSON.stringify({ suspended: state }),

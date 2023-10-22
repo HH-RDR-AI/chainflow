@@ -28,7 +28,7 @@ export const Viewer: FC<{ process: string; className?: string }> = ({
     const getXml = async () => {
       try {
         const res = await fetch(
-          `http://0.0.0.0:3000/dashboard/api/engine/process-definition/${process}/xml`
+          `https://chainflow.dexguru.biz/dashboard/api/engine/process-definition/${process}/xml`
         );
 
         if (!res.ok) {
