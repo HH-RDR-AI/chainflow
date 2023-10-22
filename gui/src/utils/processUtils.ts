@@ -7,7 +7,7 @@ import { ProcessTask } from "@/app/tasks/types";
 
 export const getInstances = async (id?: string): Promise<ProcessInstance[]> => {
   const res = await fetch(
-    `http://localhost:3000/dashboard/api/engine/process-instance${
+    `https://chainflow-engine.dexguru.biz/engine-rest/process-instance${
       !!id ? `?processDefinitionId=${id}` : ""
     }`
   );
@@ -24,7 +24,7 @@ export const getInstances = async (id?: string): Promise<ProcessInstance[]> => {
 
 export const getDefinition = async (id: string): Promise<ProcessDefinition> => {
   const res = await fetch(
-    `http://localhost:3000/dashboard/api/engine/process-definition?processDefinitionId=${id}`
+    `https://chainflow-engine.dexguru.biz/engine-rest/process-definition?processDefinitionId=${id}`
   );
 
   if (!res.ok) {
@@ -39,7 +39,7 @@ export const getDefinition = async (id: string): Promise<ProcessDefinition> => {
 
 export const getInstance = async (id: string): Promise<ProcessInstance> => {
   const res = await fetch(
-    `http://localhost:3000/dashboard/api/engine/process-instance/${id}`
+    `https://chainflow-engine.dexguru.biz/engine-rest/process-instance/${id}`
   );
 
   if (!res.ok) {
@@ -54,7 +54,7 @@ export const getInstance = async (id: string): Promise<ProcessInstance> => {
 
 export const getVariables = async (id: string): Promise<ProcessVariables> => {
   const res = await fetch(
-    `http://localhost:3000/dashboard/api/engine/process-instance/${id}/variables`
+    `https://chainflow-engine.dexguru.biz/engine-rest/process-instance/${id}/variables`
   );
 
   if (!res.ok) {
@@ -69,7 +69,7 @@ export const getVariables = async (id: string): Promise<ProcessVariables> => {
 
 export const getDefinitions = async (): Promise<ProcessDefinition[]> => {
   const res = await fetch(
-    "http://localhost:3000/dashboard/api/engine/process-definition"
+    "https://chainflow-engine.dexguru.biz/engine-rest/process-definition"
   );
 
   if (!res.ok) {
@@ -90,7 +90,7 @@ export const getDefinitions = async (): Promise<ProcessDefinition[]> => {
 
 export const getInstanceCount = async (id: string): Promise<number> => {
   const res = await fetch(
-    `http://localhost:3000/dashboard/api/engine/process-instance/count?processDefinitionId=${id}`
+    `https://chainflow-engine.dexguru.biz/engine-rest/process-instance/count?processDefinitionId=${id}`
   );
 
   if (!res.ok) {
@@ -118,7 +118,7 @@ export const getTasks = async (
   }
 
   const res = await fetch(
-    `http://localhost:3000/dashboard/api/engine/task?${query.join("&")}`
+    `https://chainflow-engine.dexguru.biz/engine-rest/task?${query.join("&")}`
   );
 
   if (!res.ok) {

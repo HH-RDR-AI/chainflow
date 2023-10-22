@@ -111,11 +111,11 @@ const ModelerPage: FC<{ className?: string }> = ({ className }) => {
                 }
 
                 const formData = new FormData();
-                formData.append("deployment-source", xmlResult.xml);
+                formData.append("process.bpmn", new Blob([xmlResult.xml]));
                 formData.append("deployment-name", name);
 
                 const res = await fetch(
-                  "http://localhost:3000/dashboard/api/engine/deployment/create",
+                  "https://chainflow-engine.dexguru.biz/engine-rest/deployment/create",
                   {
                     method: "POST",
                     body: formData,

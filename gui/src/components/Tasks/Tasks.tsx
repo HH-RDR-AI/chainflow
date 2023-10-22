@@ -119,9 +119,9 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
         {!!task && (
           <table className={styles.propsTable}>
             <tbody className={styles.propsTBody}>
-              {Object.entries(task).map(([key, value]) => {
+              {Object.entries(task).map(([key, value], idx) => {
                 return (
-                  <tr className={styles.propsTR} key={key}>
+                  <tr className={styles.propsTR} key={idx}>
                     <th className={styles.propsTH}>{key}</th>
                     <td className={styles.propsTD}>{value}</td>
                   </tr>

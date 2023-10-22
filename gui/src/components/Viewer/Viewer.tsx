@@ -26,15 +26,18 @@ export const Viewer: FC<{ process: string; className?: string }> = ({
     refViewer.current = viewer;
 
     const getXml = async () => {
-      const res = await fetch(
-        `http://localhost:3000/dashboard/api/engine/process-definition/${process}/xml`
-      );
-
-      if (!res.ok) {
-        return;
-      }
-
       try {
+        const res = await fetch(
+          `https://chainflow-engine.dexguru.biz/engine-rest/process-definition/${process}/xml`,
+          {
+            mode: "no-cors",
+          }
+        );
+
+        if (!res.ok) {
+          return;
+        }
+
         const { bpmn20Xml } = await res.json();
         await viewer?.importXML(bpmn20Xml);
         const canvas = viewer.get("canvas") as any;

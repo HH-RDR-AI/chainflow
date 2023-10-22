@@ -3,7 +3,13 @@ import { NextRequest, NextResponse } from "next/server";
 const handler = async (req: Request, { params }: any) => {
   const { searchParams } = new URL(req.url);
   const requestUrl = params?.slug?.join("/") || "";
-  const requestBody = req.method === "POST" && req.body ? req.body : undefined;
+  const isPost = ["POST", "PUT"].includes(req.method);
+  const requestBody =
+    isPost && req.body ? JSON.stringify(await req.json()) : undefined;
+
+  if (isPost) {
+    console.log(await req.json());
+  }
 
   const query = Object.entries(Object.fromEntries(searchParams))
     .map(([key, value]) => `${key}=${value}`)
@@ -24,7 +30,12 @@ const handler = async (req: Request, { params }: any) => {
 
     if (!result.ok) {
       return NextResponse.json(
-        { url: requestUrl, message: result.statusText, status: result.status },
+        {
+          url: requestUrl,
+          message: result.statusText,
+          status: result.status,
+          body: await result.json(),
+        },
         {
           status: result.status,
         }
@@ -42,3 +53,4 @@ const handler = async (req: Request, { params }: any) => {
 
 export const GET = handler;
 export const POST = handler;
+export const PUT = handler;

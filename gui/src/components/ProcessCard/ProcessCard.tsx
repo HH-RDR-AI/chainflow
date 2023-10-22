@@ -11,6 +11,10 @@ export const ProcessCard: FC<{
   process: ProcessDefinition;
   className?: string;
 }> = ({ process }) => {
+  const handleNewInstance = () => {
+    //
+  };
+
   return (
     <div className={styles.container}>
       <Link href={`/processes/${process.id}`} className={styles.title}>
@@ -24,12 +28,8 @@ export const ProcessCard: FC<{
           {process.instanceCount || "No"} instances
         </div>
         <div className={styles.actions}>
-          <button
-            onClick={() => {
-              //
-            }}
-          >
-            <FaPlay />
+          <button onClick={handleNewInstance}>
+            <FaPlay /> New
           </button>
         </div>
       </div>

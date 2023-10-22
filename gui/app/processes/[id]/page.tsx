@@ -2,6 +2,8 @@ import { getDefinition, getInstances } from "@/src/utils/processUtils";
 import styles from "./page.module.scss";
 import Viewer from "@/src/components/Viewer";
 import Link from "next/link";
+import { FaPlay } from "react-icons/fa6";
+import InstanceSuspender from "@/src/components/InstanceSuspender";
 
 export const dynamic = "force-dynamic";
 
@@ -43,7 +45,7 @@ export default async function InstancesPage({
               <tbody className={styles.instancesTBody}>
                 {instances.map((instance) => {
                   return (
-                    <tr className={styles.instancesTBody}>
+                    <tr className={styles.instancesTBody} key={instance.id}>
                       <th className={styles.instancesTH}>
                         <Link href={`/processes/${process.id}/${instance.id}`}>
                           {instance.id}
@@ -51,7 +53,12 @@ export default async function InstancesPage({
                       </th>
                       <td className={styles.instancesTD}>
                         {instance.ended ? "Ended" : "In progress"}{" "}
+                      </td>
+                      <td className={styles.instancesTD}>
                         {instance.suspended ? "Suspended" : "Active"}
+                      </td>
+                      <td className={styles.instancesTD}>
+                        <InstanceSuspender instance={instance} />
                       </td>
                     </tr>
                   );
