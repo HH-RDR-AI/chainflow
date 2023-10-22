@@ -3,13 +3,14 @@ import styles from "./page.module.scss";
 import Viewer from "@/src/components/Viewer";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 export default async function InstancesPage({
   params: { id },
 }: {
   params: { id: string };
 }) {
-  const process = await getDefinition(id);
-  const instances = await getInstances(id);
+  const { process, instances } = await getData(id);
 
   return (
     <div className={styles.container}>
@@ -62,4 +63,11 @@ export default async function InstancesPage({
       </div>
     </div>
   );
+}
+
+async function getData(id: string) {
+  return {
+    process: await getDefinition(id),
+    instances: await getInstances(id),
+  };
 }

@@ -3,13 +3,14 @@ import { ProcessInstance, ProcessVariables } from "../../types";
 import styles from "./page.module.scss";
 import Viewer from "@/src/components/Viewer";
 
+export const dynamic = "force-dynamic";
+
 export default async function InstancePage({
   params: { instanceId },
 }: {
-  params: { id: string; instanceId: string };
+  params: { instanceId: string };
 }) {
-  const instance = await getInstance(instanceId);
-  const variables = await getVariables(instanceId);
+  const { instance, variables } = await getData(instanceId);
 
   return (
     <div className={styles.container}>
@@ -58,4 +59,11 @@ export default async function InstancePage({
       </div>
     </div>
   );
+}
+
+async function getData(id: string) {
+  return {
+    instance: await getInstance(id),
+    variables: await getVariables(id),
+  };
 }

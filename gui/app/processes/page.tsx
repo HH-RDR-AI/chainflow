@@ -2,8 +2,10 @@ import styles from "./page.module.scss";
 import ProcessCard from "@/src/components/ProcessCard";
 import { getDefinitions } from "@/src/utils/processUtils";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProjectsPage() {
-  const processes = await getDefinitions();
+  const processes = await getData();
 
   return (
     <div className={styles.container}>
@@ -24,4 +26,8 @@ export default async function ProjectsPage() {
       </div>
     </div>
   );
+}
+
+async function getData() {
+  return await getDefinitions();
 }

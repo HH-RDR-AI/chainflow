@@ -5,7 +5,11 @@ import clsx from "clsx";
 import styles from "./Tasks.module.scss";
 import { ProcessDefinition, ProcessInstance } from "@/app/processes/types";
 import { ProcessTask } from "@/app/tasks/types";
-import { getDefinitions, getTasks } from "@/src/utils/processUtils";
+import {
+  getDefinitions,
+  getInstances,
+  getTasks,
+} from "@/src/utils/processUtils";
 
 export const Tasks: FC<{ className?: string }> = ({ className }) => {
   const [currentProcess, setCurrentProcess] = useState<string | null>(null);
@@ -18,7 +22,7 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
   useEffect(() => {
     const getData = async () => {
       setProcesses(await getDefinitions());
-      setInstances(await getProcessInstances());
+      setInstances(await getInstances());
     };
 
     getData();
@@ -130,8 +134,3 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
     </div>
   );
 };
-function getProcessInstances():
-  | import("react").SetStateAction<ProcessInstance[]>
-  | PromiseLike<import("react").SetStateAction<ProcessInstance[]>> {
-  throw new Error("Function not implemented.");
-}
