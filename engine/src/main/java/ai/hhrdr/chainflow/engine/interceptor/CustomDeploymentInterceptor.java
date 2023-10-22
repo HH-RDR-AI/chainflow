@@ -45,6 +45,7 @@ public class CustomDeploymentInterceptor extends CommandInterceptor {
 
         boolean shouldStart = true;
 
+        // Prevent create duplicated instances
         if (command instanceof StartProcessInstanceCmd || command instanceof SubmitStartFormCmd) {
 
             try {
@@ -78,9 +79,11 @@ public class CustomDeploymentInterceptor extends CommandInterceptor {
 
         }
 
+
         T result = next.execute(command);  // Command execute
 
-        // After command
+
+        // Deployment process
         if (command instanceof DeployCmd) {
             // Your custom logic after the actual deployment
 

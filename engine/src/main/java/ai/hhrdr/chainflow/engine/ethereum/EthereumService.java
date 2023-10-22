@@ -5,10 +5,7 @@ import org.springframework.stereotype.Service;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.FunctionReturnDecoder;
 import org.web3j.abi.TypeReference;
-import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.DynamicArray;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.*;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.DefaultBlockParameterName;
@@ -20,20 +17,16 @@ import org.web3j.tx.RawTransactionManager;
 import org.web3j.tx.gas.DefaultGasProvider;
 
 import java.io.IOException;
-
 import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
-import java.util.Map;
-import java.util.HashMap;
 
 @Service
 public class EthereumService {
 
     private final String RPC_URL = "https://rpc.ankr.com/polygon_mumbai"; // Replace with your Ethereum node RPC URL
 
-    private final String FACTORY_ADDRESS = "0x3Ae272A6192fe594D79B87acefd07a8b82225A52";
+    private final String FACTORY_ADDRESS = "0x8E1c92D50c4A9DD7ef46C3d77Db0A7Cb6D300f86";
 
     private final Web3j web3j;
 
@@ -140,7 +133,8 @@ public class EthereumService {
             BigInteger gasLimit = DefaultGasProvider.GAS_LIMIT;
             BigInteger gasPrice = web3j.ethGasPrice().send().getGasPrice();
             RawTransactionManager rawTransactionManager = new RawTransactionManager(web3j, this.credentials, chainId);
-            EthSendTransaction ethSendTransaction = rawTransactionManager.sendTransaction(gasPrice, gasLimit, contractAddress, encodedFunction, BigInteger.ZERO);
+            EthSendTransaction ethSendTransaction = rawTransactionManager
+                    .sendTransaction(gasPrice, gasLimit, contractAddress, encodedFunction, BigInteger.ZERO);
             System.out.println("Start new process instance on-chain: " + processInstanceId);
             return ethSendTransaction.getTransactionHash();
 
@@ -185,17 +179,11 @@ public class EthereumService {
                 .collect(Collectors.toList());
     }
 
-    public Map<String, Object> getProcessInstance(String contractAddress, String definitionKey) {
+    public Map<String, Object> getProcessInstance(String contractAddress, String processInstanceId) {
         org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
                 "processInstance",
-                Arrays.asList(new org.web3j.abi.datatypes.Utf8String(definitionKey)),
-                Arrays.asList(
-                        new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Utf8String>() {},            // processInstanceId
-                        new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Uint8>() {},        // status (enum mapped to uint8)
-                        new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Uint256>() {},      // claimedAmount
-                        new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Uint256>() {},      // neededAmount
-                        new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.generated.Uint256>() {}      // revenue
-               )
+                Arrays.asList(new org.web3j.abi.datatypes.Utf8String(processInstanceId)),
+                Arrays.asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.DynamicStruct>() {})
         );
         String encodedFunction = FunctionEncoder.encode(function);
 
@@ -222,7 +210,87 @@ public class EthereumService {
         resultMap.put("revenue", responseDecoded.get(4).getValue());
 
         return resultMap;
-
     }
+
+    public boolean isFinanced(String contractAddress, String processInstanceId) {
+        org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                "isFinanced",
+                Arrays.asList(new org.web3j.abi.datatypes.Utf8String(processInstanceId)),
+                Arrays.asList(new org.web3j.abi.TypeReference<org.web3j.abi.datatypes.Bool>() {})
+        );
+        String encodedFunction = FunctionEncoder.encode(function);
+        EthCall response;
+        try {
+            response = web3j.ethCall(
+                            Transaction.createEthCallTransaction(
+                                    this.credentials.getAddress(),
+                                    contractAddress,
+                                    encodedFunction),
+                            DefaultBlockParameterName.LATEST)
+                    .send();
+        } catch (IOException e) {
+            throw new RuntimeException("Error making call", e);
+        }
+
+        List<Type> someTypes = FunctionReturnDecoder.decode(response.getValue(), function.getOutputParameters());
+        Bool resultAddress = (Bool) someTypes.get(0);
+        return resultAddress.getValue();
+    }
+
+    public void startProcessInstance(String contractAddress, String processInstanceId) {
+        try {
+            // Create the function using the ABI
+            org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                    "startProcessInstance",
+                    Arrays.asList(new org.web3j.abi.datatypes.Utf8String(processInstanceId)),
+                    Collections.emptyList()  // No outputs for the function based on the ABI
+            );
+
+            // Encode the function
+            String encodedFunction = FunctionEncoder.encode(function);
+
+            // Get gas parameters
+            BigInteger gasLimit = DefaultGasProvider.GAS_LIMIT;
+            BigInteger gasPrice = web3j.ethGasPrice().send().getGasPrice();
+
+            // Use a RawTransactionManager to send the transaction
+            RawTransactionManager rawTransactionManager = new RawTransactionManager(web3j, this.credentials, chainId);
+            EthSendTransaction ethSendTransaction = rawTransactionManager.sendTransaction(gasPrice, gasLimit, contractAddress, encodedFunction, BigInteger.ZERO);
+
+            System.out.println("Start new process instance on-chain with txn " + ethSendTransaction);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error sending raw transaction", e);
+        }
+    }
+
+    public void completeProcessInstance(String contractAddress, String processInstanceId) {
+        try {
+            // Create the function using the ABI
+            org.web3j.abi.datatypes.Function function = new org.web3j.abi.datatypes.Function(
+                    "completeProcessInstance",
+                    Arrays.asList(new org.web3j.abi.datatypes.Utf8String(processInstanceId)),
+                    Collections.emptyList()  // No outputs for the function based on the ABI
+            );
+
+            // Encode the function
+            String encodedFunction = FunctionEncoder.encode(function);
+
+            // Get gas parameters
+            BigInteger gasLimit = DefaultGasProvider.GAS_LIMIT;
+            BigInteger gasPrice = web3j.ethGasPrice().send().getGasPrice();
+
+            // Use a RawTransactionManager to send the transaction
+            RawTransactionManager rawTransactionManager = new RawTransactionManager(web3j, this.credentials, chainId);
+            EthSendTransaction ethSendTransaction = rawTransactionManager
+                    .sendTransaction(gasPrice, gasLimit, contractAddress, encodedFunction, BigInteger.ZERO);
+
+            System.out.println("Complete process instance on-chain with txn " + ethSendTransaction);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error sending raw transaction", e);
+        }
+    }
+
 
 }
