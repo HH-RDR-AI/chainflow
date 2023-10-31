@@ -1,0 +1,3 @@
+camunda-external-task-client-python3
+pydantic
+web3

@@ -1,0 +1,77 @@
+<script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.x/dist/web3.min.js"></script>
+
+<form role="form" name="form">
+
+    <div class="form-group">
+        <label for="projectName">Project Name</label>
+        <input id="projectName" type="text" class="form-control" cam-variable-name="projectName" name="projectName" cam-variable-type="String" required>
+
+        <label for="amount">Amount</label>
+        <input id="amount" type="number" class="form-control" cam-variable-name="amount" name="amount" cam-variable-type="Long" required>
+    </div>
+
+
+    <script cam-script type="text/form-script">
+
+        camForm.on('submit', async function(evt) {
+         const CONTRACT_ABI = [{
+                 "inputs": [
+                     {
+                         "internalType": "uint256",
+                         "name": "_amount",
+                         "type": "uint256"
+                     },
+                     {
+                         "internalType": "string",
+                         "name": "_dealId",
+                         "type": "string"
+                     }
+                 ],
+                 "name": "createWorkDeal",
+                 "outputs": [],
+                 "stateMutability": "nonpayable",
+                 "type": "function"
+             }];
+
+         const CONTRACT_ADDRESS = "0xCb0501262839980060A6791002400728A483c17F";
+
+         if (typeof window.ethereum === 'undefined') {
+             alert('Please install Metamask or a similar Ethereum wallet extension.');
+             return;
+         }
+         const web3 = new Web3(window.ethereum);
+
+         async function connectMetamask() {
+           const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+           return accounts[0];
+         }
+
+           // Connect to Metamask
+           const account = await connectMetamask();
+
+           // Get vars
+           const projectName = document.getElementsByName("projectName")[0].value;
+           const amount = document.getElementsByName("amount")[0].value;
+
+           // Assuming you want to use the projectName in your Ethereum transaction
+           const contract = new web3.eth.Contract(CONTRACT_ABI, CONTRACT_ADDRESS);
+           const valueToSend = web3.utils.toWei('0', 'ether'); // Example value
+           camForm.variableManager.variableValue('projectName', projectName);
+           camForm.variableManager.variableValue('amount', amount);
+
+           try {
+             const receipt = await contract.methods.createWorkDeal(amount, projectName).send({ from: account, value: valueToSend });
+             debugger;
+             evt.submitPrevented = false;
+           } catch (error) {
+                 // Handle the error here
+                 debugger;
+                 evt.submitPrevented = true;
+                 alert('Error during transaction.');
+           }
+
+         });
+
+    </script>
+</form>
+
