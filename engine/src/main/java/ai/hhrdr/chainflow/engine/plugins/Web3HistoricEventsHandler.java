@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Objects;
 
-@Component
+//@Component
 public class Web3HistoricEventsHandler implements HistoryEventHandler {
 
     @Autowired

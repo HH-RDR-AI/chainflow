@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 
-@Component
+//@Component
 @Order(Ordering.DEFAULT_ORDER + 1)
 public class CustomCamundaConfiguration extends AbstractCamundaConfiguration {
 
