@@ -1,0 +1,19 @@
+---
+#image: 'docker-registry.dexguru.biz/dex.guru/chainflow_engine/chainflow_engine'
+imageTag: ''
+registrySecretName: registry-harbor
+
+transaction_status_worker:
+  replicas:
+    default: 1
+  limitsCpu: 1
+  limitsMemory: 500Mi
+  requestsCpu: 0.05
+  requestsMemory: 150Mi
+  strategyType: 'Recreate'
+  command: '[ "python", "./web3_workers/check_transaction_status.py" ]'
+  env:
+    ENVIRONMENT: "stage"
+    TOPIC_NAME: "CheckTransactionConfirmed"
+    WEB3_URL: "https://rpc.ankr.com/polygon_mumbai"
+    CAMUNDA_URL: "https://chainflow-engine.dexguru.biz/engine-rest"
