@@ -7,9 +7,7 @@ import { ProcessTask } from "@/app/tasks/types";
 
 export const getInstances = async (id?: string): Promise<ProcessInstance[]> => {
   const res = await fetch(
-    `https://chainflow.dexguru.biz/dashboard/api/engine/process-instance${
-      !!id ? `?processDefinitionId=${id}` : ""
-    }`
+    `api/engine/process-instance${!!id ? `?processDefinitionId=${id}` : ""}`
   );
 
   if (!res.ok) {
@@ -24,7 +22,7 @@ export const getInstances = async (id?: string): Promise<ProcessInstance[]> => {
 
 export const getDefinition = async (id: string): Promise<ProcessDefinition> => {
   const res = await fetch(
-    `https://chainflow.dexguru.biz/dashboard/api/engine/process-definition?processDefinitionId=${id}`
+    `api/engine/process-definition?processDefinitionId=${id}`
   );
 
   if (!res.ok) {
@@ -38,9 +36,7 @@ export const getDefinition = async (id: string): Promise<ProcessDefinition> => {
 };
 
 export const getInstance = async (id: string): Promise<ProcessInstance> => {
-  const res = await fetch(
-    `https://chainflow.dexguru.biz/dashboard/api/engine/process-instance/${id}`
-  );
+  const res = await fetch(`api/engine/process-instance/${id}`);
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -53,9 +49,7 @@ export const getInstance = async (id: string): Promise<ProcessInstance> => {
 };
 
 export const getVariables = async (id: string): Promise<ProcessVariables> => {
-  const res = await fetch(
-    `https://chainflow.dexguru.biz/dashboard/api/engine/process-instance/${id}/variables`
-  );
+  const res = await fetch(`api/engine/process-instance/${id}/variables`);
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -68,9 +62,7 @@ export const getVariables = async (id: string): Promise<ProcessVariables> => {
 };
 
 export const getDefinitions = async (): Promise<ProcessDefinition[]> => {
-  const res = await fetch(
-    "https://chainflow.dexguru.biz/dashboard/api/engine/process-definition"
-  );
+  const res = await fetch("api/engine/process-definition");
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -90,7 +82,7 @@ export const getDefinitions = async (): Promise<ProcessDefinition[]> => {
 
 export const getInstanceCount = async (id: string): Promise<number> => {
   const res = await fetch(
-    `https://chainflow.dexguru.biz/dashboard/api/engine/process-instance/count?processDefinitionId=${id}`
+    `api/engine/process-instance/count?processDefinitionId=${id}`
   );
 
   if (!res.ok) {
@@ -117,9 +109,7 @@ export const getTasks = async (
     query.push(`processInstanceId=${instanceId}`);
   }
 
-  const res = await fetch(
-    `https://chainflow.dexguru.biz/dashboard/api/engine/task?${query.join("&")}`
-  );
+  const res = await fetch(`api/engine/task?${query.join("&")}`);
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
