@@ -5,6 +5,7 @@ import { FaDatabase, FaHome, FaProjectDiagram, FaList } from "react-icons/fa";
 import { FaCodeBranch, FaUser } from "react-icons/fa6";
 import clsx from "clsx";
 import ConnectButton from "@/src/components/ConnectButton";
+import { ConnectButton as RainbowConnectButton } from '@rainbow-me/rainbowkit';
 
 export const Navigation: FC = () => {
   return (
@@ -46,6 +47,7 @@ export const Navigation: FC = () => {
         <ul className={styles.navigationList}>
           <li className={styles.navigationItem}>
             <ConnectButton />
+            <RainbowConnectButton />
           </li>
         </ul>
       </nav>

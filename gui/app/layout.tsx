@@ -3,6 +3,8 @@ import styles from "./layout.module.scss";
 import { Inter } from "next/font/google";
 import Navigation from "@/src/components/Navigation";
 
+import { Providers } from "./providers";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -15,15 +17,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
   return (
     <html lang="en">
       <body className={inter.className}>
-        <div className={styles.container}>
-          <div className={styles.panel}>
-            <Navigation />
+        <Providers>
+          <div className={styles.container}>
+            <div className={styles.panel}>
+              <Navigation />
+            </div>
+            <div className={styles.content}>{children}</div>
           </div>
-          <div className={styles.content}>{children}</div>
-        </div>
+        </Providers>
       </body>
     </html>
   );
