@@ -1,3 +1,5 @@
+import { AbiFunction } from "abitype";
+
 export type ProcessTask = {
   id: string;
   name: string;
@@ -21,4 +23,15 @@ export type ProcessTask = {
   suspended: false;
   formKey: string;
   tenantId: string;
+};
+
+export type TaskVariables = {
+  [variable: string]: {
+    value: any;
+    type: string;
+    valueInfo: {
+      objectTypeName: string;
+      serializationDataFormat: string;
+    };
+  };
 };

@@ -3,7 +3,7 @@ import {
   ProcessInstance,
   ProcessVariables,
 } from "@/app/processes/types";
-import { ProcessTask } from "@/app/tasks/types";
+import { ProcessTask, TaskVariables } from "@/app/tasks/types";
 
 export const getInstances = async (id?: string): Promise<ProcessInstance[]> => {
   const res = await fetch(
@@ -118,4 +118,20 @@ export const getTasks = async (
 
   const tasks: ProcessTask[] = await res.json();
   return tasks;
+};
+
+export const getTaskVariables = async (
+  taskId: string
+): Promise<TaskVariables> => {
+  const res = await fetch(`api/engine/task/${taskId}/form-variables`);
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error(
+      `Failed to fetch task variables: ${res.statusText} [${res.status}]`
+    );
+  }
+
+  const vars: TaskVariables = await res.json();
+  return vars;
 };

@@ -4,12 +4,15 @@ import { FC, useEffect, useState } from "react";
 import clsx from "clsx";
 import styles from "./Tasks.module.scss";
 import { ProcessDefinition, ProcessInstance } from "@/app/processes/types";
-import { ProcessTask } from "@/app/tasks/types";
+import { ProcessTask, TaskVariables } from "@/app/tasks/types";
 import {
   getDefinitions,
   getInstances,
   getTasks,
+  getTaskVariables,
 } from "@/src/utils/processUtils";
+import { useForm } from "react-hook-form";
+import { AbiFunction } from 'abitype'
 
 export const Tasks: FC<{ className?: string }> = ({ className }) => {
   const [currentProcess, setCurrentProcess] = useState<string | null>(null);
@@ -18,6 +21,14 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
   const [processes, setProcesses] = useState<ProcessDefinition[]>([]);
   const [instances, setInstances] = useState<ProcessInstance[]>([]);
   const [tasks, setTasks] = useState<ProcessTask[]>([]);
+
+  const [formVars, setFormVars] = useState<TaskVariables | undefined>(undefined)
+  const [abi, setAbi] = useState<AbiFunction | undefined>(undefined)
+
+
+  const { register, handleSubmit, watch, formState: { errors } } = useForm();
+  const onSubmit = data => console.log(data);
+
 
   useEffect(() => {
     const getData = async () => {
@@ -44,6 +55,20 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
 
     getData();
   }, [currentInstance, currentProcess]);
+
+  useEffect(() => {
+    if (!currentTask) { return }
+
+    const getData = async () => {
+      const formVars = await getTaskVariables(currentTask);
+      setFormVars(formVars)
+      if (formVars.abi) {
+        setAbi(JSON.parse(formVars.abi.value))
+      }
+    };
+
+    getData();
+  }, [currentTask]);
 
   const task = tasks.find((task) => currentTask === task.id);
 
@@ -129,6 +154,39 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
               })}
             </tbody>
           </table>
+        )}
+      </div>
+      <div className={styles.props}>
+        <h3 className={styles.propsTitle}>Task form</h3>
+        {!!formVars && (<>
+          <table className={styles.propsTable}>
+            <tbody className={styles.propsTBody}>
+              {Object.entries(formVars).map(([key, variable], idx) => {
+                return (
+                  <tr className={styles.propsTR} key={idx}>
+                    <th className={styles.propsTH}>{key}</th>
+                    <td className={styles.propsTD}>{variable.value}</td>
+                    <td className={styles.propsTD}>{variable.type}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+
+          {abi &&
+            <form onSubmit={handleSubmit(onSubmit)}>
+              {abi.inputs.map((abiParam, idx) => {
+                return (
+                  <>
+                    < input key={idx} placeholder={abiParam.name || `param ${idx}`} {...register(abiParam.name || `param ${idx}`, { required: true })} />
+                    {errors.exampleRequired && <span>This field is required</span>}
+                  </>
+                )
+              })}
+
+              <input type="submit" />
+            </form>}
+        </>
         )}
       </div>
     </div>
