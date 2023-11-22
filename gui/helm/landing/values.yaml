@@ -1,5 +1,5 @@
 ---
-image: 'docker-registry.dexguru.biz/dex.guru/chainflow_landing/chainflow_landing'
+image: 'docker-registry.dexguru.biz/dex.guru/chainflow-deployment/chainflow-deployment/landing'
 imageTag: ''
 registrySecretName: registry-harbor
 
