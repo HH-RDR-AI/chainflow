@@ -135,3 +135,51 @@ export const getTaskVariables = async (
   const vars: TaskVariables = await res.json();
   return vars;
 };
+
+export const setTaskVariables = async (
+  taskId: string,
+  variables: TaskVariables
+): Promise<number> => {
+  const body = {
+    modifications: variables,
+  };
+  const res = await fetch(`api/engine/task/${taskId}/variables`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error(
+      `Failed to set variables: ${res.statusText} [${res.status}]`
+    );
+  }
+
+  return res.status;
+};
+
+export const completeTask = async (
+  taskId: string,
+  variables: TaskVariables
+): Promise<number> => {
+  const body = {
+    variables,
+  };
+  const res = await fetch(`api/engine/task/${taskId}/complete`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error(
+      `Failed to complete task with variables: ${res.statusText} [${res.status}]`
+    );
+  }
+
+  return res.status;
+};

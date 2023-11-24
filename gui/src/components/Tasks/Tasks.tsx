@@ -10,11 +10,20 @@ import {
   getInstances,
   getTasks,
   getTaskVariables,
+  completeTask,
+  setTaskVariables,
 } from "@/src/utils/processUtils";
 import { useForm } from "react-hook-form";
-import { AbiFunction } from 'abitype'
+import { AbiFunction } from "abitype";
+import {
+  usePrepareSendTransaction,
+  useSendTransaction,
+  useWaitForTransaction,
+  useAccount,
+} from "wagmi";
 
 export const Tasks: FC<{ className?: string }> = ({ className }) => {
+  const { address } = useAccount();
   const [currentProcess, setCurrentProcess] = useState<string | null>(null);
   const [currentInstance, setCurrentInstance] = useState<string | null>(null);
   const [currentTask, setCurrentTask] = useState<string | null>(null);
@@ -22,14 +31,57 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
   const [instances, setInstances] = useState<ProcessInstance[]>([]);
   const [tasks, setTasks] = useState<ProcessTask[]>([]);
 
-  const [formVars, setFormVars] = useState<TaskVariables | undefined>(undefined)
-  const [abi, setAbi] = useState<AbiFunction | undefined>(undefined)
+  const [formVars, setFormVars] = useState<TaskVariables | undefined>(
+    undefined
+  );
+  const [abi, setAbi] = useState<AbiFunction | undefined>(undefined);
 
+  const { register, handleSubmit, formState, watch, reset } = useForm();
+  const to = watch("_to");
+  const value = watch("_value");
 
-  const { register, handleSubmit, watch, formState: { errors } } = useForm();
-  const onSubmit = data => console.log(data);
+  const { config } = usePrepareSendTransaction({
+    to: to,
+    value: value,
+    account: address,
+  });
 
+  const { data, sendTransaction } = useSendTransaction(config);
 
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+  });
+
+  useEffect(() => {
+    if (!currentTask || !data?.hash) {
+      return;
+    }
+    const transactionHash = data.hash;
+    const transactionInput = config.data || "0x";
+    const value = config.value;
+    const variables = {
+      transactionHash: {
+        value: transactionHash,
+        type: "String",
+        valueInfo: {},
+      },
+      transactionInput: {
+        value: transactionInput,
+        type: "String",
+        valueInfo: {},
+      },
+      value: {
+        value: value,
+        type: "String",
+        valueInfo: {},
+      },
+    };
+    completeTask(currentTask, variables).then((res) => {
+      if (res === 204) {
+        reset();
+      }
+    });
+  }, [data?.hash]);
   useEffect(() => {
     const getData = async () => {
       setProcesses(await getDefinitions());
@@ -57,13 +109,15 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
   }, [currentInstance, currentProcess]);
 
   useEffect(() => {
-    if (!currentTask) { return }
+    if (!currentTask) {
+      return;
+    }
 
     const getData = async () => {
       const formVars = await getTaskVariables(currentTask);
-      setFormVars(formVars)
+      setFormVars(formVars);
       if (formVars.abi) {
-        setAbi(JSON.parse(formVars.abi.value))
+        setAbi(JSON.parse(formVars.abi.value));
       }
     };
 
@@ -158,35 +212,56 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
       </div>
       <div className={styles.props}>
         <h3 className={styles.propsTitle}>Task form</h3>
-        {!!formVars && (<>
-          <table className={styles.propsTable}>
-            <tbody className={styles.propsTBody}>
-              {Object.entries(formVars).map(([key, variable], idx) => {
-                return (
-                  <tr className={styles.propsTR} key={idx}>
-                    <th className={styles.propsTH}>{key}</th>
-                    <td className={styles.propsTD}>{variable.value}</td>
-                    <td className={styles.propsTD}>{variable.type}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        {!!formVars && (
+          <>
+            <table className={styles.propsTable}>
+              <tbody className={styles.propsTBody}>
+                {Object.entries(formVars).map(([key, variable], idx) => {
+                  return (
+                    <tr className={styles.propsTR} key={idx}>
+                      <th className={styles.propsTH}>{key}</th>
+                      <td className={styles.propsTD}>{variable.value}</td>
+                      <td className={styles.propsTD}>{variable.type}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
 
-          {abi &&
-            <form onSubmit={handleSubmit(onSubmit)}>
-              {abi.inputs.map((abiParam, idx) => {
-                return (
-                  <>
-                    < input key={idx} placeholder={abiParam.name || `param ${idx}`} {...register(abiParam.name || `param ${idx}`, { required: true })} />
-                    {errors.exampleRequired && <span>This field is required</span>}
-                  </>
-                )
-              })}
+            {abi && (
+              <form
+                onSubmit={handleSubmit(
+                  () =>
+                    sendTransaction?.() ||
+                    console.log("sendTransaction is not defined")
+                )}
+              >
+                {abi.inputs.map((abiParam, idx) => {
+                  return (
+                    <>
+                      <input
+                        key={idx}
+                        placeholder={abiParam.name || `param ${idx}`}
+                        {...register(abiParam.name || `param ${idx}`, {
+                          required: true,
+                        })}
+                      />
+                      {formState.errors.exampleRequired && (
+                        <span>This field is required</span>
+                      )}
+                    </>
+                  );
+                })}
 
-              <input type="submit" />
-            </form>}
-        </>
+                <button
+                  type="submit"
+                  disabled={isLoading || !sendTransaction || !to || !value}
+                >
+                  {isLoading ? "Sending..." : "Send"}
+                </button>
+              </form>
+            )}
+          </>
         )}
       </div>
     </div>

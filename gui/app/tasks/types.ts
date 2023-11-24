@@ -30,8 +30,8 @@ export type TaskVariables = {
     value: any;
     type: string;
     valueInfo: {
-      objectTypeName: string;
-      serializationDataFormat: string;
+      objectTypeName?: string;
+      serializationDataFormat?: string;
     };
   };
 };

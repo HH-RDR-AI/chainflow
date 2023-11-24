@@ -4,10 +4,21 @@ import { publicProvider } from "@wagmi/core/providers/public";
 import { configureChains, createConfig } from "wagmi";
 import { polygonMumbai } from "@wagmi/chains";
 import { WALLET_CONNECT_PROJECT_ID } from "../constants";
-
 export const useWagmiConfig = () => {
+  const polygonMumbaiChain = {
+    ...polygonMumbai,
+    rpcUrls: {
+      ...polygonMumbai.rpcUrls,
+      default: {
+        http: ["https://endpoints.omniatech.io/v1/matic/mumbai/public"],
+      },
+      public: {
+        http: ["https://endpoints.omniatech.io/v1/matic/mumbai/public"],
+      },
+    },
+  };
   const { chains, publicClient } = configureChains(
-    [polygonMumbai],
+    [polygonMumbaiChain],
     [publicProvider()]
   );
 
