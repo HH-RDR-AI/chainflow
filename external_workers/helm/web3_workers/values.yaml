@@ -1,9 +1,9 @@
 ---
-#image: 'docker-registry.dexguru.biz/dex.guru/chainflow_engine/chainflow_engine'
+image: 'docker-registry.dexguru.biz/dex.guru/chainflow-deployment/chainflow-deployment/external_workers'
 imageTag: ''
 registrySecretName: registry-harbor
 
-transaction_status_worker:
+chainflow-transaction-status-worker:
   replicas:
     default: 1
   limitsCpu: 1
