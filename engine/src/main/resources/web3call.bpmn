@@ -5,9 +5,9 @@
         <bpmn:serviceTask id="Activity_0uptc3r" name="Check Transaction Confirmed" camunda:type="external" camunda:topic="CheckTransactionConfirmed">
             <bpmn:extensionElements>
                 <camunda:inputOutput>
-                    <camunda:inputParameter name="transactionHash" />
-                    <camunda:inputParameter name="transactionInput" />
-                    <camunda:inputParameter name="value" />
+                    <camunda:inputParameter name="transactionHash">${transactionHash}</camunda:inputParameter>
+                    <camunda:inputParameter name="transactionInput">${transactionInput}</camunda:inputParameter>
+                    <camunda:inputParameter name="value">${value}</camunda:inputParameter>
                 </camunda:inputOutput>
             </bpmn:extensionElements>
             <bpmn:incoming>Flow_1o22k93</bpmn:incoming>
@@ -29,9 +29,9 @@
             <bpmn:extensionElements>
                 <camunda:inputOutput>
                     <camunda:inputParameter name="abi">${abi}</camunda:inputParameter>
-                    <camunda:outputParameter name="transactionHash" />
-                    <camunda:outputParameter name="transactionInput" />
-                    <camunda:outputParameter name="value" />
+                    <camunda:outputParameter name="transactionHash">${transactionHash}</camunda:outputParameter>
+                    <camunda:outputParameter name="transactionInput">${transactionInput}</camunda:outputParameter>
+                    <camunda:outputParameter name="value">${value}</camunda:outputParameter>
                 </camunda:inputOutput>
             </bpmn:extensionElements>
             <bpmn:incoming>Flow_0t0n4q9</bpmn:incoming>
@@ -46,6 +46,10 @@
     </bpmn:process>
     <bpmndi:BPMNDiagram id="BPMNDiagram_1">
         <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="EthWriteCall">
+            <bpmndi:BPMNShape id="Activity_1810o09_di" bpmnElement="Activity_0uptc3r">
+                <dc:Bounds x="430" y="77" width="100" height="80" />
+                <bpmndi:BPMNLabel />
+            </bpmndi:BPMNShape>
             <bpmndi:BPMNShape id="Event_0nq93vx_di" bpmnElement="Event_0nq93vx">
                 <dc:Bounds x="152" y="99" width="36" height="36" />
                 <bpmndi:BPMNLabel>
@@ -59,20 +63,16 @@
                 <dc:Bounds x="260" y="77" width="100" height="80" />
                 <bpmndi:BPMNLabel />
             </bpmndi:BPMNShape>
-            <bpmndi:BPMNShape id="Activity_1810o09_di" bpmnElement="Activity_0uptc3r">
-                <dc:Bounds x="430" y="77" width="100" height="80" />
-                <bpmndi:BPMNLabel />
-            </bpmndi:BPMNShape>
             <bpmndi:BPMNShape id="Event_0p3x5oc_di" bpmnElement="Event_0p541p5">
                 <dc:Bounds x="462" y="139" width="36" height="36" />
             </bpmndi:BPMNShape>
-            <bpmndi:BPMNEdge id="Flow_0t0n4q9_di" bpmnElement="Flow_0t0n4q9">
-                <di:waypoint x="188" y="117" />
-                <di:waypoint x="260" y="117" />
-            </bpmndi:BPMNEdge>
             <bpmndi:BPMNEdge id="Flow_07llttx_di" bpmnElement="Flow_07llttx">
                 <di:waypoint x="530" y="117" />
                 <di:waypoint x="612" y="117" />
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_0t0n4q9_di" bpmnElement="Flow_0t0n4q9">
+                <di:waypoint x="188" y="117" />
+                <di:waypoint x="260" y="117" />
             </bpmndi:BPMNEdge>
             <bpmndi:BPMNEdge id="Flow_1o22k93_di" bpmnElement="Flow_1o22k93">
                 <di:waypoint x="360" y="117" />
