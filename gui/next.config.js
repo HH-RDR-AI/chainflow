@@ -3,7 +3,6 @@ const nextConfig = {
   basePath: '/dashboard',
   experimental: {
     serverComponentsExternalPackages: [
-      "@sismo-core/sismo-connect-server",
       "hammerjs",
     ],
   },

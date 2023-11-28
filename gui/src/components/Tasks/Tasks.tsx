@@ -212,56 +212,38 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
       </div>
       <div className={styles.props}>
         <h3 className={styles.propsTitle}>Task form</h3>
-        {!!formVars && (
-          <>
-            <table className={styles.propsTable}>
-              <tbody className={styles.propsTBody}>
-                {Object.entries(formVars).map(([key, variable], idx) => {
-                  return (
-                    <tr className={styles.propsTR} key={idx}>
-                      <th className={styles.propsTH}>{key}</th>
-                      <td className={styles.propsTD}>{variable.value}</td>
-                      <td className={styles.propsTD}>{variable.type}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-
-            {abi && (
-              <form
-                onSubmit={handleSubmit(
-                  () =>
-                    sendTransaction?.() ||
-                    console.log("sendTransaction is not defined")
-                )}
-              >
-                {abi.inputs.map((abiParam, idx) => {
-                  return (
-                    <>
-                      <input
-                        key={idx}
-                        placeholder={abiParam.name || `param ${idx}`}
-                        {...register(abiParam.name || `param ${idx}`, {
-                          required: true,
-                        })}
-                      />
-                      {formState.errors.exampleRequired && (
-                        <span>This field is required</span>
-                      )}
-                    </>
-                  );
-                })}
-
-                <button
-                  type="submit"
-                  disabled={isLoading || !sendTransaction || !to || !value}
-                >
-                  {isLoading ? "Sending..." : "Send"}
-                </button>
-              </form>
+        {!!formVars && abi && (
+          <form
+            onSubmit={handleSubmit(
+              () =>
+                sendTransaction?.() ||
+                console.log("sendTransaction is not defined")
             )}
-          </>
+          >
+            {abi.inputs.map((abiParam, idx) => {
+              return (
+                <>
+                  <input
+                    key={idx}
+                    placeholder={abiParam.name || `param ${idx}`}
+                    {...register(abiParam.name || `param ${idx}`, {
+                      required: true,
+                    })}
+                  />
+                  {formState.errors.exampleRequired && (
+                    <span>This field is required</span>
+                  )}
+                </>
+              );
+            })}
+
+            <button
+              type="submit"
+              disabled={isLoading || !sendTransaction || !to || !value}
+            >
+              {isLoading ? "Sending..." : "Send"}
+            </button>
+          </form>
         )}
       </div>
     </div>
