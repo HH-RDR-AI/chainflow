@@ -21,9 +21,11 @@ import {
   useWaitForTransaction,
   useAccount,
 } from "wagmi";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 export const Tasks: FC<{ className?: string }> = ({ className }) => {
   const { address } = useAccount();
+  const { openConnectModal } = useConnectModal();
   const [currentProcess, setCurrentProcess] = useState<string | null>(null);
   const [currentInstance, setCurrentInstance] = useState<string | null>(null);
   const [currentTask, setCurrentTask] = useState<string | null>(null);
@@ -39,6 +41,12 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
   const { register, handleSubmit, formState, watch, reset } = useForm();
   const to = watch("_to");
   const value = watch("_value");
+
+  useEffect(() => {
+    if (!address && openConnectModal) {
+      openConnectModal();
+    }
+  }, [address]);
 
   const { config } = usePrepareSendTransaction({
     to: to,
