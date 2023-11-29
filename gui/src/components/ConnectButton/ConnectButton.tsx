@@ -2,7 +2,7 @@
 // in src/page.tsx
 "use client";
 
-import { FC } from "react";
+import { FC, ReactElement } from "react";
 import { ConnectButton as CustomRainbowConnectButton } from "@rainbow-me/rainbowkit";
 import styles from "./ConnectButton.module.scss";
 import { FaSpinner, FaUser, FaUserInjured } from "react-icons/fa6";
