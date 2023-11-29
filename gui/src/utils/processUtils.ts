@@ -3,13 +3,20 @@ import {
   ProcessInstance,
   ProcessVariables,
 } from "@/app/processes/types";
-import { ProcessTask } from "@/app/tasks/types";
+import { ProcessTask, TaskVariables } from "@/app/tasks/types";
+
+export const fetchEngine = async (
+  input: RequestInfo | URL,
+  init?: RequestInit
+): Promise<Response> => {
+  return typeof window === "undefined"
+    ? fetch(`https://chainflow-engine.dexguru.biz/engine-rest/${input}`, init)
+    : fetch(`api/engine/${input}`, init);
+};
 
 export const getInstances = async (id?: string): Promise<ProcessInstance[]> => {
-  const res = await fetch(
-    `https://chainflow.dexguru.biz/dashboard/api/engine/process-instance${
-      !!id ? `?processDefinitionId=${id}` : ""
-    }`
+  const res = await fetchEngine(
+    `process-instance${!!id ? `?processDefinitionId=${id}` : ""}`
   );
 
   if (!res.ok) {
@@ -23,9 +30,7 @@ export const getInstances = async (id?: string): Promise<ProcessInstance[]> => {
 };
 
 export const getDefinition = async (id: string): Promise<ProcessDefinition> => {
-  const res = await fetch(
-    `https://chainflow.dexguru.biz/dashboard/api/engine/process-definition?processDefinitionId=${id}`
-  );
+  const res = await fetchEngine(`process-definition?processDefinitionId=${id}`);
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -38,9 +43,7 @@ export const getDefinition = async (id: string): Promise<ProcessDefinition> => {
 };
 
 export const getInstance = async (id: string): Promise<ProcessInstance> => {
-  const res = await fetch(
-    `https://chainflow.dexguru.biz/dashboard/api/engine/process-instance/${id}`
-  );
+  const res = await fetchEngine(`process-instance/${id}`);
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -53,9 +56,7 @@ export const getInstance = async (id: string): Promise<ProcessInstance> => {
 };
 
 export const getVariables = async (id: string): Promise<ProcessVariables> => {
-  const res = await fetch(
-    `https://chainflow.dexguru.biz/dashboard/api/engine/process-instance/${id}/variables`
-  );
+  const res = await fetchEngine(`process-instance/${id}/variables`);
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -68,9 +69,7 @@ export const getVariables = async (id: string): Promise<ProcessVariables> => {
 };
 
 export const getDefinitions = async (): Promise<ProcessDefinition[]> => {
-  const res = await fetch(
-    "https://chainflow.dexguru.biz/dashboard/api/engine/process-definition"
-  );
+  const res = await fetchEngine("process-definition");
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -89,8 +88,8 @@ export const getDefinitions = async (): Promise<ProcessDefinition[]> => {
 };
 
 export const getInstanceCount = async (id: string): Promise<number> => {
-  const res = await fetch(
-    `https://chainflow.dexguru.biz/dashboard/api/engine/process-instance/count?processDefinitionId=${id}`
+  const res = await fetchEngine(
+    `process-instance/count?processDefinitionId=${id}`
   );
 
   if (!res.ok) {
@@ -117,9 +116,7 @@ export const getTasks = async (
     query.push(`processInstanceId=${instanceId}`);
   }
 
-  const res = await fetch(
-    `https://chainflow.dexguru.biz/dashboard/api/engine/task?${query.join("&")}`
-  );
+  const res = await fetchEngine(`task?${query.join("&")}`);
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary
@@ -128,4 +125,68 @@ export const getTasks = async (
 
   const tasks: ProcessTask[] = await res.json();
   return tasks;
+};
+
+export const getTaskVariables = async (
+  taskId: string
+): Promise<TaskVariables> => {
+  const res = await fetchEngine(`task/${taskId}/form-variables`);
+
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error(
+      `Failed to fetch task variables: ${res.statusText} [${res.status}]`
+    );
+  }
+
+  const vars: TaskVariables = await res.json();
+  return vars;
+};
+
+export const setTaskVariables = async (
+  taskId: string,
+  variables: TaskVariables
+): Promise<number> => {
+  const body = {
+    modifications: variables,
+  };
+  const res = await fetchEngine(`task/${taskId}/variables`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error(
+      `Failed to set variables: ${res.statusText} [${res.status}]`
+    );
+  }
+
+  return res.status;
+};
+
+export const completeTask = async (
+  taskId: string,
+  variables: TaskVariables
+): Promise<number> => {
+  const body = {
+    variables,
+  };
+  const res = await fetchEngine(`task/${taskId}/complete`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error(
+      `Failed to complete task with variables: ${res.statusText} [${res.status}]`
+    );
+  }
+
+  return res.status;
 };

@@ -4,14 +4,28 @@ import { FC, useEffect, useState } from "react";
 import clsx from "clsx";
 import styles from "./Tasks.module.scss";
 import { ProcessDefinition, ProcessInstance } from "@/app/processes/types";
-import { ProcessTask } from "@/app/tasks/types";
+import { ProcessTask, TaskVariables } from "@/app/tasks/types";
 import {
   getDefinitions,
   getInstances,
   getTasks,
+  getTaskVariables,
+  completeTask,
+  setTaskVariables,
 } from "@/src/utils/processUtils";
+import { useForm } from "react-hook-form";
+import { AbiFunction } from "abitype";
+import {
+  usePrepareSendTransaction,
+  useSendTransaction,
+  useWaitForTransaction,
+  useAccount,
+} from "wagmi";
+import { useConnectModal } from "@rainbow-me/rainbowkit";
 
 export const Tasks: FC<{ className?: string }> = ({ className }) => {
+  const { address } = useAccount();
+  const { openConnectModal } = useConnectModal();
   const [currentProcess, setCurrentProcess] = useState<string | null>(null);
   const [currentInstance, setCurrentInstance] = useState<string | null>(null);
   const [currentTask, setCurrentTask] = useState<string | null>(null);
@@ -19,6 +33,63 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
   const [instances, setInstances] = useState<ProcessInstance[]>([]);
   const [tasks, setTasks] = useState<ProcessTask[]>([]);
 
+  const [formVars, setFormVars] = useState<TaskVariables | undefined>(
+    undefined
+  );
+  const [abi, setAbi] = useState<AbiFunction | undefined>(undefined);
+
+  const { register, handleSubmit, formState, watch, reset } = useForm();
+  const to = watch("_to");
+  const value = watch("_value");
+
+  useEffect(() => {
+    if (!address && openConnectModal) {
+      openConnectModal();
+    }
+  }, [address]);
+
+  const { config } = usePrepareSendTransaction({
+    to: to,
+    value: value,
+    account: address,
+  });
+
+  const { data, sendTransaction } = useSendTransaction(config);
+
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+  });
+
+  useEffect(() => {
+    if (!currentTask || !data?.hash) {
+      return;
+    }
+    const transactionHash = data.hash;
+    const transactionInput = config.data || "0x";
+    const value = config.value;
+    const variables = {
+      transactionHash: {
+        value: transactionHash,
+        type: "String",
+        valueInfo: {},
+      },
+      transactionInput: {
+        value: transactionInput,
+        type: "String",
+        valueInfo: {},
+      },
+      value: {
+        value: value,
+        type: "String",
+        valueInfo: {},
+      },
+    };
+    completeTask(currentTask, variables).then((res) => {
+      if (res === 204) {
+        reset();
+      }
+    });
+  }, [data?.hash]);
   useEffect(() => {
     const getData = async () => {
       setProcesses(await getDefinitions());
@@ -44,6 +115,22 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
 
     getData();
   }, [currentInstance, currentProcess]);
+
+  useEffect(() => {
+    if (!currentTask) {
+      return;
+    }
+
+    const getData = async () => {
+      const formVars = await getTaskVariables(currentTask);
+      setFormVars(formVars);
+      if (formVars.abi) {
+        setAbi(JSON.parse(formVars.abi.value));
+      }
+    };
+
+    getData();
+  }, [currentTask]);
 
   const task = tasks.find((task) => currentTask === task.id);
 
@@ -129,6 +216,42 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
               })}
             </tbody>
           </table>
+        )}
+      </div>
+      <div className={styles.props}>
+        <h3 className={styles.propsTitle}>Task form</h3>
+        {!!formVars && abi && (
+          <form
+            onSubmit={handleSubmit(
+              () =>
+                sendTransaction?.() ||
+                console.log("sendTransaction is not defined")
+            )}
+          >
+            {abi.inputs.map((abiParam, idx) => {
+              return (
+                <>
+                  <input
+                    key={idx}
+                    placeholder={abiParam.name || `param ${idx}`}
+                    {...register(abiParam.name || `param ${idx}`, {
+                      required: true,
+                    })}
+                  />
+                  {formState.errors.exampleRequired && (
+                    <span>This field is required</span>
+                  )}
+                </>
+              );
+            })}
+
+            <button
+              type="submit"
+              disabled={isLoading || !sendTransaction || !to || !value}
+            >
+              {isLoading ? "Sending..." : "Send"}
+            </button>
+          </form>
         )}
       </div>
     </div>
