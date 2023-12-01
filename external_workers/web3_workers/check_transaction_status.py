@@ -74,6 +74,7 @@ def handle_task(task: ExternalTask) -> TaskResult:
             "Transaction receipt status is not success in blockchain",
             variables
         )
+    return task.complete(variables)
 
 
 if __name__ == '__main__':
