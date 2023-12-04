@@ -1,13 +1,14 @@
-// Next.js https://nextjs.org/docs/getting-started/installation
-// in src/page.tsx
 "use client";
 
 import { FC, ReactElement } from "react";
 import { ConnectButton as CustomRainbowConnectButton } from "@rainbow-me/rainbowkit";
 import styles from "./ConnectButton.module.scss";
-import { FaSpinner, FaUser, FaUserInjured } from "react-icons/fa6";
+import { FaRegUser, FaSpinner, FaUserInjured } from "react-icons/fa6";
+import { getShortAddress } from "@/src/utils/common";
+import { clsx } from "clsx";
+import Avatar from "../Avatar";
 
-export const ConnectButton: FC = () => {
+export const ConnectButton: FC<{ className?: string }> = ({ className }) => {
   return (
     <CustomRainbowConnectButton.Custom>
       {({
@@ -22,7 +23,9 @@ export const ConnectButton: FC = () => {
         const loading = authenticationStatus === "loading";
         return (
           <button
-            className={styles.container}
+            className={clsx(styles.container, className, {
+              [styles.wrong]: chain?.unsupported,
+            })}
             disabled={loading}
             onClick={() => {
               if (loading) return;
@@ -42,16 +45,20 @@ export const ConnectButton: FC = () => {
                 <FaSpinner />
               ) : chain?.unsupported ? (
                 <FaUserInjured />
+              ) : !!account ? (
+                <Avatar address={account.address} />
               ) : (
-                <FaUser />
+                <FaRegUser />
               )}
             </span>
             <div className={styles.caption}>
-              <CustomRainbowConnectButton
-                accountStatus="address"
-                chainStatus="icon"
-                showBalance={false}
-              />
+              {loading
+                ? "Connecting..."
+                : chain?.unsupported
+                ? "Wrong chain"
+                : !!account
+                ? getShortAddress(account.address)
+                : "Connect wallet"}
             </div>
           </button>
         );

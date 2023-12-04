@@ -1,23 +1,11 @@
 "use client";
 
-import {
-  FC,
-  useRef,
-  useEffect,
-  ChangeEventHandler,
-  MouseEventHandler,
-} from "react";
+import { FC, useRef, useEffect } from "react";
 
 import "camunda-bpmn-js/dist/assets/camunda-platform-modeler.css";
 import BpmnModeler from "camunda-bpmn-js/lib/camunda-platform/Modeler";
 
 import styles from "./Modeler.module.scss";
-import {
-  FaDownload,
-  FaRegFolderOpen,
-  FaCheckToSlot,
-  FaFile,
-} from "react-icons/fa6";
 
 export const Modeler: FC<{ onInit: (modeler: BpmnModeler) => void }> = ({
   onInit,

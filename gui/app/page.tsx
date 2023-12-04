@@ -1,14 +1,7 @@
-import ConnectButton from "@/src/components/ConnectButton";
-import Image from "next/image";
-import Link from "next/link";
 import { FC } from "react";
 
 const HomePage: FC = () => {
-  return (
-    <div>
-      <ConnectButton />
-    </div>
-  );
+  return <h1>chainflow</h1>;
 };
 
 export default HomePage;

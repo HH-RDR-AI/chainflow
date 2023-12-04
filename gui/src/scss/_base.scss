@@ -6,13 +6,17 @@
 
 html,
 body {
+  --font-common: var(--font-ibm, sans-serif), sans-serif;
+  --font-accent: var(--font-sora, sans-serif), sans-serif;
+
   margin: 0;
   padding: 0;
-  background: var(--color-bg);
-  color: var(--color-text);
+  background: #eceff1;
+  color: #3e4854;
   font-size: 16px;
   line-height: 28px;
   min-width: 320px;
+  font-family: var(--font-common);
 }
 
 a {
@@ -32,4 +36,32 @@ img {
 [hidden],
 .hidden {
   @include visually-hidden;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-sora, sans-serif), sans-serif;
+  font-weight: 500;
+  margin: 0;
+}
+
+h1 {
+  font-size: 24px;
+  line-height: 32px;
+}
+
+button,
+input {
+  font-family: inherit;
+}
+
+.bio-properties-panel {
+  font-family: var(--font-common, sans-serif) !important;
+
+  &-header {
+    font-family: var(--font-accent, sans-serif);
+  }
 }

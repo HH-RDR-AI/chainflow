@@ -9,42 +9,42 @@ import ConnectButton from "@/src/components/ConnectButton";
 export const Navigation: FC = () => {
   return (
     <div className={styles.container}>
-      <Link className={styles.logo} href="/">
-        <span className={styles.logoIcon}>
+      <Link className={styles.link} href="/">
+        <span className={styles.icon}>
           <FaHome />
         </span>
       </Link>
-      <nav className={clsx(styles.navigation, styles.sections)}>
-        <ul className={styles.navigationList}>
-          <li className={styles.navigationItem}>
-            <Link href="/modeler" className={styles.navigationLink}>
-              <span className={styles.navigationLinkIcon}>
+      <nav className={styles.sections}>
+        <ul className={styles.list}>
+          <li className={styles.item}>
+            <Link href="/modeler" className={styles.link}>
+              <span className={styles.icon}>
                 <FaProjectDiagram />
               </span>
-              <span className={styles.navigationLinkCaption}>Modeler</span>
+              <span className={styles.caption}>Modeler</span>
             </Link>
           </li>
-          <li className={styles.navigationItem}>
-            <Link href="/processes" className={styles.navigationLink}>
-              <span className={styles.navigationLinkIcon}>
+          <li className={styles.item}>
+            <Link href="/processes" className={styles.link}>
+              <span className={styles.icon}>
                 <FaDatabase />
               </span>
-              <span className={styles.navigationLinkCaption}>Processes</span>
+              <span className={styles.caption}>Processes</span>
             </Link>
           </li>
-          <li className={styles.navigationItem}>
-            <Link href="/tasks" className={styles.navigationLink}>
-              <span className={styles.navigationLinkIcon}>
+          <li className={styles.item}>
+            <Link href="/tasks" className={styles.link}>
+              <span className={styles.icon}>
                 <FaList />
               </span>
-              <span className={styles.navigationLinkCaption}>Tasks</span>
+              <span className={styles.caption}>Tasks</span>
             </Link>
           </li>
         </ul>
       </nav>
-      <nav className={clsx(styles.navigation, styles.personal)}>
-        <ul className={styles.navigationList}>
-          <li className={styles.navigationItem}>
+      <nav className={styles.personal}>
+        <ul className={styles.list}>
+          <li className={styles.item}>
             <ConnectButton />
           </li>
         </ul>

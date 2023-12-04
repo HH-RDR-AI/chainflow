@@ -17,6 +17,7 @@ import {
 } from "react-icons/fa6";
 import BpmnModeler from "camunda-bpmn-js/lib/camunda-platform/Modeler";
 import clsx from "clsx";
+import Button from "../Button";
 
 const ModelerPage: FC<{ className?: string }> = ({ className }) => {
   const refFile = useRef<HTMLInputElement>(null);
@@ -44,7 +45,7 @@ const ModelerPage: FC<{ className?: string }> = ({ className }) => {
     reader.readAsText(e.target.files[0]);
   };
 
-  const handleOpenClick: MouseEventHandler<HTMLButtonElement> = (e) => {
+  const handleOpenClick: MouseEventHandler = (e) => {
     refFile.current?.click();
   };
 
@@ -68,7 +69,7 @@ const ModelerPage: FC<{ className?: string }> = ({ className }) => {
   return (
     <div className={clsx(styles.container, className)}>
       <div className={styles.header}>
-        <h2 className={styles.title}>Modeler</h2>
+        <h1 className={styles.title}>Modeler</h1>
         <div className={styles.tools}>
           <input
             ref={refFile}
@@ -77,21 +78,28 @@ const ModelerPage: FC<{ className?: string }> = ({ className }) => {
             accept=".bpmn, .xml"
             className={styles.file}
           />
-          <button
+          <Button
+            icon={<FaFile />}
             onClick={() => {
               refModeler.current?.createDiagram();
             }}
             className={styles.toolsAction}
-          >
-            <FaFile />
-          </button>
-          <button onClick={handleOpenClick} className={styles.toolsAction}>
-            <FaRegFolderOpen />
-          </button>
-          <button onClick={handleDownload} className={styles.toolsAction}>
-            <FaDownload />
-          </button>
-          <button
+          />
+
+          <Button
+            icon={<FaRegFolderOpen />}
+            onClick={handleOpenClick}
+            className={styles.toolsAction}
+          />
+
+          <Button
+            icon={<FaDownload />}
+            onClick={handleDownload}
+            className={styles.toolsAction}
+          />
+
+          <Button
+            icon={<FaCheckToSlot />}
             className={styles.toolsAction}
             onClick={() => {
               if (typeof window === "undefined") {
@@ -114,13 +122,10 @@ const ModelerPage: FC<{ className?: string }> = ({ className }) => {
                 formData.append("process.bpmn", new Blob([xmlResult.xml]));
                 formData.append("deployment-name", name);
 
-                const res = await fetch(
-                  "api/engine/deployment/create",
-                  {
-                    method: "POST",
-                    body: formData,
-                  }
-                );
+                const res = await fetch("api/engine/deployment/create", {
+                  method: "POST",
+                  body: formData,
+                });
 
                 if (!res.ok) {
                   console.log(
@@ -129,9 +134,7 @@ const ModelerPage: FC<{ className?: string }> = ({ className }) => {
                 }
               });
             }}
-          >
-            <FaCheckToSlot />
-          </button>
+          />
         </div>
       </div>
       <div className={styles.body}>

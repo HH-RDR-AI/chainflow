@@ -1,9 +1,15 @@
 .container {
-  border: 1px #ddd solid;
-  padding: 16px;
+  padding: 12px 16px;
   display: flex;
-  flex-flow: column;
+  align-items: center;
   gap: 16px;
+}
+
+.title {
+  flex: 1 0 0;
+}
+
+.body {
 }
 
 .footer {
