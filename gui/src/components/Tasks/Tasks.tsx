@@ -22,6 +22,7 @@ import {
   useAccount,
 } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
+import Button from "../Button";
 
 export const Tasks: FC<{ className?: string }> = ({ className }) => {
   const { address } = useAccount();
@@ -110,7 +111,7 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
 
   useEffect(() => {
     const getData = async () => {
-      setTasks(await getTasks(currentProcess, currentInstance));
+      setTasks(await getTasks(null, currentProcess, currentInstance));
     };
 
     getData();
@@ -165,7 +166,6 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
                               active: currentInstance === instance.id,
                             })}
                             onClick={() => {
-                              //console.log([process.id, instance.id]);
                               setCurrentProcess(process.id);
                               setCurrentInstance(instance.id);
                             }}
@@ -245,12 +245,11 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
               );
             })}
 
-            <button
-              type="submit"
+            <Button
+              caption={isLoading ? "Sending..." : "Send"}
+              buttonType="submit"
               disabled={isLoading || !sendTransaction || !to || !value}
-            >
-              {isLoading ? "Sending..." : "Send"}
-            </button>
+            />
           </form>
         )}
       </div>

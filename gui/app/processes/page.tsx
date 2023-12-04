@@ -1,8 +1,7 @@
+import List from "@/src/components/List";
 import styles from "./page.module.scss";
 import ProcessCard from "@/src/components/ProcessCard";
 import { getDefinitions } from "@/src/utils/processUtils";
-
-export const dynamic = "force-dynamic";
 
 export default async function ProjectsPage() {
   const processes = await getData();
@@ -10,19 +9,21 @@ export default async function ProjectsPage() {
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2 className={styles.title}>Processes</h2>
+        <h1 className={styles.title}>Processes</h1>
         <div className={styles.tools}></div>
       </div>
       <div className={styles.body}>
-        <ul className={styles.list}>
+        <List className={styles.list}>
           {processes?.map((process) => {
             return (
-              <li className={styles.item} key={process.key}>
-                <ProcessCard process={process} />
-              </li>
+              <ProcessCard
+                process={process}
+                className={styles.card}
+                key={process.key}
+              />
             );
           })}
-        </ul>
+        </List>
       </div>
     </div>
   );

@@ -4,6 +4,8 @@ import Viewer from "@/src/components/Viewer";
 import Link from "next/link";
 import { FaPlay } from "react-icons/fa6";
 import InstanceSuspender from "@/src/components/InstanceSuspender";
+import Button from "@/src/components/Button";
+import Panel from "@/src/components/Panel";
 
 export const dynamic = "force-dynamic";
 
@@ -17,56 +19,69 @@ export default async function InstancesPage({
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2 className={styles.title}>Process</h2>
+        <h1 className={styles.title}>Process</h1>
         <div className={styles.tabs}>
           <ul className={styles.tabsList}></ul>
         </div>
         <div className={styles.tools}></div>
       </div>
       <div className={styles.body}>
-        <div className={styles.props}>
-          <table className={styles.propsTable}>
-            <tbody className={styles.propsTBody}>
-              {Object.entries(process).map(([key, value]) => {
-                return (
-                  <tr className={styles.propsTR} key={key}>
-                    <th className={styles.propsTH}>{key}</th>
-                    <td className={styles.propsTD}>{value}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-        <div className={styles.content}>
+        <aside className={styles.aside}>
+          <Panel title="Properties">
+            <div className={styles.props}>
+              <table className={styles.propsTable}>
+                <tbody className={styles.propsTBody}>
+                  {Object.entries(process).map(([key, value]) => {
+                    return (
+                      <tr className={styles.propsTR} key={key}>
+                        <th className={styles.propsTH}>{key}</th>
+                        <td className={styles.propsTD}>{value}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </Panel>
+
+          <Panel
+            title="Instances"
+            tools={<Button caption="New Instance" icon={<FaPlay />} disabled />}
+          >
+            <div className={styles.instances}>
+              <table className={styles.instancesTable}>
+                <tbody className={styles.instancesTBody}>
+                  {instances.map((instance) => {
+                    return (
+                      <tr className={styles.instancesTBody} key={instance.id}>
+                        <th className={styles.instancesTH}>
+                          <Link
+                            href={`/processes/${process.id}/${instance.id}`}
+                          >
+                            {instance.id}
+                          </Link>
+                        </th>
+                        <td className={styles.instancesTD}>
+                          {instance.ended ? "Ended" : "In progress"}{" "}
+                        </td>
+                        <td className={styles.instancesTD}>
+                          {instance.suspended ? "Suspended" : "Active"}
+                        </td>
+                        <td className={styles.instancesTD}>
+                          <InstanceSuspender instance={instance} />
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </Panel>
+        </aside>
+
+        <main className={styles.content}>
           <Viewer process={process.id} className={styles.viewer} />
-          <div className={styles.instances}>
-            <table className={styles.instancesTable}>
-              <tbody className={styles.instancesTBody}>
-                {instances.map((instance) => {
-                  return (
-                    <tr className={styles.instancesTBody} key={instance.id}>
-                      <th className={styles.instancesTH}>
-                        <Link href={`/processes/${process.id}/${instance.id}`}>
-                          {instance.id}
-                        </Link>
-                      </th>
-                      <td className={styles.instancesTD}>
-                        {instance.ended ? "Ended" : "In progress"}{" "}
-                      </td>
-                      <td className={styles.instancesTD}>
-                        {instance.suspended ? "Suspended" : "Active"}
-                      </td>
-                      <td className={styles.instancesTD}>
-                        <InstanceSuspender instance={instance} />
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
+        </main>
       </div>
     </div>
   );

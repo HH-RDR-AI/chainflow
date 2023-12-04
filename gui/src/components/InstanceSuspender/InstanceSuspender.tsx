@@ -3,6 +3,7 @@
 import { ProcessInstance } from "@/app/processes/types";
 import { FC } from "react";
 import { FaPlay } from "react-icons/fa6";
+import Button from "../Button";
 
 export const InstanceSuspender: FC<{ instance: ProcessInstance }> = ({
   instance,
@@ -12,13 +13,10 @@ export const InstanceSuspender: FC<{ instance: ProcessInstance }> = ({
   }
 
   const makeSuspended = async (id: string, state: boolean) => {
-    const res = await fetch(
-      `api/engine/process-instance/${id}/suspended`,
-      {
-        method: "PUT",
-        body: JSON.stringify({ suspended: state }),
-      }
-    );
+    const res = await fetch(`api/engine/process-instance/${id}/suspended`, {
+      method: "PUT",
+      body: JSON.stringify({ suspended: state }),
+    });
 
     if (!res.ok) {
       const json = await res.json();
@@ -38,12 +36,12 @@ export const InstanceSuspender: FC<{ instance: ProcessInstance }> = ({
   };
 
   return (
-    <button
+    <Button
+      icon={<FaPlay />}
+      caption="Resume"
       onClick={() => {
         makeSuspended(instance.id, false);
       }}
-    >
-      <FaPlay /> Resume
-    </button>
+    />
   );
 };

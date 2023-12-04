@@ -1,5 +1,5 @@
 .container {
-  padding-left: 48px;
+  padding-left: 80px;
 }
 
 .panel {
@@ -7,12 +7,12 @@
   left: 0;
   top: 0;
   bottom: 0;
-  width: 48px;
+  width: 80px;
   z-index: 1000;
 }
 
 .content {
-  padding: 8px;
+  padding: 20px 16px;
   min-height: 100vh;
   display: flex;
   flex-flow: column;

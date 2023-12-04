@@ -1,14 +1,28 @@
+import List from "@/src/components/List";
 import styles from "./page.module.scss";
-import { Tasks } from "@/src/components/Tasks/Tasks";
+import { getTasks } from "@/src/utils/processUtils";
+import TaskCard from "@/src/components/TaskCard";
 
 export default async function TasksPage() {
+  const tasks = await getData();
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2 className={styles.title}>Tasks</h2>
+        <h1 className={styles.title}>Tasks</h1>
         <div className={styles.tools}></div>
       </div>
-      <Tasks className={styles.body} />
+      <div className={styles.body}>
+        <List className={styles.list}>
+          {tasks?.map((task, idx) => {
+            return <TaskCard task={task} className={styles.card} key={idx} />;
+          })}
+        </List>
+      </div>
     </div>
   );
+}
+
+async function getData() {
+  return await getTasks();
 }

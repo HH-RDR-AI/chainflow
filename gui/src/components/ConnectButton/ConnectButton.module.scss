@@ -1,31 +1,17 @@
 .container {
-  border: 0;
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  text-decoration: none;
-  background: none;
-  padding: 8px;
-  transition: 0.25s ease;
-  color: #000;
-  width: 100%;
-  font-size: 18px;
-
-  &:hover {
-    background: #ddd;
-  }
+  composes: link from "../Navigation/Navigation.module.scss";
+  cursor: pointer;
 }
 
 .icon {
-  font-size: 32px;
+  composes: icon from "../Navigation/Navigation.module.scss";
 }
 
 .caption {
-  flex: 1 0 0;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  text-align: left;
-  font-weight: 500;
-  padding: 5px;
+  composes: caption from "../Navigation/Navigation.module.scss";
+}
+
+.wrong,
+.wrong .icon {
+  color: #ff646d;
 }

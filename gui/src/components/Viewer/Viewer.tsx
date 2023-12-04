@@ -7,6 +7,7 @@ import BpmnViewer from "bpmn-js/lib/Viewer";
 
 import styles from "./Viewer.module.scss";
 import clsx from "clsx";
+import { fetchEngine } from "@/src/utils/processUtils";
 
 export const Viewer: FC<{ process: string; className?: string }> = ({
   process,
@@ -27,9 +28,7 @@ export const Viewer: FC<{ process: string; className?: string }> = ({
 
     const getXml = async () => {
       try {
-        const res = await fetch(
-          `api/engine/process-definition/${process}/xml`
-        );
+        const res = await fetchEngine(`process-definition/${process}/xml`);
 
         if (!res.ok) {
           return;

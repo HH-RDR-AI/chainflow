@@ -9,9 +9,12 @@ export const fetchEngine = async (
   input: RequestInfo | URL,
   init?: RequestInit
 ): Promise<Response> => {
-  return typeof window === "undefined"
-    ? fetch(`https://chainflow-engine.dexguru.biz/engine-rest/${input}`, init)
-    : fetch(`api/engine/${input}`, init);
+  const hostUrl =
+    typeof window === "undefined"
+      ? "https://chainflow-engine.dexguru.biz/engine-rest"
+      : "/dashboard/api/engine";
+
+  return fetch(`${hostUrl}/${input}`, init);
 };
 
 export const getInstances = async (id?: string): Promise<ProcessInstance[]> => {
@@ -103,10 +106,15 @@ export const getInstanceCount = async (id: string): Promise<number> => {
 };
 
 export const getTasks = async (
+  id?: string | null,
   definitionId?: string | null,
   instanceId?: string | null
 ): Promise<ProcessTask[]> => {
   const query = [];
+
+  if (id) {
+    query.push(`id=${id}`);
+  }
 
   if (definitionId) {
     query.push(`processDefinitionId=${definitionId}`);

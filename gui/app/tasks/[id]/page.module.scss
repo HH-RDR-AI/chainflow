@@ -28,24 +28,18 @@
   flex-flow: column;
 }
 
-.list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  display: grid;
+.content {
+  flex: 1 0 0;
+  display: flex;
+  flex-flow: column;
   gap: 16px;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 }
 
 .props {
-  flex: 0 0 320px;
-
   &Table {
     border-collapse: collapse;
     border-spacing: 0;
     display: block;
-    font-size: 12px;
-    line-height: 16px;
   }
 
   &TBody {
@@ -70,27 +64,26 @@
   }
 }
 
-.content {
-  flex: 1 0 0;
+.form {
   display: flex;
   flex-flow: column;
   gap: 16px;
+
+  &Field {
+    display: flex;
+    gap: 8px;
+    flex-flow: column;
+
+    &Input {
+      border: 1px #eceff1 solid;
+      border-radius: 4px;
+      height: 32px;
+      padding: 4px 12px;
+    }
+  }
 }
 
-.viewer {
-  flex: 1 0 0;
-  border-radius: 8px;
-  background: #fff;
-}
-
-.variables {
-  flex: 0 0 auto;
-
-  &Table {
-    border-spacing: 4px;
-  }
-
-  &TH {
-    text-align: left;
-  }
+.connect {
+  background: #1e242c !important;
+  border-radius: 4px;
 }
