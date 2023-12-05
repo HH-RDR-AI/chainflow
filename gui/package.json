@@ -38,6 +38,7 @@
     "wagmi": "^1.4.7"
   },
   "devDependencies": {
+    "@types/mersenne-twister": "^1.1.7",
     "bufferutil": "^4.0.8",
     "utf-8-validate": "^6.0.3"
   }
