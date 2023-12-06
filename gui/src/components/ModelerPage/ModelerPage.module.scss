@@ -37,3 +37,62 @@
   left: -100vh;
   top: -100vh;
 }
+
+.modal {
+  max-width: 600px;
+  gap: 16px;
+  flex-flow: column;
+
+  &[open] {
+    display: flex;
+  }
+
+  &Close {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+  }
+}
+
+.definitions {
+  margin: -8px;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+}
+
+.definition {
+  width: 100%;
+  padding: 0;
+  display: flex;
+  flex-flow: column;
+  gap: 16px;
+  border: 2px transparent solid;
+  transition: 0.25s ease;
+  cursor: pointer;
+  padding: 8px;
+  align-items: stretch;
+  text-align: left;
+
+  &:hover,
+  &:focus {
+    border-color: #7583ff;
+  }
+
+  &View {
+    pointer-events: none;
+    position: relative;
+    aspect-ratio: 21/9;
+
+    & > div {
+      position: absolute !important;
+      left: 0;
+      top: 0;
+    }
+
+    &::after {
+      content: "";
+    }
+  }
+}

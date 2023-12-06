@@ -8,78 +8,43 @@ import { ProcessTask, TaskVariables } from "@/app/tasks/types";
 export const fetchEngine = async (
   input: RequestInfo | URL,
   init?: RequestInit
-): Promise<Response> => {
+): Promise<any> => {
   const hostUrl =
     typeof window === "undefined"
       ? "https://chainflow-engine.dexguru.biz/engine-rest"
       : "/dashboard/api/engine";
 
-  return fetch(`${hostUrl}/${input}`, init);
+  try {
+    const res = await fetch(`${hostUrl}/${input}`, init);
+
+    if (!res.ok) {
+      console.log(`Failed to fetch data: ${res.statusText} [${res.status}]`);
+    }
+
+    return await res.json();
+  } catch (e) {
+    console.log(`Failed to fetch data: ${e}`);
+  }
 };
 
 export const getInstances = async (id?: string): Promise<ProcessInstance[]> => {
-  const res = await fetchEngine(
+  const instances: ProcessInstance[] = await fetchEngine(
     `process-instance${!!id ? `?processDefinitionId=${id}` : ""}`
   );
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error(`Failed to fetch data: ${res.statusText} [${res.status}]`);
-  }
-
-  const instances: ProcessInstance[] = await res.json();
 
   return instances;
 };
 
-export const getDefinition = async (id: string): Promise<ProcessDefinition> => {
-  const res = await fetchEngine(`process-definition?processDefinitionId=${id}`);
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error(`Failed to fetch data: ${res.statusText} [${res.status}]`);
-  }
-
-  const processes: ProcessDefinition[] = await res.json();
-
-  return processes[0];
-};
-
 export const getInstance = async (id: string): Promise<ProcessInstance> => {
-  const res = await fetchEngine(`process-instance/${id}`);
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error(`Failed to fetch data: ${res.statusText} [${res.status}]`);
-  }
-
-  const instance: ProcessInstance = await res.json();
+  const instance: ProcessInstance = await fetchEngine(`process-instance/${id}`);
 
   return instance;
 };
 
-export const getVariables = async (id: string): Promise<ProcessVariables> => {
-  const res = await fetchEngine(`process-instance/${id}/variables`);
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error(`Failed to fetch data: ${res.statusText} [${res.status}]`);
-  }
-
-  const vars: ProcessVariables = await res.json();
-
-  return vars;
-};
-
 export const getDefinitions = async (): Promise<ProcessDefinition[]> => {
-  const res = await fetchEngine("process-definition");
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error(`Failed to fetch data: ${res.statusText} [${res.status}]`);
-  }
-
-  const processes: ProcessDefinition[] = await res.json();
+  const processes: ProcessDefinition[] = await fetchEngine(
+    "process-definition"
+  );
 
   await Promise.all(
     processes.map(async (process, idx) => {
@@ -90,31 +55,53 @@ export const getDefinitions = async (): Promise<ProcessDefinition[]> => {
   return processes;
 };
 
-export const getInstanceCount = async (id: string): Promise<number> => {
-  const res = await fetchEngine(
-    `process-instance/count?processDefinitionId=${id}`
+export const getDefinition = async (id: string): Promise<ProcessDefinition> => {
+  const processes: ProcessDefinition = await fetchEngine(
+    `process-definition/${id}`
   );
 
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error(`Failed to fetch data: ${res.statusText} [${res.status}]`);
-  }
+  return processes;
+};
 
-  const { count } = await res.json();
+export const getDefinitionStats = async (): Promise<
+  {
+    id: string;
+    instances: number;
+    failedJobs: number;
+    definition: ProcessDefinition;
+    incidents: [];
+  }[]
+> => {
+  return await fetchEngine(`process-definition/statistics`);
+};
+
+export const getVariables = async (id: string): Promise<ProcessVariables> => {
+  const vars: ProcessVariables = await fetchEngine(
+    `process-instance/${id}/variables`
+  );
+
+  return vars;
+};
+
+export const getDefinitionXML = async (id: string) => {
+  const { bpmn20Xml } = await fetchEngine(`process-definition/${id}/xml`);
+
+  return bpmn20Xml;
+};
+
+export const getInstanceCount = async (id: string): Promise<number> => {
+  const { count } = await fetchEngine(
+    `process-instance/count?processDefinitionId=${id}`
+  );
 
   return count;
 };
 
 export const getTasks = async (
-  id?: string | null,
   definitionId?: string | null,
   instanceId?: string | null
 ): Promise<ProcessTask[]> => {
   const query = [];
-
-  if (id) {
-    query.push(`id=${id}`);
-  }
 
   if (definitionId) {
     query.push(`processDefinitionId=${definitionId}`);
@@ -124,30 +111,20 @@ export const getTasks = async (
     query.push(`processInstanceId=${instanceId}`);
   }
 
-  const res = await fetchEngine(`task?${query.join("&")}`);
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error(`Failed to fetch data: ${res.statusText} [${res.status}]`);
-  }
-
-  const tasks: ProcessTask[] = await res.json();
+  const tasks: ProcessTask[] = await fetchEngine(`task?${query.join("&")}`);
   return tasks;
+};
+
+export const getTask = async (id?: string | null): Promise<ProcessTask> => {
+  return await fetchEngine(`task/${id}`);
 };
 
 export const getTaskVariables = async (
   taskId: string
 ): Promise<TaskVariables> => {
-  const res = await fetchEngine(`task/${taskId}/form-variables`);
-
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error(
-      `Failed to fetch task variables: ${res.statusText} [${res.status}]`
-    );
-  }
-
-  const vars: TaskVariables = await res.json();
+  const vars: TaskVariables = await fetchEngine(
+    `task/${taskId}/form-variables`
+  );
   return vars;
 };
 
