@@ -48,34 +48,36 @@ export default async function InstancesPage({
             title="Instances"
             tools={<Button caption="New Instance" icon={<FaPlay />} disabled />}
           >
-            <div className={styles.instances}>
-              <table className={styles.instancesTable}>
-                <tbody className={styles.instancesTBody}>
-                  {instances.map((instance) => {
-                    return (
-                      <tr className={styles.instancesTBody} key={instance.id}>
-                        <th className={styles.instancesTH}>
-                          <Link
-                            href={`/processes/${process.id}/${instance.id}`}
-                          >
-                            {instance.id}
-                          </Link>
-                        </th>
-                        <td className={styles.instancesTD}>
-                          {instance.ended ? "Ended" : "In progress"}{" "}
-                        </td>
-                        <td className={styles.instancesTD}>
-                          {instance.suspended ? "Suspended" : "Active"}
-                        </td>
-                        <td className={styles.instancesTD}>
-                          <InstanceSuspender instance={instance} />
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
-            </div>
+            {!!instances.length && (
+              <div className={styles.instances}>
+                <table className={styles.instancesTable}>
+                  <tbody className={styles.instancesTBody}>
+                    {instances.map((instance) => {
+                      return (
+                        <tr className={styles.instancesTBody} key={instance.id}>
+                          <th className={styles.instancesTH}>
+                            <Link
+                              href={`/processes/${process.id}/${instance.id}`}
+                            >
+                              {instance.id}
+                            </Link>
+                          </th>
+                          <td className={styles.instancesTD}>
+                            {instance.ended ? "Ended" : "In progress"}{" "}
+                          </td>
+                          <td className={styles.instancesTD}>
+                            {instance.suspended ? "Suspended" : "Active"}
+                          </td>
+                          <td className={styles.instancesTD}>
+                            <InstanceSuspender instance={instance} />
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </Panel>
         </aside>
 

@@ -67,6 +67,10 @@
       color: #22d49f;
     }
   }
+
+  &.active {
+    border-right-color: #22d49f;
+  }
 }
 
 .sections {

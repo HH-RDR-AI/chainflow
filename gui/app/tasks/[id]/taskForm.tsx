@@ -58,7 +58,7 @@ export const TaskForm: FC<TaskFormProps> = ({ vars, abi }) => {
           sendTransaction?.() || console.log("sendTransaction is not defined")
       )}
     >
-      {abi.inputs.map((abiParam, idx) => {
+      {abi?.inputs?.map((abiParam, idx) => {
         return (
           <label key={idx} className={styles.formField}>
             <strong className={styles.formFieldTitle}>

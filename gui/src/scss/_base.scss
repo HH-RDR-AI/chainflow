@@ -1,3 +1,5 @@
+@import "camunda-bpmn-js/dist/assets/camunda-platform-modeler.css";
+
 *,
 *::before,
 *::after {
@@ -21,10 +23,10 @@ body {
 
 a {
   transition: 0.25s ease;
-  color: var(--color-main);
+  color: #6046ff;
 
   &:hover {
-    color: var(--color-accent);
+    color: #22d49f;
   }
 }
 
@@ -51,6 +53,7 @@ h6 {
 h1 {
   font-size: 24px;
   line-height: 32px;
+  margin: 0;
 }
 
 button,
@@ -58,10 +61,118 @@ input {
   font-family: inherit;
 }
 
+dialog {
+  border: 0;
+  border-radius: 12px;
+  background: #eceff1;
+
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.5);
+  }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  border-radius: 8px;
+  background: #fff;
+  border-radius: 8px;
+}
+
+thead {
+  color: #6b7a8a;
+
+  tr {
+    & > * {
+      background: #f8f9fb;
+    }
+
+    & > :first-child {
+      border-top-left-radius: 8px;
+    }
+
+    & > :last-child {
+      border-top-right-radius: 8px;
+    }
+  }
+}
+
+tr {
+  &:not(:last-child) {
+    border-bottom: 1px #eceff1 solid;
+  }
+
+  & > :first-child {
+    padding-left: 16px;
+  }
+
+  & > :last-child {
+    padding-right: 16px;
+  }
+}
+
+td,
+th {
+  padding: 8px;
+  text-align: left;
+}
+
 .bio-properties-panel {
-  font-family: var(--font-common, sans-serif) !important;
+  gap: 8px;
+  font-size: 14px;
+  font-family: var(--font-common, sans-serif);
+
+  --group-bottom-border-color: #eceff1;
 
   &-header {
     font-family: var(--font-accent, sans-serif);
+    background: none;
+    padding: 0;
+    border: 0;
+
+    &-icon {
+      width: 20px;
+      height: 20px;
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+
+    &-labels {
+      margin-left: 8px;
+    }
+
+    &-type {
+      font-size: 16px;
+      line-height: 20px;
+      font-weight: 400;
+      color: #465160;
+    }
+  }
+
+  &-group {
+    background: none;
+  }
+
+  &-group-header.empty &-add-entry {
+    margin-right: 5px;
+
+    &:hover {
+      margin-right: 5px;
+    }
+  }
+
+  &-scroll-container {
+    background: #fff;
+    border-radius: 8px;
+  }
+}
+
+.bjs-viewer {
+  .bjs-powered-by {
+    display: none;
   }
 }
