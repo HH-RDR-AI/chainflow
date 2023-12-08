@@ -31,9 +31,9 @@
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_0qk4bg8" sourceRef="Activity_1lytfrh" targetRef="Gateway_0ci2aqk" />
     <bpmn:endEvent id="Event_1e9tcy6" name="Success Path">
-      <bpmn:incoming>Flow_033hsjn</bpmn:incoming>
+      <bpmn:incoming>Flow_0ya5k5j</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_033hsjn" sourceRef="Activity_04043ok" targetRef="Event_1e9tcy6" />
+    <bpmn:sequenceFlow id="Flow_033hsjn" sourceRef="Activity_04043ok" targetRef="Activity_0eok0jc" />
     <bpmn:serviceTask id="Activity_04043ok" name="Call Redash API to change query status" camunda:class="ai.hhrdr.chainflow.engine.LoggerDelegate">
       <bpmn:incoming>Flow_08w9kd5</bpmn:incoming>
       <bpmn:outgoing>Flow_033hsjn</bpmn:outgoing>
@@ -72,7 +72,14 @@
       <bpmn:incoming>Flow_05fndjo</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_05fndjo" sourceRef="Gateway_1r7gy61" targetRef="Event_1qxk3ws" />
+    <bpmn:sequenceFlow id="Flow_0ya5k5j" sourceRef="Activity_0eok0jc" targetRef="Event_1e9tcy6" />
+    <bpmn:serviceTask id="Activity_0eok0jc" name="Mark rewards claimable">
+      <bpmn:incoming>Flow_033hsjn</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ya5k5j</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
+  <bpmn:message id="Message_0p6m252" name="Message_0p6m252" />
+  <bpmn:message id="Message_3bamfph" name="Message_3bamfph" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="warehouse_query_review">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
@@ -84,12 +91,6 @@
       <bpmndi:BPMNShape id="Activity_1emmahe_di" bpmnElement="Activity_1lytfrh">
         <dc:Bounds x="460" y="80" width="100" height="80" />
         <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1e9tcy6_di" bpmnElement="Event_1e9tcy6">
-        <dc:Bounds x="922" y="102" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="906" y="145" width="68" height="14" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1jgx156_di" bpmnElement="Activity_04043ok">
         <dc:Bounds x="740" y="80" width="100" height="80" />
@@ -114,6 +115,16 @@
         <dc:Bounds x="282" y="80" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1e9tcy6_di" bpmnElement="Event_1e9tcy6">
+        <dc:Bounds x="1082" y="92" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1066" y="135" width="68" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_041m951_di" bpmnElement="Activity_0eok0jc">
+        <dc:Bounds x="911" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_18sgxn8_di" bpmnElement="Flow_18sgxn8">
         <di:waypoint x="188" y="120" />
         <di:waypoint x="282" y="120" />
@@ -128,7 +139,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_033hsjn_di" bpmnElement="Flow_033hsjn">
         <di:waypoint x="840" y="120" />
-        <di:waypoint x="922" y="120" />
+        <di:waypoint x="911" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08w9kd5_di" bpmnElement="Flow_08w9kd5">
         <di:waypoint x="665" y="120" />
@@ -153,6 +164,10 @@
         <di:waypoint x="332" y="290" />
         <di:waypoint x="332" y="280" />
         <di:waypoint x="188" y="280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ya5k5j_di" bpmnElement="Flow_0ya5k5j">
+        <di:waypoint x="1011" y="110" />
+        <di:waypoint x="1082" y="110" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
