@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0dyz2d0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.15.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0dyz2d0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.18.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
   <bpmn:process id="warehouse_query_review" name="Warehouse Query Review" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartEvent_1" name="Submit for review" camunda:initiator="initiatorUserId">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="query_id" label="Query Id" type="string" />
+          <camunda:formField id="dashboard_id" label="Dashboard ID" type="long" />
+          <camunda:formField id="comment" label="Comment" type="string" />
+          <camunda:formField id="user_id" label="User ID" type="long" />
           <camunda:formField id="org_id" label="Org ID" type="long" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_18sgxn8</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_18sgxn8" sourceRef="StartEvent_1" targetRef="Activity_0l2d8b6" />
-    <bpmn:serviceTask id="Activity_0l2d8b6" name="Call Redash API on query details" camunda:class="ai.hhrdr.chainflow.engine.LoggerDelegate">
+    <bpmn:serviceTask id="Activity_0l2d8b6" name="Call Redash API on dashboard details" camunda:class="ai.hhrdr.chainflow.engine.LoggerDelegate">
       <bpmn:incoming>Flow_18sgxn8</bpmn:incoming>
       <bpmn:outgoing>Flow_09p9nm6</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_09p9nm6" sourceRef="Activity_0l2d8b6" targetRef="Activity_1lytfrh" />
-    <bpmn:userTask id="Activity_1lytfrh" name="Review Query" camunda:assignee="demo">
+    <bpmn:userTask id="Activity_1lytfrh" name="Review Dashboard" camunda:assignee="demo">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="is_rejected" label="Is Rejected" type="boolean" />
           <camunda:formField id="rejection_comment" label="Rejection Comment" type="string" />
-          <camunda:formField id="query_id" label="Query ID" type="long" defaultValue="${query_id}" />
+          <camunda:formField id="dashboard_id" label="Dashboard ID" type="long" defaultValue="${dashboard_id}" />
           <camunda:formField id="org_id" label="Org ID" type="long" defaultValue="${org_id}" />
         </camunda:formData>
       </bpmn:extensionElements>
@@ -31,7 +33,7 @@
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_0qk4bg8" sourceRef="Activity_1lytfrh" targetRef="Gateway_0ci2aqk" />
     <bpmn:sequenceFlow id="Flow_033hsjn" sourceRef="Activity_04043ok" targetRef="Activity_0eok0jc" />
-    <bpmn:serviceTask id="Activity_04043ok" name="Call Redash API to change query status" camunda:class="ai.hhrdr.chainflow.engine.LoggerDelegate">
+    <bpmn:serviceTask id="Activity_04043ok" name="Call Redash API to change dashboard status" camunda:class="ai.hhrdr.chainflow.engine.WarehouseDelegate">
       <bpmn:incoming>Flow_08w9kd5</bpmn:incoming>
       <bpmn:outgoing>Flow_033hsjn</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -48,7 +50,7 @@
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="rejection_comment" label="Rejection Comment" type="string" defaultValue="${rejection_comment}" />
-          <camunda:formField id="query_id" label="Query ID" type="long" defaultValue="${query_id}" />
+          <camunda:formField id="dashboard_id" label="Dashboard ID" type="long" defaultValue="${dashboard_id}" />
           <camunda:formField id="org_id" label="Org ID" type="long" defaultValue="${org_id}" />
           <camunda:formField id="is_resubmited" label="Resubmit" type="boolean" defaultValue="false" />
         </camunda:formData>
@@ -90,7 +92,7 @@
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="152" y="102" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="128" y="145" width="85" height="14" />
+          <dc:Bounds x="128" y="145" width="86" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_12jl7i7_di" bpmnElement="Activity_0l2d8b6">
@@ -103,6 +105,7 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1jgx156_di" bpmnElement="Activity_04043ok">
         <dc:Bounds x="740" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0ci2aqk_di" bpmnElement="Gateway_0ci2aqk" isMarkerVisible="true">
         <dc:Bounds x="615" y="95" width="50" height="50" />
