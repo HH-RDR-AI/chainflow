@@ -26,7 +26,7 @@ public class WarehouseDelegate implements JavaDelegate {
             + ", variables=" + execution.getVariables()
             + " \n\n");
 
-    // Get Dashboard ID, make post request to change is_draft to false
+    // Get ID, type of publication (dashboard, query, etc.) make post request to change is_draft to false
     // Precondition: Complete is successful
     //    execution.getVariables();
 
