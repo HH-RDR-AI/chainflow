@@ -22,6 +22,9 @@ camunda.bpm:
     tenant-check-enabled: true
   webapp:
     index-redirect-enabled: false
+  api:
+    url: "http://localhost:5005"
+    key: "nNYpqeMEa65ywLcJj15vhaRN2Rpjo4Z98uzby5Ix"
 #  default-serialization-format: application/json
 server.port: 8080
 
