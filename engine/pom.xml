@@ -131,11 +131,6 @@
       <artifactId>spring-boot-starter-actuator</artifactId>
       <version>3.1.4</version>
     </dependency>
-    <dependency>
-      <groupId>com.google.code.gson</groupId>
-      <artifactId>gson</artifactId>
-      <version>2.10.1</version>
-    </dependency>
     <!-- JAXB -->
     <dependency>
       <groupId>javax.xml.bind</groupId>
@@ -146,11 +141,6 @@
       <groupId>org.web3j</groupId>
       <artifactId>core</artifactId>
       <version>4.8.7</version>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.httpcomponents.client5</groupId>
-      <artifactId>httpclient5</artifactId>
-      <version>5.3</version>
     </dependency>
   </dependencies>
 
@@ -200,6 +190,14 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <version>3.0.0-M9</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>11</source>
+          <target>11</target>
+        </configuration>
       </plugin>
     </plugins>
   </build>
