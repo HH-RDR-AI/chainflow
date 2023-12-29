@@ -42,7 +42,7 @@ public class WarehouseDelegate implements JavaDelegate {
 
     String json = "{\"is_draft\":false}";
     HttpClient client = HttpClient.newHttpClient();
-    if (execution.getProcessDefinitionId().contains("warehouse_query_review")) {
+    if (execution.getVariable("dashboard_id") != null) {
       HttpRequest req = HttpRequest
               .newBuilder()
               .uri(URI.create(apiURL + "/api/dashboards/" + execution.getVariable("dashboard_id")))
@@ -51,7 +51,7 @@ public class WarehouseDelegate implements JavaDelegate {
               .POST(HttpRequest.BodyPublishers.ofString(json))
               .build();
       sendRequest(client, req);
-    } else if (execution.getProcessDefinitionId().contains("warehouse_real_query_review")) {
+    } else if (execution.getVariable("query_id") != null) {
       HttpRequest req = HttpRequest
               .newBuilder()
               .uri(URI.create(apiURL + "/api/queries/" + execution.getVariable("query_id")))
