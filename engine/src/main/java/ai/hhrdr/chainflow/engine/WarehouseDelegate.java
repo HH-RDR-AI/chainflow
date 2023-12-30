@@ -51,7 +51,7 @@ public class WarehouseDelegate implements JavaDelegate {
           sendRequest(client, req);
         }
         catch (Exception e) {
-          LOGGER.severe("Warehouse Delegate failed to update Dashboard. Exception: " + e);
+          LOGGER.severe("Warehouse Delegate failed to update Dashboard. \nException: " + e.getMessage());
         }
         break;
       case "warehouse_query_review":
@@ -66,7 +66,7 @@ public class WarehouseDelegate implements JavaDelegate {
           sendRequest(client, req);
         }
         catch (Exception e) {
-          LOGGER.severe("Warehouse Delegate failed to update Query. Exception: " + e);
+          LOGGER.severe("Warehouse Delegate failed to update Query. \nException: " + e.getMessage());
         }
         break;
     }
