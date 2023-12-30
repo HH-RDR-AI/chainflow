@@ -2,6 +2,7 @@ package ai.hhrdr.chainflow.engine;
 
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +13,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.logging.Logger;
 
-/**
- * This is an easy adapter implementation
- * illustrating how a Java Delegate can be used
- * from within a BPMN 2.0 Service Task.
- */
 @Component("warehouse")
 public class WarehouseDelegate implements JavaDelegate {
 
@@ -42,24 +38,37 @@ public class WarehouseDelegate implements JavaDelegate {
 
     String json = "{\"is_draft\":false}";
     HttpClient client = HttpClient.newHttpClient();
-    if (execution.getVariable("dashboard_id") != null) {
-      HttpRequest req = HttpRequest
-              .newBuilder()
-              .uri(URI.create(apiURL + "/api/dashboards/" + execution.getVariable("dashboard_id")))
-              .header("Content-Type", "application/json")
-              .header("Authorization", apiKey)
-              .POST(HttpRequest.BodyPublishers.ofString(json))
-              .build();
-      sendRequest(client, req);
-    } else if (execution.getVariable("query_id") != null) {
-      HttpRequest req = HttpRequest
-              .newBuilder()
-              .uri(URI.create(apiURL + "/api/queries/" + execution.getVariable("query_id")))
-              .header("Content-Type", "application/json")
-              .header("Authorization", apiKey)
-              .POST(HttpRequest.BodyPublishers.ofString(json))
-              .build();
-      sendRequest(client, req);
+    switch (((ExecutionEntity) execution).getProcessDefinition().getKey()) {
+      case "warehouse_dashboard_review":
+        try {
+          HttpRequest req = HttpRequest
+                  .newBuilder()
+                  .uri(URI.create(apiURL + "/api/dashboards/" + execution.getVariable("dashboard_id")))
+                  .header("Content-Type", "application/json")
+                  .header("Authorization", apiKey)
+                  .POST(HttpRequest.BodyPublishers.ofString(json))
+                  .build();
+          sendRequest(client, req);
+        }
+        catch (Exception e) {
+          LOGGER.severe("Warehouse Delegate failed to update Dashboard. Exception: " + e);
+        }
+        break;
+      case "warehouse_query_review":
+        try {
+          HttpRequest req = HttpRequest
+                  .newBuilder()
+                  .uri(URI.create(apiURL + "/api/queries/" + execution.getVariable("query_id")))
+                  .header("Content-Type", "application/json")
+                  .header("Authorization", apiKey)
+                  .POST(HttpRequest.BodyPublishers.ofString(json))
+                  .build();
+          sendRequest(client, req);
+        }
+        catch (Exception e) {
+          LOGGER.severe("Warehouse Delegate failed to update Query. Exception: " + e);
+        }
+        break;
     }
   }
 
