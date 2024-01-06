@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0mudifz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.18.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
   <bpmn:process id="warehouse_instance_review" name="Warehouse Instance Review" isExecutable="true" camunda:historyTimeToLive="180">
-    <bpmn:startEvent id="Event_136m1fz" name="Start DB Creation, collect vars" camunda:initiator="initiatorUserId">
+    <bpmn:startEvent id="Event_136m1fz" name="Start DB Creation, collect vars">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="user_id" label="User ID" type="long" />
-          <camunda:formField id="org_id" label="Org ID" type="string" />
+          <camunda:formField id="org_id" label="Org ID" type="long" />
           <camunda:formField id="url" label="URL" type="string" />
           <camunda:formField id="name" label="Name" type="string" />
           <camunda:formField id="provider" label="Provider" type="string" />
@@ -35,7 +35,7 @@
     <bpmn:sequenceFlow id="Flow_0g7qus4" sourceRef="Activity_1waof8a" targetRef="Event_0ap5041" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0wgwuas">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="warehouse_instance_review">
       <bpmndi:BPMNShape id="BPMNShape_0sve8x2" bpmnElement="Event_136m1fz">
         <dc:Bounds x="182" y="102" width="36" height="36" />
         <bpmndi:BPMNLabel>
