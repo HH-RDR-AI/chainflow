@@ -46,7 +46,7 @@
     <bpmn:sequenceFlow id="Flow_1p3ofvn" sourceRef="Gateway_0ci2aqk" targetRef="Activity_1aw0e3z">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_rejected}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Activity_1aw0e3z" name="User to see rejection message" camunda:assignee="${initiatorUserId}">
+    <bpmn:userTask id="Activity_1aw0e3z" name="User to see rejection message" camunda:assignee="${user_id.toString()}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="rejection_comment" label="Rejection Comment" type="string" defaultValue="${rejection_comment}" />
@@ -76,7 +76,7 @@
       <bpmn:outgoing>Flow_0n05bhd</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0n05bhd" sourceRef="Activity_0eok0jc" targetRef="Activity_1ma39hd" />
-    <bpmn:userTask id="Activity_1ma39hd" name="Claim Reward" camunda:assignee="${initiatorUserId}">
+    <bpmn:userTask id="Activity_1ma39hd" name="Claim Reward" camunda:assignee="${user_id.toString()}">
       <bpmn:incoming>Flow_0n05bhd</bpmn:incoming>
       <bpmn:outgoing>Flow_077nfrs</bpmn:outgoing>
     </bpmn:userTask>
