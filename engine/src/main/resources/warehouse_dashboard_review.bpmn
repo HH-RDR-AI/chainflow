@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0dyz2d0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.18.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0dyz2d0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.15.2" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
   <bpmn:process id="warehouse_dashboard_review" name="Warehouse Dashboard Review" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartEvent_1" name="Submit for review" camunda:initiator="initiatorUserId">
       <bpmn:extensionElements>
@@ -75,15 +75,23 @@
       <bpmn:incoming>Flow_033hsjn</bpmn:incoming>
       <bpmn:outgoing>Flow_0n05bhd</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0n05bhd" sourceRef="Activity_0eok0jc" targetRef="Activity_1ma39hd" />
-    <bpmn:userTask id="Activity_1ma39hd" name="Claim Reward" camunda:assignee="${user_id.toString()}">
+    <bpmn:sequenceFlow id="Flow_0n05bhd" sourceRef="Activity_0eok0jc" targetRef="web3_task" />
+    <bpmn:userTask id="web3_task" name="Claim Reward" camunda:assignee="${user_id.toString()}">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="dashboard_id" label="Dashboard ID" type="long" />
+          <camunda:formField id="org_id" label="Org ID" type="long" />
+          <camunda:formField id="user_id" label="User ID" type="long" />
+          <camunda:formField id="amount" label="Amount" type="long" defaultValue="1000" />
+        </camunda:formData>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0n05bhd</bpmn:incoming>
       <bpmn:outgoing>Flow_077nfrs</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:endEvent id="Event_1rnqrld" name="Success Path">
       <bpmn:incoming>Flow_077nfrs</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_077nfrs" sourceRef="Activity_1ma39hd" targetRef="Event_1rnqrld" />
+    <bpmn:sequenceFlow id="Flow_077nfrs" sourceRef="web3_task" targetRef="Event_1rnqrld" />
   </bpmn:process>
   <bpmn:message id="Message_0p6m252" name="Message_0p6m252" />
   <bpmn:message id="Message_3bamfph" name="Message_3bamfph" />
@@ -127,7 +135,7 @@
         <dc:Bounds x="911" y="80" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_14ci1tr_di" bpmnElement="Activity_1ma39hd">
+      <bpmndi:BPMNShape id="Activity_14ci1tr_di" bpmnElement="web3_task">
         <dc:Bounds x="911" y="230" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
