@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0dyz2d0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.15.2" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
   <bpmn:process id="warehouse_dashboard_review" name="Warehouse Dashboard Review" isExecutable="true" camunda:historyTimeToLive="180">
-    <bpmn:startEvent id="StartEvent_1" name="Submit for review" camunda:initiator="initiatorUserId">
+    <bpmn:startEvent id="StartEvent_1" name="Submit for review" camunda:asyncBefore="true" camunda:initiator="initiatorUserId">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="dashboard_id" label="Dashboard ID" type="long" />
           <camunda:formField id="comment" label="Comment" type="string" />
-          <camunda:formField id="user_id" label="User ID" type="long" />
+          <camunda:formField id="user_id" label="User ID" type="long">
+            <camunda:properties />
+            <camunda:validation />
+          </camunda:formField>
           <camunda:formField id="org_id" label="Org ID" type="long" />
         </camunda:formData>
       </bpmn:extensionElements>
@@ -14,6 +17,7 @@
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_18sgxn8" sourceRef="StartEvent_1" targetRef="Activity_0l2d8b6" />
     <bpmn:serviceTask id="Activity_0l2d8b6" name="Call Redash API on dashboard details" camunda:class="ai.hhrdr.chainflow.engine.LoggerDelegate">
+      <bpmn:extensionElements />
       <bpmn:incoming>Flow_18sgxn8</bpmn:incoming>
       <bpmn:outgoing>Flow_09p9nm6</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -46,7 +50,7 @@
     <bpmn:sequenceFlow id="Flow_1p3ofvn" sourceRef="Gateway_0ci2aqk" targetRef="Activity_1aw0e3z">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_rejected}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Activity_1aw0e3z" name="User to see rejection message" camunda:assignee="${user_id.toString()}">
+    <bpmn:userTask id="Activity_1aw0e3z" name="User to see rejection message" camunda:assignee="${user_id}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="rejection_comment" label="Rejection Comment" type="string" defaultValue="${rejection_comment}" />
@@ -54,6 +58,10 @@
           <camunda:formField id="org_id" label="Org ID" type="long" defaultValue="${org_id}" />
           <camunda:formField id="is_resubmited" label="Resubmit" type="boolean" defaultValue="false" />
         </camunda:formData>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="javascript">var user_id = execution.getVariable(user_id).toString();
+execution.setVariable("user_id", user_id)</camunda:script>
+        </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1p3ofvn</bpmn:incoming>
       <bpmn:outgoing>Flow_0j52cu8</bpmn:outgoing>
@@ -76,7 +84,7 @@
       <bpmn:outgoing>Flow_0n05bhd</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0n05bhd" sourceRef="Activity_0eok0jc" targetRef="web3_task" />
-    <bpmn:userTask id="web3_task" name="Claim Reward" camunda:assignee="${user_id.toString()}">
+    <bpmn:userTask id="web3_task" name="Claim Reward" camunda:assignee="${user_id}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="dashboard_id" label="Dashboard ID" type="long" />
@@ -84,6 +92,10 @@
           <camunda:formField id="user_id" label="User ID" type="long" />
           <camunda:formField id="amount" label="Amount" type="long" defaultValue="1000" />
         </camunda:formData>
+        <camunda:executionListener event="start">
+          <camunda:script scriptFormat="javascript">var user_id = execution.getVariable(user_id).toString();
+execution.setVariable("user_id", user_id)</camunda:script>
+        </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0n05bhd</bpmn:incoming>
       <bpmn:outgoing>Flow_077nfrs</bpmn:outgoing>

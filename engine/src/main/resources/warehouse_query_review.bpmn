@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1f72c6v" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.15.2" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
   <bpmn:process id="warehouse_query_review" name="Warehouse Query Review" isExecutable="true" camunda:historyTimeToLive="180">
-    <bpmn:startEvent id="Event_09h2z8n" name="Submit for review" camunda:initiator="initiatorUserId">
+    <bpmn:startEvent id="Event_09h2z8n" name="Submit for review" camunda:asyncBefore="true" camunda:initiator="initiatorUserId">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="query_id" label="Query ID" type="long" />
