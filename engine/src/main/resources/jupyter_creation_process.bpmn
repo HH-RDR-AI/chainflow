@@ -6,15 +6,12 @@
         <camunda:formData>
           <camunda:formField id="user_id" label="User ID" type="long" />
           <camunda:formField id="org_id" label="Org ID" type="long" />
-          <camunda:formField id="url" label="URL" type="string" />
-          <camunda:formField id="name" label="Name" type="string" />
-          <camunda:formField id="provider" label="Provider" type="string" />
-          <camunda:formField id="region" label="Region" type="string" />
-          <camunda:formField id="tier" label="Tier" type="string" />
-          <camunda:formField id="minTotalMemoryGb" label="Min Total Memory GB" type="long" defaultValue="0" />
-          <camunda:formField id="maxTotalMemoryGb" label="Max Total Memory GB" type="long" defaultValue="0" />
-          <camunda:formField id="idleScaling" label="Idle Scaling" type="boolean" defaultValue="false" />
-          <camunda:formField id="idleTimeoutMinutes" label="Idle Timeout Minutes" type="long" defaultValue="5" />
+          <camunda:formField id="machine_type" label="Machine Type" type="string" />
+          <camunda:formField id="disk_type" label="Disk Type" type="string" />
+          <camunda:formField id="disk_size" label="Disk Size" type="long" />
+          <camunda:formField id="secure_boot" label="Secure Boot" type="boolean" defaultValue="false" />
+          <camunda:formField id="idle_shutdown" label="Idle Shutdown" type="boolean" defaultValue="false" />
+          <camunda:formField id="inactivity_timeout_minutes" label="Inactivity Timeout Minutes" type="long" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_0zh0lwk</bpmn:outgoing>
@@ -60,13 +57,13 @@
         <di:waypoint x="208" y="120" />
         <di:waypoint x="280" y="120" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_19l6zjk_di" bpmnElement="Flow_19l6zjk">
-        <di:waypoint x="560" y="120" />
-        <di:waypoint x="652" y="120" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0ibs7nz_di" bpmnElement="Flow_0ibs7nz">
         <di:waypoint x="380" y="120" />
         <di:waypoint x="460" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_19l6zjk_di" bpmnElement="Flow_19l6zjk">
+        <di:waypoint x="560" y="120" />
+        <di:waypoint x="652" y="120" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
