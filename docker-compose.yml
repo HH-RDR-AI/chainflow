@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  chainflow-engine:
+    build: ./engine
+    ports:
+      - "8080:8080"
+    networks:
+      - chainflow-network
+  external_workers:
+    build: ./external_workers
+    networks:
+      - chainflow-network
+  gui:
+    build: ./gui
+    ports:
+      - "3000:3000"
+    networks:
+      - chainflow-network
+networks:
+  chainflow-network:
+    driver: bridge
