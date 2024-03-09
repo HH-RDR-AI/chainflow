@@ -2,6 +2,7 @@ import List from "@/src/components/List";
 import styles from "./page.module.scss";
 import { getTasks } from "@/src/utils/processUtils";
 import TaskCard from "@/src/components/TaskCard";
+import Link from "next/link";
 
 export default async function TasksPage() {
   const tasks = await getData();
@@ -13,11 +14,36 @@ export default async function TasksPage() {
         <div className={styles.tools}></div>
       </div>
       <div className={styles.body}>
-        <List className={styles.list}>
-          {tasks?.map((task, idx) => {
-            return <TaskCard task={task} className={styles.card} key={idx} />;
-          })}
-        </List>
+        {!!tasks.length && (
+          <table>
+            <thead>
+              <tr>
+                <th>Task</th>
+                <th>Instance</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tasks?.map((task, idx) => {
+                return (
+                  <tr key={idx}>
+                    <td>
+                      <Link href={`/tasks/${task.id}`} className={styles.title}>
+                        {task.name}
+                      </Link>
+                    </td>
+                    <td>
+                      <Link
+                        href={`/processes/${task.processDefinitionId}/${task.processInstanceId}`}
+                      >
+                        {task.processInstanceId}
+                      </Link>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

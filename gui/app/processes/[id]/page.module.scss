@@ -53,16 +53,15 @@
   &TR {
     display: flex;
     flex-flow: column;
-    gap: 2px;
+    padding: 8px 16px;
+    gap: 4px;
   }
 
-  &TH {
-    display: block;
-    text-align: left;
-  }
-
+  &TH,
   &TD {
     display: block;
+    text-align: left;
+    padding: 0 !important;
   }
 }
 
@@ -81,10 +80,6 @@
 
 .instances {
   flex: 0 0 auto;
-
-  &Table {
-    border-spacing: 4px;
-  }
 
   &TH {
     text-align: left;

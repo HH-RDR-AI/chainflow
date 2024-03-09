@@ -2,12 +2,11 @@
 
 import { FC, useRef, useEffect } from "react";
 
-import "camunda-bpmn-js/dist/assets/camunda-platform-viewer.css";
 import BpmnViewer from "bpmn-js/lib/Viewer";
 
 import styles from "./Viewer.module.scss";
 import clsx from "clsx";
-import { fetchEngine } from "@/src/utils/processUtils";
+import { fetchEngine, getDefinitionXML } from "@/src/utils/processUtils";
 
 export const Viewer: FC<{ process: string; className?: string }> = ({
   process,
@@ -28,14 +27,9 @@ export const Viewer: FC<{ process: string; className?: string }> = ({
 
     const getXml = async () => {
       try {
-        const res = await fetchEngine(`process-definition/${process}/xml`);
+        const xml = await getDefinitionXML(process);
 
-        if (!res.ok) {
-          return;
-        }
-
-        const { bpmn20Xml } = await res.json();
-        await viewer?.importXML(bpmn20Xml);
+        await viewer?.importXML(xml);
         const canvas = viewer.get("canvas") as any;
         canvas.zoom("fit-viewport");
       } catch (e) {
@@ -46,5 +40,10 @@ export const Viewer: FC<{ process: string; className?: string }> = ({
     getXml();
   }, [refCanvas]);
 
-  return <div className={clsx(styles.container, className)} ref={refCanvas} />;
+  return (
+    <div
+      className={clsx("bjs-viewer", styles.container, className)}
+      ref={refCanvas}
+    />
+  );
 };

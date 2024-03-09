@@ -111,7 +111,7 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
 
   useEffect(() => {
     const getData = async () => {
-      setTasks(await getTasks(null, currentProcess, currentInstance));
+      setTasks(await getTasks(currentProcess, currentInstance));
     };
 
     getData();
