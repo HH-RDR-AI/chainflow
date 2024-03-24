@@ -11,9 +11,9 @@
           <camunda:formField id="owner_address" label="owner_address" type="string" defaultValue="0x8903d35F5F941bc0C6977DBf40d0cB067473e8f2" />
           <camunda:formField id="whitelisted_addresses" label="whitelisted_addresses" type="string" defaultValue="0x8903d35F5F941bc0C6977DBf40d0cB067473e8f2" />
           <camunda:formField id="quantity" label="quantity" type="long" defaultValue="3" />
-          <camunda:formField id="factory_address" label="factory_address" type="string" defaultValue="factory_address" />
-          <camunda:formField id="image_link" type="string" defaultValue="none" />
-          <camunda:formField id="is_aigenerated" type="boolean" defaultValue="true" />
+          <camunda:formField id="factory_address" label="factory_address" type="string" defaultValue="0x8E1c92D50c4A9DD7ef46C3d77Db0A7Cb6D300f86" />
+          <camunda:formField id="image_link" label="image_link" type="string" defaultValue="none" />
+          <camunda:formField id="is_aigenerated" label="is_aigenerated" type="boolean" defaultValue="true" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_1ltk7yb</bpmn:outgoing>
@@ -27,20 +27,26 @@
     <bpmn:sequenceFlow id="Flow_01mkno0" name="Yes" sourceRef="Gateway_1p2emin" targetRef="Activity_0irz3ft">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_approved}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_02iuehi" name="No" sourceRef="Gateway_1p2emin" targetRef="Activity_0ghhtp6" />
+    <bpmn:sequenceFlow id="Flow_02iuehi" name="No" sourceRef="Gateway_1p2emin" targetRef="ExternalLLMWorker" />
     <bpmn:sequenceFlow id="Flow_0zz9xvy" sourceRef="Activity_0al1lvs" targetRef="Activity_18aisb2" />
     <bpmn:sequenceFlow id="Flow_07ac65y" sourceRef="Activity_18aisb2" targetRef="Gateway_1oja892" />
     <bpmn:serviceTask id="Activity_1fvs1rd" name="Setting Up Environment" camunda:class="ai.hhrdr.chainflow.engine.LoggerDelegate">
       <bpmn:incoming>Flow_1ltk7yb</bpmn:incoming>
       <bpmn:outgoing>Flow_1xe7dtm</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0ghhtp6" name="External LLM Worker - Collection Sample Generation" camunda:class="ai.hhrdr.chainflow.engine.LoggerDelegate">
+    <bpmn:serviceTask id="ExternalLLMWorker" name="External LLM Worker - Collection Sample Generation" camunda:type="external" camunda:topic="ExternalLLMWorker">
+      <bpmn:extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="prompt">${prompt}</camunda:inputParameter>
+          <camunda:outputParameter name="image_url">${image_url}</camunda:outputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_02iuehi</bpmn:incoming>
       <bpmn:incoming>Flow_19yhzr9</bpmn:incoming>
       <bpmn:incoming>Flow_0t8txti</bpmn:incoming>
       <bpmn:outgoing>Flow_0xht1h8</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0xht1h8" sourceRef="Activity_0ghhtp6" targetRef="Activity_093cgpj" />
+    <bpmn:sequenceFlow id="Flow_0xht1h8" sourceRef="ExternalLLMWorker" targetRef="Activity_093cgpj" />
     <bpmn:userTask id="Activity_093cgpj" name="User Task To Review Samples" camunda:assignee="${user_id}">
       <bpmn:extensionElements>
         <camunda:formData>
@@ -67,26 +73,6 @@
       <bpmn:incoming>Flow_1aleote</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1aleote" sourceRef="Event_0cxjoud" targetRef="Event_1gwlzct" />
-    <bpmn:userTask id="Activity_0al1lvs" name="Deploy NFT Collection Transaction Web3 Task" camunda:assignee="${user_id}">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="transactionHash" label="transactionHash" type="string">
-            <camunda:validation />
-          </camunda:formField>
-          <camunda:formField id="transactionInput" label="transactionInput" type="string" defaultValue="transactionInput">
-            <camunda:validation />
-          </camunda:formField>
-          <camunda:formField id="value" label="value" type="long" defaultValue="1">
-            <camunda:validation />
-          </camunda:formField>
-          <camunda:formField id="task_type" label="task_type" type="string" defaultValue="web3_task">
-            <camunda:validation />
-          </camunda:formField>
-        </camunda:formData>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_13273bj</bpmn:incoming>
-      <bpmn:outgoing>Flow_0zz9xvy</bpmn:outgoing>
-    </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_13273bj" sourceRef="Activity_0irz3ft" targetRef="Activity_0al1lvs" />
     <bpmn:serviceTask id="Activity_0irz3ft" name="Transaction Calculator" camunda:class="ai.hhrdr.chainflow.engine.LoggerDelegate">
       <bpmn:incoming>Flow_01mkno0</bpmn:incoming>
@@ -112,12 +98,12 @@
       <bpmn:outgoing>Flow_0ow28xh</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_0ow28xh" name="Deployed" sourceRef="Activity_0lgkho5" targetRef="Gateway_1oja892" />
-    <bpmn:boundaryEvent id="Event_1fnxc6b" name="Generation Error" attachedToRef="Activity_0ghhtp6">
+    <bpmn:boundaryEvent id="Event_1fnxc6b" name="Generation Error" attachedToRef="ExternalLLMWorker">
       <bpmn:outgoing>Flow_0y4hkd5</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_0qv98qg" camunda:errorCodeVariable="error_code" />
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_0y4hkd5" sourceRef="Event_1fnxc6b" targetRef="Activity_1k4jqjd" />
-    <bpmn:sequenceFlow id="Flow_19yhzr9" sourceRef="Activity_1k4jqjd" targetRef="Activity_0ghhtp6" />
+    <bpmn:sequenceFlow id="Flow_19yhzr9" sourceRef="Activity_1k4jqjd" targetRef="ExternalLLMWorker" />
     <bpmn:userTask id="Activity_1k4jqjd" name="Admin Ceck LLM client" camunda:assignee="admin">
       <bpmn:incoming>Flow_0y4hkd5</bpmn:incoming>
       <bpmn:outgoing>Flow_19yhzr9</bpmn:outgoing>
@@ -160,7 +146,7 @@
       <bpmn:outgoing>Flow_0t8txti</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0o0hukm" name="Uploaded file" sourceRef="Gateway_1pdij2d" targetRef="Activity_0irz3ft" />
-    <bpmn:sequenceFlow id="Flow_0t8txti" name="AI Generation" sourceRef="Gateway_1pdij2d" targetRef="Activity_0ghhtp6">
+    <bpmn:sequenceFlow id="Flow_0t8txti" name="AI Generation" sourceRef="Gateway_1pdij2d" targetRef="ExternalLLMWorker">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_aigenerated}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1xe7dtm" sourceRef="Activity_1fvs1rd" targetRef="Gateway_1pdij2d" />
@@ -178,6 +164,39 @@
       </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_05l08u8" sourceRef="Event_0snks94" targetRef="Activity_0lgkho5" />
+    <bpmn:callActivity id="Activity_0al1lvs" name="Deploy NFT Collection Transaction Web3 Task" calledElement="EthWriteCall">
+      <bpmn:extensionElements>
+        <camunda:in source="abi" target="abi" />
+        <camunda:inputOutput>
+          <camunda:inputParameter name="abi">{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "recipient",
+				"type": "address"
+			},
+			{
+				"internalType": "string",
+				"name": "tokenURI",
+				"type": "string"
+			}
+		],
+		"name": "mintNFT",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}</camunda:inputParameter>
+        </camunda:inputOutput>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_13273bj</bpmn:incoming>
+      <bpmn:outgoing>Flow_0zz9xvy</bpmn:outgoing>
+    </bpmn:callActivity>
     <bpmn:textAnnotation id="TextAnnotation_0ry3xmb">
       <bpmn:text>Pre-setting contexts from application properties if needed</bpmn:text>
     </bpmn:textAnnotation>
@@ -204,7 +223,7 @@
       <bpmndi:BPMNShape id="Activity_1m0emg7_di" bpmnElement="Activity_1fvs1rd">
         <dc:Bounds x="310" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1vrbmnc_di" bpmnElement="Activity_0ghhtp6">
+      <bpmndi:BPMNShape id="Activity_1vrbmnc_di" bpmnElement="ExternalLLMWorker">
         <dc:Bounds x="610" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0po4t0e_di" bpmnElement="Activity_093cgpj">
@@ -215,10 +234,6 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="792" y="85" width="55" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1t47cfm_di" bpmnElement="Activity_0al1lvs">
-        <dc:Bounds x="1180" y="270" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0i2p4bw_di" bpmnElement="Activity_0irz3ft">
         <dc:Bounds x="1030" y="270" width="100" height="80" />
@@ -258,6 +273,9 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="460" y="261" width="82" height="14" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_06zmm08_di" bpmnElement="Activity_0al1lvs">
+        <dc:Bounds x="1180" y="270" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_0ry3xmb_di" bpmnElement="TextAnnotation_0ry3xmb">
         <dc:Bounds x="250" y="128" width="100" height="84" />
