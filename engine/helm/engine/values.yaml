@@ -1,9 +1,9 @@
 ---
-image: 'docker-registry.dexguru.biz/dex.guru/chainflow-deployment/chainflow-deployment/engine'
+image: 'docker-registry.dexguru.biz/dex.guru/chainflow-deployment/chainflow-deployment/engine-niftnet'
 imageTag: ''
 registrySecretName: registry-harbor
 
-chainflow-engine:
+chainflow-engine-niftnet:
   replicas:
     default: 1
   port: 8080
@@ -20,6 +20,8 @@ chainflow-engine:
     port: '8080'
   env:
     ENVIRONMENT: "stage"
-  ingressHost1: "chainflow-engine.dexguru.biz"
+    API_URL: "http://api.url.com"
+    API_KEY: "key"
+  ingressHost1: "chainflow-niftnet.dexguru.biz"
   letsencrypt:
     issuer: "letsencrypt-prod"
