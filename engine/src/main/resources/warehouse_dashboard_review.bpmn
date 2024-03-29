@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0dyz2d0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.15.2" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0dyz2d0" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.20.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
   <bpmn:process id="warehouse_dashboard_review" name="Warehouse Dashboard Review" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartEvent_1" name="Submit for review" camunda:asyncBefore="true" camunda:initiator="initiatorUserId">
       <bpmn:extensionElements>
@@ -36,17 +36,12 @@
       <bpmn:outgoing>Flow_0qk4bg8</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_0qk4bg8" sourceRef="Activity_1lytfrh" targetRef="Gateway_0ci2aqk" />
-    <bpmn:sequenceFlow id="Flow_033hsjn" sourceRef="Activity_04043ok" targetRef="Activity_0eok0jc" />
-    <bpmn:serviceTask id="Activity_04043ok" name="Call Redash API to change dashboard status" camunda:class="ai.hhrdr.chainflow.engine.WarehouseDelegate">
-      <bpmn:incoming>Flow_08w9kd5</bpmn:incoming>
-      <bpmn:outgoing>Flow_033hsjn</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:exclusiveGateway id="Gateway_0ci2aqk" default="Flow_08w9kd5">
       <bpmn:incoming>Flow_0qk4bg8</bpmn:incoming>
       <bpmn:outgoing>Flow_08w9kd5</bpmn:outgoing>
       <bpmn:outgoing>Flow_1p3ofvn</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_08w9kd5" sourceRef="Gateway_0ci2aqk" targetRef="Activity_04043ok" />
+    <bpmn:sequenceFlow id="Flow_08w9kd5" sourceRef="Gateway_0ci2aqk" targetRef="Activity_0eok0jc" />
     <bpmn:sequenceFlow id="Flow_1p3ofvn" sourceRef="Gateway_0ci2aqk" targetRef="Activity_1aw0e3z">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_rejected}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -80,22 +75,18 @@ execution.setVariable("user_id", user_id)</camunda:script>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_05fndjo" sourceRef="Gateway_1r7gy61" targetRef="Event_1qxk3ws" />
     <bpmn:serviceTask id="Activity_0eok0jc" name="Mark rewards claimable" camunda:class="ai.hhrdr.chainflow.engine.LoggerDelegate">
-      <bpmn:incoming>Flow_033hsjn</bpmn:incoming>
+      <bpmn:incoming>Flow_08w9kd5</bpmn:incoming>
       <bpmn:outgoing>Flow_0n05bhd</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0n05bhd" sourceRef="Activity_0eok0jc" targetRef="web3_task" />
     <bpmn:userTask id="web3_task" name="Claim Reward" camunda:assignee="${user_id}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="dashboard_id" label="Dashboard ID" type="long" />
-          <camunda:formField id="org_id" label="Org ID" type="long" />
-          <camunda:formField id="user_id" label="User ID" type="long" />
+          <camunda:formField id="dashboard_id" label="Dashboard ID" type="long" defaultValue="${dashboard_id}" />
+          <camunda:formField id="org_id" label="Org ID" type="long" defaultValue="${org_id}" />
+          <camunda:formField id="user_id" label="User ID" type="long" defaultValue="${user_id}" />
           <camunda:formField id="amount" label="Amount" type="long" defaultValue="1000" />
         </camunda:formData>
-        <camunda:executionListener event="start">
-          <camunda:script scriptFormat="javascript">var user_id = execution.getVariable(user_id).toString();
-execution.setVariable("user_id", user_id)</camunda:script>
-        </camunda:executionListener>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0n05bhd</bpmn:incoming>
       <bpmn:outgoing>Flow_077nfrs</bpmn:outgoing>
@@ -121,10 +112,6 @@ execution.setVariable("user_id", user_id)</camunda:script>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1emmahe_di" bpmnElement="Activity_1lytfrh">
         <dc:Bounds x="460" y="80" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1jgx156_di" bpmnElement="Activity_04043ok">
-        <dc:Bounds x="740" y="80" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0ci2aqk_di" bpmnElement="Gateway_0ci2aqk" isMarkerVisible="true">
@@ -169,13 +156,9 @@ execution.setVariable("user_id", user_id)</camunda:script>
         <di:waypoint x="560" y="120" />
         <di:waypoint x="615" y="120" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_033hsjn_di" bpmnElement="Flow_033hsjn">
-        <di:waypoint x="840" y="120" />
-        <di:waypoint x="911" y="120" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08w9kd5_di" bpmnElement="Flow_08w9kd5">
         <di:waypoint x="665" y="120" />
-        <di:waypoint x="740" y="120" />
+        <di:waypoint x="911" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1p3ofvn_di" bpmnElement="Flow_1p3ofvn">
         <di:waypoint x="640" y="145" />

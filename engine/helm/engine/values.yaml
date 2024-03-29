@@ -20,6 +20,8 @@ chainflow-engine:
     port: '8080'
   env:
     ENVIRONMENT: "stage"
+    API_URL: "http://api.url.com"
+    API_KEY: "key"
   ingressHost1: "chainflow-engine.dexguru.biz"
   letsencrypt:
     issuer: "letsencrypt-prod"
@@ -41,6 +43,8 @@ chainflow-engine-crossfi:
     port: '8080'
   env:
     ENVIRONMENT: "stage"
+    API_URL: "http://api.url.com"
+    API_KEY: "key"
   ingressHost1: "engine-crossfi.dexguru.biz"
   letsencrypt:
     issuer: "letsencrypt-prod"
