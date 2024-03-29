@@ -20,7 +20,7 @@
       <bpmn:outgoing>Flow_1ltk7yb</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_1ltk7yb" sourceRef="Event_1b5mulx" targetRef="Activity_1fvs1rd" />
-    <bpmn:exclusiveGateway id="Gateway_1p2emin" name="Approve Samples" default="Flow_02iuehi">
+    <bpmn:exclusiveGateway id="Gateway_1p2emin" name="Approve Samples">
       <bpmn:incoming>Flow_0lfzuyz</bpmn:incoming>
       <bpmn:outgoing>Flow_01mkno0</bpmn:outgoing>
       <bpmn:outgoing>Flow_02iuehi</bpmn:outgoing>
@@ -28,7 +28,9 @@
     <bpmn:sequenceFlow id="Flow_01mkno0" name="Yes" sourceRef="Gateway_1p2emin" targetRef="Activity_0irz3ft">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_approved}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_02iuehi" name="No" sourceRef="Gateway_1p2emin" targetRef="DaliWorker" />
+    <bpmn:sequenceFlow id="Flow_02iuehi" name="No" sourceRef="Gateway_1p2emin" targetRef="DaliWorker">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!is_approved}</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0zz9xvy" sourceRef="Activity_0al1lvs" targetRef="Activity_18aisb2" />
     <bpmn:sequenceFlow id="Flow_07ac65y" sourceRef="Activity_18aisb2" targetRef="Gateway_1oja892" />
     <bpmn:serviceTask id="Activity_1fvs1rd" name="Setting Up Environment" camunda:class="ai.hhrdr.chainflow.engine.LoggerDelegate">
@@ -62,7 +64,6 @@
         </camunda:formData>
         <camunda:inputOutput>
           <camunda:inputParameter name="image_url">${image_url}</camunda:inputParameter>
-          <camunda:outputParameter name="tokenURI">${tokenURI}</camunda:outputParameter>
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0w36nrh</bpmn:incoming>
@@ -233,7 +234,7 @@
       <bpmndi:BPMNShape id="Gateway_1p2emin_di" bpmnElement="Gateway_1p2emin" isMarkerVisible="true">
         <dc:Bounds x="935" y="425" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="916.5" y="401" width="87" height="14" />
+          <dc:Bounds x="917" y="401" width="87" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1m0emg7_di" bpmnElement="Activity_1fvs1rd">
