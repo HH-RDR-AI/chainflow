@@ -41,7 +41,7 @@
       <bpmn:outgoing>Flow_08w9kd5</bpmn:outgoing>
       <bpmn:outgoing>Flow_1p3ofvn</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_08w9kd5" sourceRef="Gateway_0ci2aqk" targetRef="Activity_0eok0jc" />
+    <bpmn:sequenceFlow id="Flow_08w9kd5" sourceRef="Gateway_0ci2aqk" targetRef="Activity_04043ok" />
     <bpmn:sequenceFlow id="Flow_1p3ofvn" sourceRef="Gateway_0ci2aqk" targetRef="Activity_1aw0e3z">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${is_rejected}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -75,7 +75,7 @@ execution.setVariable("user_id", user_id)</camunda:script>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_05fndjo" sourceRef="Gateway_1r7gy61" targetRef="Event_1qxk3ws" />
     <bpmn:serviceTask id="Activity_0eok0jc" name="Mark rewards claimable" camunda:class="ai.hhrdr.chainflow.engine.LoggerDelegate">
-      <bpmn:incoming>Flow_08w9kd5</bpmn:incoming>
+      <bpmn:incoming>Flow_033hsjn</bpmn:incoming>
       <bpmn:outgoing>Flow_0n05bhd</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_0n05bhd" sourceRef="Activity_0eok0jc" targetRef="web3_task" />
@@ -95,6 +95,11 @@ execution.setVariable("user_id", user_id)</camunda:script>
       <bpmn:incoming>Flow_077nfrs</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_077nfrs" sourceRef="web3_task" targetRef="Event_1rnqrld" />
+    <bpmn:serviceTask id="Activity_04043ok" name="Call Redash API to change dashboard status" camunda:class="ai.hhrdr.chainflow.engine.WarehouseDelegate">
+      <bpmn:incoming>Flow_08w9kd5</bpmn:incoming>
+      <bpmn:outgoing>Flow_033hsjn</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_033hsjn" sourceRef="Activity_04043ok" targetRef="Activity_0eok0jc" />
   </bpmn:process>
   <bpmn:message id="Message_0p6m252" name="Message_0p6m252" />
   <bpmn:message id="Message_3bamfph" name="Message_3bamfph" />
@@ -112,6 +117,10 @@ execution.setVariable("user_id", user_id)</camunda:script>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1emmahe_di" bpmnElement="Activity_1lytfrh">
         <dc:Bounds x="460" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1jgx156_di" bpmnElement="Activity_04043ok">
+        <dc:Bounds x="740" y="80" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0ci2aqk_di" bpmnElement="Gateway_0ci2aqk" isMarkerVisible="true">
@@ -156,9 +165,13 @@ execution.setVariable("user_id", user_id)</camunda:script>
         <di:waypoint x="560" y="120" />
         <di:waypoint x="615" y="120" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_033hsjn_di" bpmnElement="Flow_033hsjn">
+        <di:waypoint x="840" y="120" />
+        <di:waypoint x="911" y="120" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08w9kd5_di" bpmnElement="Flow_08w9kd5">
         <di:waypoint x="665" y="120" />
-        <di:waypoint x="911" y="120" />
+        <di:waypoint x="740" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1p3ofvn_di" bpmnElement="Flow_1p3ofvn">
         <di:waypoint x="640" y="145" />
