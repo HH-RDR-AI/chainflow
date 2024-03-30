@@ -104,7 +104,7 @@
     <bpmn:sequenceFlow id="Flow_0ow28xh" name="Deployed" sourceRef="Activity_0lgkho5" targetRef="Gateway_1oja892" />
     <bpmn:boundaryEvent id="Event_1fnxc6b" name="Generation Error" attachedToRef="DaliWorker">
       <bpmn:outgoing>Flow_0y4hkd5</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_0qv98qg" camunda:errorCodeVariable="error_code" />
+      <bpmn:errorEventDefinition id="ErrorEventDefinition_0qv98qg" errorRef="Error_07hcjht" camunda:errorCodeVariable="DaleeFailure" />
     </bpmn:boundaryEvent>
     <bpmn:sequenceFlow id="Flow_0y4hkd5" sourceRef="Event_1fnxc6b" targetRef="Activity_1k4jqjd" />
     <bpmn:sequenceFlow id="Flow_19yhzr9" sourceRef="Activity_1k4jqjd" targetRef="DaliWorker" />
@@ -212,19 +212,8 @@
         </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1fg56of</bpmn:incoming>
-      <bpmn:incoming>Flow_1ck368i</bpmn:incoming>
       <bpmn:outgoing>Flow_0w36nrh</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:boundaryEvent id="Event_19d5axp" attachedToRef="FaceSwapWorker">
-      <bpmn:outgoing>Flow_16e7br2</bpmn:outgoing>
-      <bpmn:errorEventDefinition id="ErrorEventDefinition_10flhzp" />
-    </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_16e7br2" sourceRef="Event_19d5axp" targetRef="Activity_0h3eqvh" />
-    <bpmn:userTask id="Activity_0h3eqvh" name="Admin Check LLM Client">
-      <bpmn:incoming>Flow_16e7br2</bpmn:incoming>
-      <bpmn:outgoing>Flow_1ck368i</bpmn:outgoing>
-    </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_1ck368i" sourceRef="Activity_0h3eqvh" targetRef="FaceSwapWorker" />
     <bpmn:textAnnotation id="TextAnnotation_0ry3xmb">
       <bpmn:text>Pre-setting contexts from application properties if needed</bpmn:text>
     </bpmn:textAnnotation>
@@ -234,6 +223,7 @@
     </bpmn:textAnnotation>
     <bpmn:association id="Association_0oczcby" sourceRef="Activity_0irz3ft" targetRef="TextAnnotation_18acf78" />
   </bpmn:process>
+  <bpmn:error id="Error_07hcjht" name="DaleeFailure" errorCode="${}" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="payment-retrival">
       <bpmndi:BPMNShape id="Event_1b5mulx_di" bpmnElement="Event_1b5mulx">
@@ -310,14 +300,8 @@
           <dc:Bounds x="822" y="125" width="55" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0vjl8gc_di" bpmnElement="Activity_0h3eqvh">
-        <dc:Bounds x="680" y="190" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0rqiojf_di" bpmnElement="Event_0cxjoud">
         <dc:Bounds x="832" y="392" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0zoxztr_di" bpmnElement="Event_19d5axp">
-        <dc:Bounds x="712" y="392" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_0ry3xmb_di" bpmnElement="TextAnnotation_0ry3xmb">
         <dc:Bounds x="200" y="268" width="100" height="84" />
@@ -473,16 +457,6 @@
       <bpmndi:BPMNEdge id="Flow_0w36nrh_di" bpmnElement="Flow_0w36nrh">
         <di:waypoint x="770" y="450" />
         <di:waypoint x="800" y="450" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_16e7br2_di" bpmnElement="Flow_16e7br2">
-        <di:waypoint x="730" y="392" />
-        <di:waypoint x="730" y="270" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ck368i_di" bpmnElement="Flow_1ck368i">
-        <di:waypoint x="710" y="270" />
-        <di:waypoint x="710" y="340" />
-        <di:waypoint x="680" y="340" />
-        <di:waypoint x="680" y="410" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
