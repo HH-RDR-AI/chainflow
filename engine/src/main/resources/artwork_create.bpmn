@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1hqbnv9" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.21.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
+  <bpmn:process id="artwork_create" name="Create Artwork" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="user_id" label="user_id" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="chat_id" label="chat_id" type="string">
+            <camunda:validation>
+              <camunda:constraint name="readonly" />
+            </camunda:validation>
+          </camunda:formField>
+          <camunda:formField id="img_art_thumbnail" label="img_art_thumbnail" type="string" />
+          <camunda:formField id="art_name" label="art_name" type="string" />
+          <camunda:formField id="art_description" label="art_description" type="string" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_0z1n5cw</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_0poz3rv">
+      <bpmn:incoming>Flow_187uj0g</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="AddArtworkDelegate" name="AddArtworkDelegate" camunda:class="ai.hhrdr.chainflow.engine.AddArtworkDelegate">
+      <bpmn:incoming>Flow_0z1n5cw</bpmn:incoming>
+      <bpmn:outgoing>Flow_05j1lgd</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:userTask id="Activity_0da253k" name="Edit Artwork" camunda:assignee="${user_id}">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="art_name" label="art_name" type="string" defaultValue="${art_name}" />
+          <camunda:formField id="art_description" label="art_description" type="string" />
+          <camunda:formField id="img_art_thumbnail" label="img_event_thumbnail" type="string" defaultValue="${img_art_thumbnail}" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_05j1lgd</bpmn:incoming>
+      <bpmn:outgoing>Flow_187uj0g</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0z1n5cw" sourceRef="StartEvent_1" targetRef="AddArtworkDelegate" />
+    <bpmn:sequenceFlow id="Flow_05j1lgd" sourceRef="AddArtworkDelegate" targetRef="Activity_0da253k" />
+    <bpmn:sequenceFlow id="Flow_187uj0g" sourceRef="Activity_0da253k" targetRef="Event_0poz3rv" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="artwork_create">
+      <bpmndi:BPMNShape id="Event_0poz3rv_di" bpmnElement="Event_0poz3rv">
+        <dc:Bounds x="812" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_187xim6_di" bpmnElement="Activity_0da253k">
+        <dc:Bounds x="570" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_01um9gv_di" bpmnElement="AddArtworkDelegate">
+        <dc:Bounds x="380" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="158" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_187uj0g_di" bpmnElement="Flow_187uj0g">
+        <di:waypoint x="670" y="120" />
+        <di:waypoint x="812" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05j1lgd_di" bpmnElement="Flow_05j1lgd">
+        <di:waypoint x="480" y="120" />
+        <di:waypoint x="570" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0z1n5cw_di" bpmnElement="Flow_0z1n5cw">
+        <di:waypoint x="194" y="120" />
+        <di:waypoint x="380" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
