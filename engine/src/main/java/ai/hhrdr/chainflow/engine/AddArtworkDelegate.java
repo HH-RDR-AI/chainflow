@@ -16,7 +16,7 @@ import java.net.http.HttpResponse.BodyHandlers;
 import java.util.logging.Logger;
 
 @Component("addArtDelegate")
-public class AddArtDelegate implements JavaDelegate {
+public class AddArtworkDelegate implements JavaDelegate {
 
     @Value("${api.url}")
     private String apiURL;
@@ -24,7 +24,7 @@ public class AddArtDelegate implements JavaDelegate {
     @Value("${api.key}")
     private String apiKey;
 
-    private static final Logger LOGGER = Logger.getLogger(AddArtDelegate.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(AddArtworkDelegate.class.getName());
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
@@ -33,7 +33,7 @@ public class AddArtDelegate implements JavaDelegate {
         String imgArtThumbnail = (String) execution.getVariable("img_art_thumbnail");
 
         JSONObject json = new JSONObject();
-        json.put("artt_name", artName);
+        json.put("art_name", artName);
         json.put("art_description", artDescription);
         json.put("img_art_thumbnail", imgArtThumbnail);
 
