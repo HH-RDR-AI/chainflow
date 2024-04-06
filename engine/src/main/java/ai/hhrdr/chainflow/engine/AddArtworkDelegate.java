@@ -6,16 +6,15 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
+import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.logging.Logger;
 
-@Component("addArtDelegate")
+@Component("AddArtworkDelegate")
 public class AddArtworkDelegate implements JavaDelegate {
 
     @Value("${api.url}")
@@ -45,21 +44,27 @@ public class AddArtworkDelegate implements JavaDelegate {
                 .POST(BodyPublishers.ofString(json.toString()))
                 .build();
         try {
-
             HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-            // Assuming the response body contains a JSON list of arts
+
             String artJson = response.body();
             JSONParser parser = new JSONParser(JSONParser.MODE_PERMISSIVE);
-            JSONObject art = (JSONObject) parser.parse(artJson); // Corrected parsing line
+            Object obj = parser.parse(artJson); // Use Object to hold the parsed result
 
-            String artId = (String) art.get("id"); // Extracting the 'id' as a string
-            execution.setVariable("current_art_id", artId);
-            LOGGER.info("art creation response status code: " + response.statusCode());
-            LOGGER.info("art creation response body: " + response.body());
-            // Optionally, you can handle the response further, for example, to log or process the result.
+            if (obj instanceof JSONObject) { // Check if the parsed object is indeed a JSONObject
+                JSONObject art = (JSONObject) obj; // Safe casting to JSONObject
+
+                String artId = (String) art.get("id"); // Now safely extract the 'id'
+                execution.setVariable("current_art_id", artId);
+                LOGGER.info("art creation response status code: " + response.statusCode());
+                LOGGER.info("art creation response body: " + response.body());
+            } else {
+                LOGGER.severe("Parsed response is not a JSON object as expected.");
+                // Handle this scenario appropriately (e.g., throw an exception or log a detailed message)
+            }
         } catch (Exception e) {
             LOGGER.severe("Failed to add art. Exception: " + e.getMessage());
-            throw e; // Rethrow if you want to indicate failure in the process
+            throw e; // Re-throw if you want to propagate the error
         }
+
     }
 }
