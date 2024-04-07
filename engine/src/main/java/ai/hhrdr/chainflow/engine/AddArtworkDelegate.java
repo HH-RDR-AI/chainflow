@@ -6,6 +6,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -27,22 +28,35 @@ public class AddArtworkDelegate implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) throws Exception {
+        String artId = (String) execution.getVariable("art_id");
         String artName = (String) execution.getVariable("art_name");
         String artDescription = (String) execution.getVariable("art_description");
         String imgArtThumbnail = (String) execution.getVariable("img_art_thumbnail");
-
+        String artDescriptionPrompt = (String) execution.getVariable("art_description_prompt");
+        HttpClient client = HttpClient.newHttpClient();
         JSONObject json = new JSONObject();
         json.put("art_name", artName);
         json.put("art_description", artDescription);
         json.put("img_art_thumbnail", imgArtThumbnail);
+        json.put("art_description_prompt", artDescriptionPrompt);
+        HttpRequest request;// Ensure your API key is correctly set up for authorization
+        if (artId != null) {
 
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(apiURL + "/api/arts"))
-                .header("Content-Type", "application/json")
-                .header("Authorization", apiKey) // Ensure your API key is correctly set up for authorization
-                .POST(BodyPublishers.ofString(json.toString()))
-                .build();
+            request = HttpRequest.newBuilder()
+                    .uri(URI.create(apiURL + "/api/arts/" + artId))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", apiKey) // Ensure your API key is correctly set up for authorization
+                    .PUT(BodyPublishers.ofString(json.toString()))
+                    .build();
+        } else {
+
+            request = HttpRequest.newBuilder()
+                    .uri(URI.create(apiURL + "/api/arts"))
+                    .header("Content-Type", "application/json")
+                    .header("Authorization", apiKey) // Ensure your API key is correctly set up for authorization
+                    .POST(BodyPublishers.ofString(json.toString()))
+                    .build();
+        }
         try {
             HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
 
@@ -53,8 +67,8 @@ public class AddArtworkDelegate implements JavaDelegate {
             if (obj instanceof JSONObject) { // Check if the parsed object is indeed a JSONObject
                 JSONObject art = (JSONObject) obj; // Safe casting to JSONObject
 
-                String artId = (String) art.get("id"); // Now safely extract the 'id'
-                execution.setVariable("current_art_id", artId);
+                String artIdRes = (String) art.get("id"); // Now safely extract the 'id'
+                execution.setVariable("art_id", artIdRes);
                 LOGGER.info("art creation response status code: " + response.statusCode());
                 LOGGER.info("art creation response body: " + response.body());
             } else {
