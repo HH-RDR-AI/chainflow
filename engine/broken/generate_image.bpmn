@@ -187,7 +187,9 @@
     </bpmn:userTask>
     <bpmn:boundaryEvent id="Event_15swukt" attachedToRef="Activity_189xyxw">
       <bpmn:outgoing>Flow_1uwb9o5</bpmn:outgoing>
-      <bpmn:timerEventDefinition id="TimerEventDefinition_1nggm5a" />
+      <bpmn:timerEventDefinition id="TimerEventDefinition_1nggm5a">
+        <bpmn:timeDuration xsi:type="bpmn:tFormalExpression">PT3D</bpmn:timeDuration>
+      </bpmn:timerEventDefinition>
     </bpmn:boundaryEvent>
     <bpmn:userTask id="Activity_1y2jjyw" name="Admin to check the shipment status">
       <bpmn:incoming>Flow_1uwb9o5</bpmn:incoming>
