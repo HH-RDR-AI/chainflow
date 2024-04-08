@@ -9,7 +9,7 @@ from openai import AsyncOpenAI
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Environment variables to configure the script
-TOPIC_NAME = os.getenv('TOPIC_NAME', "DaliGenerateArtPrompt")
+TOPIC_NAME = os.getenv('TOPIC_NAME', "DallEGenerateDescriptivePrompt")
 CAMUNDA_URL = os.getenv('CAMUNDA_URL', 'http://localhost:8080/engine-rest')
 
 # Logging the script startup
@@ -28,6 +28,7 @@ default_config = {
 # Initialize the AsyncOpenAI client with an API key from environment variables
 client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
+
 # Main function to describe images using OpenAI's model
 async def describe_image_with_openai_vision(image_url, name, description, image_type):
     # Example of logging an operation
@@ -38,7 +39,6 @@ async def describe_image_with_openai_vision(image_url, name, description, image_
         prompt = "Provide a detailed analysis of the visual elements, colors, textures, and any distinctive stylistic features present in the image. Focus on describing the composition, any patterns or motifs, the use of light and shadow, and overall thematic presence. Refrain from evaluating the artistic medium or categorizing the image; concentrate only on the observable details. Maximum length 250 words."
 
     prompt = f"{prompt}\n\nArtwork Name: {name}\n\nArtwork Description: {description}"
-
 
     try:
         response = await client.chat.completions.create(model="gpt-4-1106-vision-preview",
@@ -63,6 +63,7 @@ async def describe_image_with_openai_vision(image_url, name, description, image_
         logging.error(f"Error while generating description for image: {e}")
         return None
 
+
 # Function to handle tasks from Camunda
 def handle_task(task: ExternalTask) -> TaskResult:
     # Task handling code with added logging
@@ -71,16 +72,20 @@ def handle_task(task: ExternalTask) -> TaskResult:
     img_art_thumbnail = variables.get("img_art_thumbnail")
     art_name = variables.get("art_name")
     art_description = variables.get("art_description")
+    image_type = variables.get("image_type")
     loop = asyncio.get_event_loop()
     description = loop.run_until_complete(describe_image_with_openai_vision(img_art_thumbnail, art_name,
-                                                              art_description, 'artwork'))
+                                                                            art_description, image_type))
     if not description:
         return task.bpmn_error(
             "art_description_generation_failed",
             "art_description_generation_failed",
             variables
         )
-    variables["art_description_prompt"] = description
+    if image_type == 'person':
+        variables["person_description_prompt"] = description
+    else:
+        variables["art_description_prompt"] = description
     return task.complete(variables)
 
 
