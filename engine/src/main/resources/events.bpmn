@@ -66,7 +66,7 @@
       <bpmn:outgoing>Flow_1by0u3z</bpmn:outgoing>
     </bpmn:callActivity>
     <bpmn:sequenceFlow id="Flow_0q92z88" sourceRef="Gateway_0e2zsak" targetRef="account">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${account_id = ''}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${account_id == ''}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_03swavw" sourceRef="Gateway_0e2zsak" targetRef="GetEventDelegate" />
     <bpmn:sequenceFlow id="Flow_1tjlhmu" sourceRef="GetEventDelegate" targetRef="Gateway_0b2zwx6" />
