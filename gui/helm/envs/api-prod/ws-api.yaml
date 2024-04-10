@@ -1,0 +1,16 @@
+api:
+  replicas:
+    default: 10
+  limitsCpu: 1
+  limitsMemory: 1G
+  requestsCpu: 0.5
+  requestsMemory: 0.5G
+  env:
+    SERVICE_NAME: "ws-app"
+    ENVIRONMENT: "production"
+    WORKERS: '5'
+  ingressHosts:
+    - name: "ws-prod-lax-dexguru-biz"
+      host: "ws-prod-lax.dexguru.biz"
+    - name: "ws-dex-guru"
+      host: "ws.dex.guru"

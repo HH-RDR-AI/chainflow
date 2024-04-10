@@ -1,0 +1,14 @@
+api:
+  replicas:
+    default: 5
+  limitsCpu: 3
+  limitsMemory: 2G
+  requestsCpu: 1
+  requestsMemory: 1G
+  env:
+    SERVICE_NAME: "ws-app-public"
+    ENVIRONMENT: "production"
+    WORKERS: '5'
+  ingressHosts:
+    - name: "ws-dev-dex-guru"
+      host: "ws.dev.dex.guru"

@@ -1,0 +1,28 @@
+---
+image: 'docker-registry.dexguru.biz/dex.guru/dexguru-websocket-app/dexguru-websocket-app'
+imageTag: ''
+registrySecretName: registry-harbor
+
+api:
+  port: 8000
+  serviceType: NodePort
+  strategyType: 'RollingUpdate'
+  readnessProbe:
+    path: '/health_check'
+    port: '8000'
+  livenessProbe:
+    path: '/health_check'
+    port: '8000'
+  baseEnv:
+    APM_SERVER_URL: "http://apm-server-apm-server.logging.svc.cluster.local:8200"
+    APM_ENABLED: 'True'
+    APM_RECORDING: 'True'
+    APM_CAPTURE_HEADERS: 'False'
+    LOGGING_LEVEL: 'INFO'
+    LOG_HANDLERS: '["console", "logstash"]'
+    LOGSTASH: "logstash-logstash.logging.svc.cluster.local"
+    IS_DEBUG: 'False'
+    REDIS_PUB_SUB_CONNECTION: '{"connection_id":"redis_pub_sub_connection","storage_host":"10.0.100.22"}'
+    authjwt_secret_key: "597accceaae5f77e0387854b88a57110ceb3caa1a3b70995a6d1e11df781017b"
+  letsencrypt:
+    issuer: "letsencrypt-prod"

@@ -9,7 +9,7 @@ const nextConfig = {
   rewrites: async () => {
     return [
       {
-        source: "/api/engine/:path*",
+        source: "/app/engine/:path*",
         destination: "https://chainflow-engine.dexguru.biz/engine-rest/:path*",
       }
     ];

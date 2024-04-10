@@ -12,7 +12,7 @@ export const fetchEngine = async (
   const hostUrl =
     typeof window === "undefined"
       ? "https://chainflow-engine.dexguru.biz/engine-rest"
-      : "/dashboard/api/engine";
+      : "/dashboard/app/engine";
 
   return fetch(`${hostUrl}/${input}`, init);
 };

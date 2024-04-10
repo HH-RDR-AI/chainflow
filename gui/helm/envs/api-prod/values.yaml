@@ -1,0 +1,29 @@
+---
+image: 'docker-registry.dexguru.biz/dex.guru/dexguru-websocket-app/dexguru-websocket-app'
+imageTag: ''
+registrySecretName: registry-harbor
+
+
+api:
+  port: 8000
+  serviceType: NodePort
+  strategyType: 'RollingUpdate'
+  readnessProbe:
+    path: '/health_check'
+    port: '8000'
+  livenessProbe:
+    path: '/health_check'
+    port: '8000'
+  baseEnv:
+    APM_SERVER_URL: 'http://apm-server-external-apm-server.logging.svc.prod.dexguru.biz:8200'
+    APM_ENABLED: 'True'
+    APM_RECORDING: 'True'
+    APM_CAPTURE_HEADERS: 'False'
+    LOGGING_LEVEL: 'INFO'
+    LOG_HANDLERS: '["console", "logstash"]'
+    LOGSTASH: "logstash-logstash.logging.svc.cluster.local"
+    IS_DEBUG: 'False'
+    REDIS_PUB_SUB_CONNECTION: '{"connection_id":"redis_pub_sub_connection","storage_host":"10.0.200.42"}'
+    authjwt_secret_key: "a39203d6fece0c42b1bde15b955aa03155f184db72551a0e79369653fd883bcf"
+  ingressHost1: "ws-app-prod.dexguru.biz"
+  ingressHost2: "ws.dex.guru"
