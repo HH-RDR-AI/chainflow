@@ -1,13 +1,13 @@
 ---
 layout: base
 permalink: /
-title: GURUChain 
+title: GURU Network 
 description: "At DexGuru, we're not just building a platform; we're shaping the future of blockchain technology. From our origins as a pioneering Dex Aggregator to our evolution into a comprehensive AI-enhanced blockchain ecosystem, DexGuru stands at the forefront of innovation, ready to unlock the full potential of decentralized applications for developers, AI enthusiasts, and blockchain believers alike."
 # --------------------------
 # start: Banner config
 banner:
-  type: guru_appchain
-  title: GURUChain
+  type: guru_network
+  title: GURU Network
   subtitle:  Unleashing the <br />Future ofAI Focused Decentralized Applications
 
   actions:

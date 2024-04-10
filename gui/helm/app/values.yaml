@@ -6,7 +6,7 @@ registrySecretName: registry-harbor
 app:
   replicas:
     default: 1
-  port: 8000
+  port: 80
   serviceType: NodePort
   limitsCpu: 1
   limitsMemory: 1G
