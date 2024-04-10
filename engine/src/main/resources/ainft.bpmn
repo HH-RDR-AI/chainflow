@@ -12,10 +12,10 @@
       <bpmn:outgoing>Flow_1caskys</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:serviceTask id="Activity_1xz5ssg" name="DaliWorker" camunda:asyncBefore="true" camunda:type="external" camunda:topic="DaliWorker">
-      <bpmn:extensionElements />
       <bpmn:incoming>Flow_1ntse5j</bpmn:incoming>
       <bpmn:incoming>Flow_0pucu70</bpmn:incoming>
       <bpmn:incoming>Flow_04zoc6e</bpmn:incoming>
+      <bpmn:incoming>Flow_08ulvfo</bpmn:incoming>
       <bpmn:incoming>Flow_0cbzill</bpmn:incoming>
       <bpmn:outgoing>Flow_1f1dv3c</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -74,6 +74,7 @@
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1hw1oc0</bpmn:incoming>
+      <bpmn:outgoing>Flow_08ulvfo</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_17kzja3" sourceRef="Activity_0imoc1t" targetRef="Gateway_0cui0l0" />
     <bpmn:scriptTask id="Activity_0imoc1t" name="Set, substract retries" scriptFormat="JavaScript">
@@ -97,6 +98,7 @@ execution.setVariable('retries', retries);
 
 print('Retries set to: ' + retries);</bpmn:script>
     </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_08ulvfo" sourceRef="Activity_080u5ep" targetRef="Activity_1xz5ssg" />
     <bpmn:serviceTask id="Activity_1ldqql2" name="Payment" camunda:class="ai.hhrdr.chainflow.engine.LoggerDelegate">
       <bpmn:incoming>Flow_1o2ce10</bpmn:incoming>
       <bpmn:outgoing>Flow_0g8k3zm</bpmn:outgoing>
@@ -218,6 +220,10 @@ print('Retries set to: ' + retries);</bpmn:script>
       <bpmndi:BPMNEdge id="Flow_17kzja3_di" bpmnElement="Flow_17kzja3">
         <di:waypoint x="690" y="480" />
         <di:waypoint x="655" y="480" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_08ulvfo_di" bpmnElement="Flow_08ulvfo">
+        <di:waypoint x="500" y="550" />
+        <di:waypoint x="500" y="390" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1o2ce10_di" bpmnElement="Flow_1o2ce10">
         <di:waypoint x="1135" y="350" />
