@@ -22,14 +22,14 @@ banner:
         type: book,
     }
 
-  text: "The Appchain platform is the culmination of our vision, integrating our existing services with a revolutionary new execution layer that enhances dApp capabilities through smart contract execution and AI-driven data insights. With the unique FlowOrchestrator system, Appchain enables seamless on-chain/off-chain interactions, transforming how decentralized applications interact with blockchain and AI technologies."
+  text: "GURU Orchestration platform and Network is the culmination of our vision, integrating our existing services with a revolutionary new execution layer that enhances dApp capabilities through smart contract execution and AI-driven data insights. With the unique FlowOrchestrator system, GURU Orchestrator and Network enables seamless on-chain/off-chain interactions, transforming how decentralized applications interact with blockchain and AI technologies."
 
 features:
   title: Key Features
   items:
     - {
         title: "For Developers: Monetize Your Innovation",
-        text: "Unlock new revenue streams by publishing your APIs and AI models within our ecosystem. Appchain's execution layer allows you to embed blockchain data dashboards directly into dApp front-ends, offering no-code solutions that redefine dApp functionality.",
+        text: "Unlock new revenue streams by publishing your APIs and AI models within our ecosystem. GURU Orchestrator and Network's execution layer allows you to embed blockchain data dashboards directly into dApp front-ends, offering no-code solutions that redefine dApp functionality.",
         img: "/assets/img/features/warehouse/collaboration.svg",
       }
     - {
@@ -49,7 +49,7 @@ features:
 }
 
 cta:
-  text: The $GURU token is the backbone of our ecosystem, facilitating transactions, rewarding contributions, and driving innovation. As we expand the Appchain platform, the $GURU token ensures a vibrant, self-sustaining blockchain community.
+  text: The $GURU token is the backbone of our ecosystem, facilitating transactions, rewarding contributions, and driving innovation. As we expand the GURU Orchestrator and Network platform, the $GURU token ensures a vibrant, self-sustaining blockchain community.
   actions:
     - {
         title: Participate in LBP,
