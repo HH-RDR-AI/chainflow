@@ -38,11 +38,7 @@
     <bpmn:sequenceFlow id="Flow_1f1dv3c" sourceRef="Activity_1xz5ssg" targetRef="Activity_0vbjzf1" />
     <bpmn:sequenceFlow id="Flow_125ctv0" sourceRef="Activity_0vbjzf1" targetRef="Activity_093cgpj" />
     <bpmn:serviceTask id="Activity_0vbjzf1" name="FaceSwap Worker" camunda:asyncBefore="true" camunda:type="external" camunda:topic="FaceSwapWorker">
-      <bpmn:extensionElements>
-        <camunda:inputOutput>
-          <camunda:outputParameter name="image_url">${image_url}</camunda:outputParameter>
-        </camunda:inputOutput>
-      </bpmn:extensionElements>
+      <bpmn:extensionElements />
       <bpmn:incoming>Flow_1f1dv3c</bpmn:incoming>
       <bpmn:outgoing>Flow_125ctv0</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -58,9 +54,6 @@
           <camunda:formField id="task_type" label="task_type" type="string" defaultValue="review" />
           <camunda:formField id="prompt" label="prompt" type="string" defaultValue="${prompt}" />
         </camunda:formData>
-        <camunda:inputOutput>
-          <camunda:inputParameter name="image_url">${image_url}</camunda:inputParameter>
-        </camunda:inputOutput>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_125ctv0</bpmn:incoming>
       <bpmn:outgoing>Flow_0w8oyqd</bpmn:outgoing>
