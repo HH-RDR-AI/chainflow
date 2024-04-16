@@ -82,7 +82,7 @@ menu:
     }
 
 aside:
-  - { title: Dashboard, url: /dashboard }
+  - { title: Demo, url: /dashboard }
 
 # Generate social links in footer.
 social_links:

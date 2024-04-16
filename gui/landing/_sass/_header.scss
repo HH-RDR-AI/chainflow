@@ -323,9 +323,15 @@
   }
 }
 
-@property --color {
-  syntax: "<angle>";
-  initial-value: 0deg;
+@property --color-1 {
+  syntax: "<color>";
+  initial-value: rgba(96, 70, 255, 1);
+  inherits: false;
+}
+
+@property --color-2 {
+  syntax: "<color>";
+  initial-value: rgba(34, 212, 159, 1);
   inherits: false;
 }
 
@@ -337,20 +343,19 @@
   width: max-content;
 
   &__img {
+    --color-1: rgba(96, 70, 255, 1);
+    --color-2: rgba(34, 212, 159, 1);
+
     background: linear-gradient(#0b0f14, #0b0f14) padding-box,
-      linear-gradient(
-          104deg,
-          rgba(96, 70, 255, 1) 0%,
-          rgba(34, 212, 159, 1) 100%
-        )
-        border-box;
+      linear-gradient(104deg, var(--color-1) 0%, var(--color-2) 100%) border-box;
+    background-size: 100%, 200%;
     border: 2px transparent solid;
     flex: 0 0 auto;
     width: 40px;
     height: 40px;
     padding: 5px 9px;
     border-radius: 50%;
-    animation: logo-img 1s linear infinite;
+    animation: logo-img 2s linear infinite;
 
     &-logo {
       width: 18px;
@@ -359,12 +364,29 @@
     }
 
     @keyframes logo-img {
-      from {
-        --_angle: 0deg;
+      0% {
+        --color-1: rgba(96, 70, 255, 1);
+        --color-2: rgba(34, 212, 159, 1);
       }
 
-      to {
-        --_angle: 360deg;
+      25% {
+        --color-1: rgba(70, 166, 255, 1);
+        --color-2: rgba(96, 70, 255, 1);
+      }
+
+      50% {
+        --color-1: rgba(241, 190, 62, 1);
+        --color-2: rgba(70, 166, 255, 1);
+      }
+
+      50% {
+        --color-1: rgba(34, 212, 159, 1);
+        --color-2: rgba(241, 190, 62, 1);
+      }
+
+      100% {
+        --color-1: rgba(96, 70, 255, 1);
+        --color-2: rgba(34, 212, 159, 1);
       }
     }
   }

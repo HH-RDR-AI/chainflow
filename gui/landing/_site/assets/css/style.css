@@ -94,6 +94,8 @@ iframe {
   overflow: hidden;
   font-size: 0;
   max-width: 100%;
+  object-fit: contain;
+  object-position: center;
 }
 :where(img):before {
   display: none;
@@ -553,9 +555,14 @@ html.open-menu {
   color: #6b7a8a;
 }
 
-@property --color {
-  syntax: "<angle>";
-  initial-value: 0deg;
+@property --color-1 {
+  syntax: "<color>";
+  initial-value: rgb(96, 70, 255);
+  inherits: false;
+}
+@property --color-2 {
+  syntax: "<color>";
+  initial-value: rgb(34, 212, 159);
   inherits: false;
 }
 .logo {
@@ -566,14 +573,17 @@ html.open-menu {
   width: max-content;
 }
 .logo__img {
-  background: linear-gradient(#0b0f14, #0b0f14) padding-box, linear-gradient(104deg, rgb(96, 70, 255) 0%, rgb(34, 212, 159) 100%) border-box;
+  --color-1: rgba(96, 70, 255, 1);
+  --color-2: rgba(34, 212, 159, 1);
+  background: linear-gradient(#0b0f14, #0b0f14) padding-box, linear-gradient(104deg, var(--color-1) 0%, var(--color-2) 100%) border-box;
+  background-size: 100%, 200%;
   border: 2px transparent solid;
   flex: 0 0 auto;
   width: 40px;
   height: 40px;
   padding: 5px 9px;
   border-radius: 50%;
-  animation: logo-img 1s linear infinite;
+  animation: logo-img 2s linear infinite;
 }
 .logo__img-logo {
   width: 18px;
@@ -581,11 +591,25 @@ html.open-menu {
   object-fit: contain;
 }
 @keyframes logo-img {
-  from {
-    --_angle: 0deg;
+  0% {
+    --color-1: rgba(96, 70, 255, 1);
+    --color-2: rgba(34, 212, 159, 1);
   }
-  to {
-    --_angle: 360deg;
+  25% {
+    --color-1: rgba(70, 166, 255, 1);
+    --color-2: rgba(96, 70, 255, 1);
+  }
+  50% {
+    --color-1: rgba(241, 190, 62, 1);
+    --color-2: rgba(70, 166, 255, 1);
+  }
+  50% {
+    --color-1: rgba(34, 212, 159, 1);
+    --color-2: rgba(241, 190, 62, 1);
+  }
+  100% {
+    --color-1: rgba(96, 70, 255, 1);
+    --color-2: rgba(34, 212, 159, 1);
   }
 }
 .logo__title {
@@ -1205,6 +1229,9 @@ html.open-menu {
   flex-flow: row wrap;
   gap: 16px;
 }
+.section__body > * {
+  max-width: 100%;
+}
 .section__illustration {
   position: relative;
   display: flex;
@@ -1280,7 +1307,7 @@ s .section__img:only-child {
 
 .distribution {
   display: block;
-  margin: 72px 0 auto;
+  margin: 72px auto 0;
 }
 
 .section-animate__ripples {
