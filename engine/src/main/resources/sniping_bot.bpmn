@@ -7,6 +7,9 @@
           <camunda:formField id="wallet_address" label="wallet_address" type="string" />
           <camunda:formField id="token_address" label="token_address" type="string" />
           <camunda:formField id="tick_time" label="tick_time" type="long" defaultValue="30" />
+          <camunda:formField id="is_backtesting" label="Backtesting" type="boolean" defaultValue="0" />
+          <camunda:formField id="backtest_start" label="Backtesting start" type="date" />
+          <camunda:formField id="backtest_end" label="backtesting end" type="date" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_151i445</bpmn:outgoing>
