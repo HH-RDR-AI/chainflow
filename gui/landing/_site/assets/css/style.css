@@ -65,6 +65,11 @@ body {
   min-width: 320px;
 }
 
+html,
+body {
+  scroll-behavior: smooth;
+}
+
 ::selection {
   background: #6b7a8a;
   color: #fff;
@@ -111,19 +116,31 @@ iframe {
   background-size: 16px 16px;
 }
 
-:where(a[href^="https://t.me/"]) {
-  display: inline-flex;
-  gap: 8px;
-  align-items: center;
-}
-:where(a[href^="https://t.me/"]):before {
+:where(a[href^="https://t.me/"]):before,
+:where(a[href^="https://twitter.com/"]):before,
+:where(a[href^="https://discord.gg/"]):before {
   content: "";
+  display: inline-block;
+  vertical-align: middle;
+  margin: -0.25em 0.25em 0 0;
   width: 24px;
   height: 24px;
-  background: #46a6ff center center no-repeat;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 18'%3E%3Cpath fill='%23fff' d='m.6 8.63 4.49 1.78 1.74 5.92c.1.38.55.52.84.27l2.5-2.16a.7.7 0 0 1 .91-.03l4.52 3.48c.31.24.75.06.83-.34L19.73.68c.1-.44-.31-.8-.7-.64L.59 7.58c-.46.19-.45.87 0 1.05Zm5.95.83 8.78-5.73c.16-.1.32.13.18.26l-7.24 7.14c-.26.25-.42.59-.47.95l-.25 1.94a.22.22 0 0 1-.44.03l-.95-3.53c-.1-.4.05-.84.39-1.06Z'/%3E%3C/svg%3E");
-  background-size: 15px;
+  background: #46a6ff padding-box center center no-repeat;
+  background-size: 100%;
   border-radius: 50%;
+  border: 4px #46a6ff solid;
+}
+
+:where(a[href^="https://t.me/"]):before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 16 16' width='16' height='16'%3E%3Cpath d='m1.73 7.75 3 1.19 1.16 3.95c.07.25.36.34.56.18l1.66-1.44a.47.47 0 0 1 .61-.02l3.01 2.32c.21.16.5.04.56-.23l2.2-11.25c.06-.29-.21-.53-.47-.42L1.72 7.05c-.3.13-.3.58.01.7Zm3.97.56 5.85-3.82c.1-.07.22.08.12.17L6.85 9.42a1.1 1.1 0 0 0-.3.63l-.17 1.3a.15.15 0 0 1-.3.02L5.44 9a.65.65 0 0 1 .26-.7Z'/%3E%3C/svg%3E");
+}
+
+:where(a[href^="https://twitter.com/"]):before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 16 16' width='16' height='16'%3E%3Cpath d='M16 3.04a6.6 6.6 0 0 1-1.89.51 3.3 3.3 0 0 0 1.45-1.81c-.64.37-1.34.64-2.09.79a3.28 3.28 0 0 0-5.6 2.99A9.3 9.3 0 0 1 1.12 2.1a3.28 3.28 0 0 0 1.02 4.38 3.28 3.28 0 0 1-1.49-.4v.03a3.29 3.29 0 0 0 2.64 3.22 3.34 3.34 0 0 1-1.48.06 3.29 3.29 0 0 0 3.07 2.28 6.58 6.58 0 0 1-4.85 1.36 9.33 9.33 0 0 0 5.04 1.47c6.04 0 9.34-5 9.34-9.33v-.42a6.63 6.63 0 0 0 1.63-1.7z'/%3E%3C/svg%3E");
+}
+
+:where(a[href^="https://discord.gg/"]):before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 16 16' width='16' height='16'%3E%3Cpath d='M12.86 3.8A12.59 12.59 0 0 0 9.97 3a7.07 7.07 0 0 0-.37.67 12.08 12.08 0 0 0-3.2 0A6.87 6.87 0 0 0 6.03 3a12.55 12.55 0 0 0-2.9.8 9.62 9.62 0 0 0-2.07 7.1 12.23 12.23 0 0 0 3.54 1.6c.29-.35.54-.71.76-1.1a7.94 7.94 0 0 1-1.2-.5l.3-.2c2.3.93 4.8.93 7.08 0l.3.2c-.39.2-.79.37-1.2.5.22.39.47.76.75 1.1a12.2 12.2 0 0 0 3.55-1.6c.29-2.7-.5-5.03-2.08-7.1ZM5.67 9.48a1.25 1.25 0 1 1 0-2.52c.7 0 1.27.57 1.26 1.26a1.25 1.25 0 0 1-1.26 1.26Zm4.66 0a1.25 1.25 0 1 1 0-2.52c.7 0 1.27.57 1.25 1.26 0 .7-.55 1.26-1.25 1.26Z'/%3E%3C/svg%3E");
 }
 
 :where(ul:not([class])) {
@@ -485,7 +502,7 @@ html.open-menu {
   }
 }
 .page-header-links {
-  flex: 1 0 280px;
+  flex: 1 0 auto;
 }
 .page-header-links__header {
   margin-bottom: 24px;
@@ -1287,9 +1304,6 @@ s .section__img:only-child {
 .section--right .section__illustration {
   order: 1;
 }
-.section--distribution {
-  background: #181d23;
-}
 
 .allocation {
   display: flex;
@@ -1430,9 +1444,9 @@ s .section__img:only-child {
   list-style: none;
 }
 .adopters-entry__img {
+  width: 100%;
   display: block;
   border-radius: 24px;
-  background: #01061d;
   overflow: hidden;
   object-fit: cover;
   aspect-ratio: 1;
@@ -1440,7 +1454,11 @@ s .section__img:only-child {
 .adopters-entry__img:not(:last-child) {
   margin-bottom: 32px;
 }
+.adopters-entry__img--service {
+  object-fit: contain;
+}
 .adopters-entry__img--logo {
+  background: #01061d;
   padding: 32px;
   display: grid;
   place-items: center;
@@ -1972,6 +1990,11 @@ s .section__img:only-child {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.socials-entry::before {
+  border: 0;
+  background-size: 24px;
+  background-color: transparent;
 }
 .socials-entry:focus, .socials-entry:hover {
   background: #74bcff;

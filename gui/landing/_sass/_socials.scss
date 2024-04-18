@@ -8,8 +8,8 @@
     gap: 28px;
 
     @media (max-width: 960px) {
-    justify-content: center;
-  }
+      justify-content: center;
+    }
   }
 
   &__item {
@@ -27,6 +27,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
+    &::before {
+      border: 0;
+      background-size: 24px;
+      background-color: transparent;
+    }
 
     &:focus,
     &:hover {

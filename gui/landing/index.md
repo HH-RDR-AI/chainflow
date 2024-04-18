@@ -17,13 +17,15 @@ banner:
         url: https://webforms.pipedrive.com/f/c6vRxuvEjYqAxWSu1hN3xF2Cm5KyUtB66yKiko2wxKvPIs2J5R6mPJUV3oMdjnoHpF,
         type: book,
       }
-    - { title: Participate in LBP, url: https://dex.guru, type: book }
+    - { title: Participate in LBP, url: https://dex.guru, type: primary }
 
   text: "The GURU Network provides a transformative platform for startup innovators and dApp builders, integrating AI and blockchain technologies to simplify the development process and operations of startup as a business."
 
 partners:
-  subtitle: We secured a total of $6 million through two successful venture capital rounds to develop a sophisticated trading terminal and deliver dependable market data.
+  show: true
 ---
+
+{% include section.html pretitle="GURU Platform and Network" title="Scaling dApps Ecosystem" img="/assets/img/content/scaling.svg" %}
 
 <!-- REVOLUTION SECTION -->
 
@@ -42,8 +44,6 @@ For Application developers it’s became expected that they embed GPT mechanics,
 {% include section.html pretitle="GPT Revolution" title="Happened Now What?" text=content  img="/assets/img/content/revolution.svg" align="left" bg="light" animate=true %}
 
 <!-- / REVOLUTION SECTION -->
-
-{% include section.html pretitle="GURU Platform and Network" title="Scaling dApps Ecosystem" img="/assets/img/content/scaling.svg" %}
 
 {% include vision.html %}
 
@@ -89,12 +89,12 @@ GURU Wallet and Wallet SDK serves as a window into GURU Network participation, a
 
 {% include section.html pretitle="GURU Network" title="Tokenomics" img="/assets/img/content/tokenomics.svg" bg="dark" %}
 
-{% include distribution.html  %}
-
-{% include section.html title="Roadmap" img="/assets/img/content/roadmap.svg" bg="light"   %}
-
-{% include section.html pretitle="GURU Network" title="Ecosystem Markets" img="/assets/img/content/market.svg" bg="dark" %}
+{% include section.html pretitle="GURU Network" title="Ecosystem Markets" img="/assets/img/content/market.svg" bg="light" %}
 
 {% include adopters.html %}
 
 {% include section.html title="Go to Market Strategy" img="/assets/img/content/strategy.svg" bg="light" %}
+
+{% include section.html title="Roadmap" img="/assets/img/content/roadmap.svg" bg="dark"  %}
+
+{% include distribution.html  %}

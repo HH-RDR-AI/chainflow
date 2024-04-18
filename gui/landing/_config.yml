@@ -33,74 +33,65 @@ partners:
 
 menu:
   - {
-      title: Solutions,
+      title: Products,
       dropdown:
         [
           {
-            title: Open-source Tools,
             items:
               [
                 {
-                  icon: roadsign,
-                  title: Meta-aggregation,
-                  description: Meta Aggregation API finds the best price and route for market orders between quotes from supported aggregators,
-                  url: https://github.com/dex-guru/meta-aggregation-api,
+                  icon: dna,
+                  title: Block Explorer as-a-service,
+                  description: Affordable Etherscan alternative
+                    for EVM compatible chains,
+                  url: https://b2b.dex.guru/explorer,
                 },
 
                 {
-                  icon: clickhouse,
-                  title: ClickHouse Web3,
-                  description: ClickHouse Fork with web3 flavor,
-                  url: https://github.com/dex-guru/ClickHouse,
-                },
-                {
-                  icon: plug,
-                  title: Data Sources Repo,
-                  description: Here you can find(or add a new one!) configs for blockchains and AMMs we support at DexGuru,
-                  url: https://github.com/dex-guru/data-sources,
+                  icon: floppy,
+                  title: Data Warehouse,
+                  description: "For most data-intensive
+                    applications like analytics,
+                    AI,
+                    ML,
+                    etc.",
+                  url: https://b2b.dex.guru/data-warehouse,
                 },
 
                 {
-                  icon: files,
-                  title: Assets Repo,
-                  description: Tokens and Exchanges Logos. This repo is a primary source of token images we use at DexGuru.,
-                  url: https://github.com/dex-guru/assets,
-                },
-                {
-                  icon: tags,
-                  title: Tags Repo,
-                  description: A tag can really be anything. It unites multiple tokens with similar qualities into one set. Here you can find list of tags we use at DexGuru,
-                  url: https://github.com/dex-guru/tags,
+                  icon: yoga,
+                  title: Trading Terminal,
+                  description: We provide users with real-time data,
+                  trading charts,
+                  and various features to help them make informed decisions when trading cryptocurrencies.,
+                  url: https://dex.guru,
                 },
               ],
           },
         ],
     }
   - {
-      title: Contact Us,
+      title: Community,
       url: "https://webforms.pipedrive.com/f/6rExdWpdC4j2tsyB09LRGHr6990s7NqeLfhIpT4vPjJOmddqhyIMu7dyvJFAjABNHd",
+      dropdown:
+        [
+          {
+            items:
+              [
+                { title: "Twitter", url: "https://twitter.com/dexguru" },
+                { title: "Telegram", url: "https://t.me/dexguru" },
+                { title: "Discord", url: "https://discord.gg/dPW8fzwzz9" },
+              ],
+          },
+        ],
     }
+  - { title: Ecosytem, url: "#ecosystem" }
 
 aside:
-  - { title: Demo, url: /dashboard }
+  - { title: GURU Whitepaper, url: /assets/img/whitepapper_dexguru_network.pdf }
 
 # Generate social links in footer.
 social_links:
   - { platform: twitter, user_url: "https://twitter.com/dexguru" }
   - { platform: telegram, user_url: "https://t.me/dexguru" }
   - { platform: discord, user_url: "https://discord.gg/dPW8fzwzz9" }
-#   - { platform: devto,          user_url: "https://dev.to/jekyll" }
-#   - { platform: dribbble,       user_url: "https://dribbble.com/jekyll" }
-#   - { platform: facebook,       user_url: "https://www.facebook.com/jekyll" }
-#   - { platform: flickr,         user_url: "https://www.flickr.com/photos/jekyll" }
-#   - { platform: github,         user_url: "https://github.com/jekyll/minima" }
-#   - { platform: google_scholar, user_url: "https://scholar.google.com/citations?user=qc6CJjYAAAAJ" }
-#   - { platform: instagram,      user_url: "https://www.instagram.com/jekyll" }
-#   - { platform: keybase,        user_url: "https://keybase.io/jekyll" }
-#   - { platform: linkedin,       user_url: "https://www.linkedin.com/in/jekyll" }
-#   - { platform: microdotblog,   user_url: "https://micro.blog/jekyll" }
-#   - { platform: pinterest,      user_url: "https://www.pinterest.com/jekyll" }
-#   - { platform: stackoverflow,  user_url: "https://stackoverflow.com/users/1234567/jekyll" }
-#   - { platform: youtube,        user_url: "https://www.youtube.com/jekyll" }
-# If you want to link only specific pages in your header, uncomment this and add the path to the pages in
-# order as they should show up.

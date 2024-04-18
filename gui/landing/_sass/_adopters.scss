@@ -15,9 +15,9 @@
 
   &-entry {
     &__img {
+      width: 100%;
       display: block;
       border-radius: 24px;
-      background: #01061d;
       overflow: hidden;
       object-fit: cover;
       aspect-ratio: 1;
@@ -26,7 +26,12 @@
         margin-bottom: 32px;
       }
 
+      &--service {
+        object-fit: contain;
+      }
+
       &--logo {
+        background: #01061d;
         padding: 32px;
         display: grid;
         place-items: center;
