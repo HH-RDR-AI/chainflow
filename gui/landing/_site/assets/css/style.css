@@ -125,21 +125,24 @@ iframe {
   margin: -0.25em 0.25em 0 0;
   width: 24px;
   height: 24px;
-  background: #46a6ff padding-box center center no-repeat;
+  background: var(--_color) padding-box center center no-repeat;
   background-size: 100%;
   border-radius: 50%;
-  border: 4px #46a6ff solid;
+  border: 4px var(--_color) solid;
 }
 
 :where(a[href^="https://t.me/"]):before {
+  --_color: #229ed9;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 16 16' width='16' height='16'%3E%3Cpath d='m1.73 7.75 3 1.19 1.16 3.95c.07.25.36.34.56.18l1.66-1.44a.47.47 0 0 1 .61-.02l3.01 2.32c.21.16.5.04.56-.23l2.2-11.25c.06-.29-.21-.53-.47-.42L1.72 7.05c-.3.13-.3.58.01.7Zm3.97.56 5.85-3.82c.1-.07.22.08.12.17L6.85 9.42a1.1 1.1 0 0 0-.3.63l-.17 1.3a.15.15 0 0 1-.3.02L5.44 9a.65.65 0 0 1 .26-.7Z'/%3E%3C/svg%3E");
 }
 
 :where(a[href^="https://twitter.com/"]):before {
+  --_color: #1d9bf0;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 16 16' width='16' height='16'%3E%3Cpath d='M16 3.04a6.6 6.6 0 0 1-1.89.51 3.3 3.3 0 0 0 1.45-1.81c-.64.37-1.34.64-2.09.79a3.28 3.28 0 0 0-5.6 2.99A9.3 9.3 0 0 1 1.12 2.1a3.28 3.28 0 0 0 1.02 4.38 3.28 3.28 0 0 1-1.49-.4v.03a3.29 3.29 0 0 0 2.64 3.22 3.34 3.34 0 0 1-1.48.06 3.29 3.29 0 0 0 3.07 2.28 6.58 6.58 0 0 1-4.85 1.36 9.33 9.33 0 0 0 5.04 1.47c6.04 0 9.34-5 9.34-9.33v-.42a6.63 6.63 0 0 0 1.63-1.7z'/%3E%3C/svg%3E");
 }
 
 :where(a[href^="https://discord.gg/"]):before {
+  --_color: #5865f2;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 16 16' width='16' height='16'%3E%3Cpath d='M12.86 3.8A12.59 12.59 0 0 0 9.97 3a7.07 7.07 0 0 0-.37.67 12.08 12.08 0 0 0-3.2 0A6.87 6.87 0 0 0 6.03 3a12.55 12.55 0 0 0-2.9.8 9.62 9.62 0 0 0-2.07 7.1 12.23 12.23 0 0 0 3.54 1.6c.29-.35.54-.71.76-1.1a7.94 7.94 0 0 1-1.2-.5l.3-.2c2.3.93 4.8.93 7.08 0l.3.2c-.39.2-.79.37-1.2.5.22.39.47.76.75 1.1a12.2 12.2 0 0 0 3.55-1.6c.29-2.7-.5-5.03-2.08-7.1ZM5.67 9.48a1.25 1.25 0 1 1 0-2.52c.7 0 1.27.57 1.26 1.26a1.25 1.25 0 0 1-1.26 1.26Zm4.66 0a1.25 1.25 0 1 1 0-2.52c.7 0 1.27.57 1.25 1.26 0 .7-.55 1.26-1.25 1.26Z'/%3E%3C/svg%3E");
 }
 
@@ -535,6 +538,9 @@ html.open-menu {
   border-radius: 8px;
   background: none;
   transition: 0.25s ease;
+}
+.page-header-link::before {
+  margin: 0;
 }
 @media (max-width: 640px) {
   .page-header-link {
@@ -1982,22 +1988,21 @@ s .section__img:only-child {
 }
 .socials-entry {
   display: block;
-  width: 64px;
-  height: 64px;
   border-radius: 50%;
-  color: #fff;
-  background: #46a6ff;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 .socials-entry::before {
-  border: 0;
-  background-size: 24px;
-  background-color: transparent;
+  width: 64px;
+  height: 64px;
+  background-size: 32px;
+  margin: 0;
+  transition: 0.25s ease;
 }
-.socials-entry:focus, .socials-entry:hover {
-  background: #74bcff;
+.socials-entry:focus:before, .socials-entry:hover:before {
+  background-color: #74bcff;
+  border-color: #74bcff;
 }
 .socials-entry__icon {
   width: 32px;

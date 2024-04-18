@@ -19,24 +19,25 @@
 
   &-entry {
     display: block;
-    width: 64px;
-    height: 64px;
     border-radius: 50%;
-    color: $color-style-white;
-    background: $color-style-blue;
     display: flex;
     align-items: center;
     justify-content: center;
 
     &::before {
-      border: 0;
-      background-size: 24px;
-      background-color: transparent;
+      width: 64px;
+      height: 64px;
+      background-size: 32px;
+      margin: 0;
+      transition: 0.25s ease;
     }
 
     &:focus,
     &:hover {
-      background: $color-style-blue-hover;
+      &:before {
+        background-color: $color-style-blue-hover;
+        border-color: $color-style-blue-hover;
+      }
     }
 
     &__icon {
