@@ -48,5 +48,5 @@ web3-transaction-executing-worker:
   env:
     ENVIRONMENT: "stage"
     TOPIC_NAME: "web3_execution")
-    CAMUNDA_URL: "http://localhost:8080/engine-rest"
+    CAMUNDA_URL: "https://chainflow-engine.dexguru.biz/engine-rest"
     WEB3_URL: "https://rpc.ankr.com/polygon_mumbai"
