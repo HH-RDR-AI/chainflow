@@ -7,10 +7,10 @@ chainflow-engine-niftnet:
   replicas:
     default: 1
   port: 8080
-  limitsCpu: 1
-  limitsMemory: 1G
-  requestsCpu: 0.1
-  requestsMemory: 125Mi
+  limitsCpu: 2
+  limitsMemory: 2G
+  requestsCpu: 1
+  requestsMemory: 1024Mi
   strategyType: 'RollingUpdate'
   readnessProbe:
     path: '/health_check'
