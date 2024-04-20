@@ -1,9 +1,8 @@
 package ai.hhrdr.chainflow.engine;
 
-import net.minidev.json.JSONObject;
-import net.minidev.json.parser.JSONParser;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import java.net.URI;
@@ -29,12 +28,16 @@ public class AddEventDelegate implements JavaDelegate {
     public void execute(DelegateExecution execution) throws Exception {
         String eventName = (String) execution.getVariable("event_name");
         String eventDescription = (String) execution.getVariable("event_description");
-        String imgEventThumbnail = (String) execution.getVariable("img_event_thumbnail");
+        String imgEventThumbnail = (String) execution.getVariable("img_event_cover");
+        String userId = (String) execution.getVariable("user_id");
+
 
         JSONObject json = new JSONObject();
         json.put("event_name", eventName);
         json.put("event_description", eventDescription);
-        json.put("img_event_thumbnail", imgEventThumbnail);
+        json.put("img_event_cover", imgEventThumbnail);
+        json.put("camunda_user_id", userId);
+
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
@@ -43,16 +46,13 @@ public class AddEventDelegate implements JavaDelegate {
                 .header("Authorization", apiKey) // Ensure your API key is correctly set up for authorization
                 .POST(BodyPublishers.ofString(json.toString()))
                 .build();
+
         try {
-
             HttpResponse<String> response = client.send(request, BodyHandlers.ofString());
-            // Assuming the response body contains a JSON list of events
-            String eventJson = response.body();
-            JSONParser parser = new JSONParser(JSONParser.MODE_PERMISSIVE);
-            JSONObject event = (JSONObject) parser.parse(eventJson); // Corrected parsing line
-
-            String eventId = (String) event.get("id"); // Extracting the 'id' as a string
-            execution.setVariable("current_event_id", eventId);
+            // Assuming the response body contains a JSON object
+            JSONObject event = new JSONObject(response.body());
+            String eventId = event.getString("id"); // Extracting the 'id' as a string
+            execution.setVariable("event_id", eventId);
             LOGGER.info("Event creation response status code: " + response.statusCode());
             LOGGER.info("Event creation response body: " + response.body());
             // Optionally, you can handle the response further, for example, to log or process the result.

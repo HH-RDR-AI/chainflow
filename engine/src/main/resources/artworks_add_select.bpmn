@@ -24,9 +24,7 @@
     <bpmn:userTask id="qr_generation" name="Generate QR Code" camunda:assignee="${user_id}">
       <bpmn:extensionElements>
         <camunda:formData>
-          <camunda:formField id="task_type" label="task_type" type="string" defaultValue="generate_qr" />
-          <camunda:formField id="user_id" label="user_id" type="string" defaultValue="{user_id}" />
-          <camunda:formField id="event_id" label="event_id" type="string" defaultValue="new_event" />
+          <camunda:formField id="event_id" label="event_id" type="string" defaultValue="${event_id}" />
           <camunda:formField id="ref_id" label="ref_id" type="string" defaultValue="1" />
           <camunda:formField id="art_id" label="art_id" type="string" defaultValue="${art_id}" />
           <camunda:formField id="def" label="def" type="string" defaultValue="generate-ai-artwork" />
@@ -51,6 +49,10 @@
       <bpmn:outgoing>Flow_0yshfpe</bpmn:outgoing>
     </bpmn:serviceTask>
     <bpmn:callActivity id="Activity_1tgxgdc" name="Choose/Create Event" calledElement="events_add_select">
+      <bpmn:extensionElements>
+        <camunda:out variables="all" />
+        <camunda:in variables="all" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_15w08ya</bpmn:incoming>
       <bpmn:outgoing>Flow_156cmti</bpmn:outgoing>
     </bpmn:callActivity>
@@ -62,14 +64,14 @@
     <bpmn:sequenceFlow id="Flow_02a51x4" sourceRef="Gateway_0lev542" targetRef="Activity_0n9xo47" />
     <bpmn:sequenceFlow id="Flow_0yshfpe" sourceRef="Activity_1a53jgr" targetRef="Gateway_0lev542" />
     <bpmn:sequenceFlow id="Flow_1mirtdx" sourceRef="Gateway_0lev542" targetRef="qr_generation" />
-    <bpmn:exclusiveGateway id="Gateway_0ai26al">
+    <bpmn:exclusiveGateway id="Gateway_0ai26al" default="Flow_1cn0tfj">
       <bpmn:incoming>Flow_0ictbyi</bpmn:incoming>
       <bpmn:outgoing>Flow_15w08ya</bpmn:outgoing>
       <bpmn:outgoing>Flow_1cn0tfj</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0ictbyi" sourceRef="StartArtworksCreation" targetRef="Gateway_0ai26al" />
     <bpmn:sequenceFlow id="Flow_15w08ya" sourceRef="Gateway_0ai26al" targetRef="Activity_1tgxgdc">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${event_id != ''}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${event_id == null}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:exclusiveGateway id="Gateway_1nqns0q">
       <bpmn:incoming>Flow_156cmti</bpmn:incoming>
@@ -155,6 +157,9 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1ht4ko3_di" bpmnElement="Gateway_0lev542">
         <dc:Bounds x="935" y="265" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="917" y="322" width="86" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1hb7enr_di" bpmnElement="Gateway_1qktcq6">
         <dc:Bounds x="1355" y="265" width="50" height="50" />
@@ -252,7 +257,7 @@
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_17rad66_di" bpmnElement="TextAnnotation_17rad66">
-        <dc:Bounds x="1050" y="360" width="100" height="70" />
+        <dc:Bounds x="1050" y="360" width="99.9959660068847" height="69.9965038726334" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_0n680eh_di" bpmnElement="TextAnnotation_0n680eh">
