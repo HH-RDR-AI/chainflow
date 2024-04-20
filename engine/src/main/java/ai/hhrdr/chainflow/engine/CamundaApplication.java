@@ -1,9 +1,12 @@
 package ai.hhrdr.chainflow.engine;
 
+import javax.servlet.Filter;
+import org.camunda.bpm.engine.rest.security.auth.ProcessEngineAuthenticationFilter;
 import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,18 +44,18 @@ public class CamundaApplication extends SpringBootServletInitializer {
   public static PropertySourcesPlaceholderConfigurer propertyConfigurer() {
     return new PropertySourcesPlaceholderConfigurer();
   }
-//
-//  @Bean
-//  public FilterRegistrationBean authenticationFilter() {
-//    FilterRegistrationBean registration = new FilterRegistrationBean();
-//    Filter myFilter = new ProcessEngineAuthenticationFilter();
-//    registration.setFilter(myFilter);
-//    registration.addUrlPatterns("/engine-rest/*");
-//    registration.addInitParameter("authentication-provider",
-//            "org.camunda.bpm.engine.rest.security.auth.impl.HttpBasicAuthenticationProvider");
-//    registration.setName("camunda-auth");
-//    registration.setOrder(1);
-//    return registration;
-//  }
+
+  @Bean
+  public FilterRegistrationBean authenticationFilter() {
+    FilterRegistrationBean registration = new FilterRegistrationBean();
+    Filter myFilter = new ProcessEngineAuthenticationFilter();
+    registration.setFilter(myFilter);
+    registration.addUrlPatterns("/engine-rest/*");
+    registration.addInitParameter("authentication-provider",
+            "org.camunda.bpm.engine.rest.security.auth.impl.HttpBasicAuthenticationProvider");
+    registration.setName("camunda-auth");
+    registration.setOrder(1);
+    return registration;
+  }
 
 }
