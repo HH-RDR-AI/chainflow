@@ -2,14 +2,14 @@
 layout: base
 permalink: /
 type: network
-title: GURU Network
-description: "At DexGuru, we're not just building a platform; we're shaping the future of blockchain technology. From our origins as a pioneering Dex Aggregator to our evolution into a comprehensive AI-enhanced blockchain ecosystem, DexGuru stands at the forefront of innovation, ready to unlock the full potential of decentralized applications for developers, AI enthusiasts, and blockchain believers alike."
+title: GURU - The AI Orchestration Network
+description: "GURU is building the AI orchestration network. L3 which allows dApps to natively embed orchestrated AI Agents and earn Network participant rewards."
 # --------------------------
 # start: Banner config
 banner:
   type: network
-  title: GURU Network
-  subtitle: Orchestrating Multi-Step <b>Ai Processors</b> and <br /><b>RAG</b>(Retrieval-Augmented Generation) Applications OnChain
+  title: GURU AI
+  subtitle: Building The <b>AI</b> Orchestration <b>Network</b>
 
   actions:
     - {
@@ -19,13 +19,13 @@ banner:
       }
     - { title: Participate in LBP, url: https://dex.guru, type: primary }
 
-  text: "The GURU Network provides a transformative platform for startup innovators and dApp builders, integrating AI and blockchain technologies to simplify the development process and operations of startup as a business."
+  text: "GPT Revolution Happened Now What? GURU is building the AI orchestration network. L3 which allows dApps to natively embed orchestrated AI Agents and earn Network participant rewards. Ecosystem incentives and coordinates different parties to run autonomous agents and compute nodes independently and creates markets for them."
 
 partners:
   show: true
 ---
 
-{% include section.html pretitle="GURU Platform and Network" title="Scaling dApps Ecosystem" img="/assets/img/content/scaling.svg" %}
+{% include section.html pretitle="GURU Framework and Network" title="Scaling dApps Ecosystem" img="/assets/img/content/scaling.svg" %}
 
 <!-- REVOLUTION SECTION -->
 
@@ -41,7 +41,7 @@ For Application developers it’s became expected that they embed GPT mechanics,
 
 {% endcapture %}
 
-{% include section.html pretitle="GPT Revolution" title="Happened Now What?" text=content  img="/assets/img/content/revolution.svg" align="left" bg="light" animate=true %}
+<!-- /  {% include section.html pretitle="GPT Revolution" title="Happened Now What?" text=content  img="/assets/img/content/revolution.svg" align="left" bg="light" animate=true %} -->
 
 <!-- / REVOLUTION SECTION -->
 
@@ -53,7 +53,7 @@ For Application developers it’s became expected that they embed GPT mechanics,
 
 {% capture content %}
 
-Orchestrator is in a core of GURU Platform Ecosystem powering up all connection and financial means of GURU Network:
+Orchestrator is in a core of GURU Framework Ecosystem powering up all connection and financial means of GURU Network:
 
 - Provides single execution context for variety of environments (on-chain/off-chain/user/AI interactions)
 - Seamlessly orchestrate multi-steps LLM/AI models using orchestration snippets catalog
