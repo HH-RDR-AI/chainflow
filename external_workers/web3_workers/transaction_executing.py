@@ -1,6 +1,6 @@
 import json
 import os
-
+from pathlib import Path
 
 import requests
 from camunda.external_task.external_task import ExternalTask, TaskResult
@@ -9,26 +9,24 @@ from eth_typing import ChecksumAddress
 from hexbytes import HexBytes
 from web3 import Web3
 from web3.exceptions import TimeExhausted
-from web3.middleware import geth_poa_middleware
 
 from external_workers.web3_workers.errors import QuoteError
 
 TOPIC_NAME = os.getenv("TOPIC_NAME", "web3_execution")
 CAMUNDA_URL = os.getenv("CAMUNDA_URL", "http://localhost:8080/engine-rest")
-WEB3_URL = os.getenv("WEB3_URL", "https://rpc.ankr.com/polygon_mumbai")
-PRIVATE_KEY = os.getenv("PRIVATE_KEY", "")
-GWEI = 10**9
-
-with open("./erc20_abi.json") as fh:
-    erc20_abi = json.load(fh)
-
+WEB3_URL = os.getenv("WEB3_URL", "http://rpc-gw-stage.dexguru.biz/full/1")
+PRIVATE_KEY = os.getenv(
+    "PRIVATE_KEY", "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
+)
 if not PRIVATE_KEY:
     raise ValueError("PRIVATE_KEY is not set")
-
 w3 = Web3(Web3.HTTPProvider(WEB3_URL))
-account = w3.eth.account.privateKeyToAccount(PRIVATE_KEY)
-w3.middleware_onion.inject(geth_poa_middleware)
+account = w3.eth.account.from_key(PRIVATE_KEY)
 CHAIN_ID = w3.eth.chain_id
+GWEI = 10**9
+
+with open(Path(__file__).parent / "erc20_abi.json") as fh:
+    erc20_abi = json.load(fh)
 
 
 # configuration for the Client
@@ -63,11 +61,11 @@ def handle_task(task: ExternalTask) -> TaskResult:
     # Live trading logic
     if trading_signal == "buy":
         buy_token = token_address
-        sell_token = ""  # TODO: set the token address to sell
+        sell_token = token_address  # TODO: set the token address to sell
         amount = 0  # TODO: set the amount to sell
         make_trade(buy_token, sell_token, amount)
     elif trading_signal == "sell":
-        buy_token = ""
+        buy_token = token_address  # TODO: set the token address to buy
         sell_token = token_address
         amount = 0  # TODO: set the amount to sell
         make_trade(buy_token, sell_token, amount)
@@ -80,7 +78,7 @@ def get_quote(buy_token: str, sell_token: str, amount: int):
         "buyToken": buy_token,
         "sellToken": sell_token,
         "sellAmount": int(amount),
-        "takerAddress": w3.eth.default_account,
+        "takerAddress": account.address,
         "provider": "paraswap",
     }
     response = requests.get(quote_url, params=params)
@@ -94,7 +92,7 @@ def get_quote(buy_token: str, sell_token: str, amount: int):
 def is_enough_allowance(spender: str, token: ChecksumAddress, amount: int):
     allowance = (
         w3.eth.contract(address=token, abi=erc20_abi)
-        .functions.allowance(w3.eth.default_account, spender)
+        .functions.allowance(account.address, spender)
         .call()
     )
     return allowance >= amount
@@ -105,7 +103,7 @@ def approve(spender: str, token: ChecksumAddress, amount: int):
     gas = contract.functions.approve(spender, amount).estimateGas()
     tx = contract.functions.approve(spender, amount).buildTransaction(
         {
-            "nonce": w3.eth.get_transaction_count(w3.eth.default_account),
+            "nonce": w3.eth.get_transaction_count(account.address),
             "gas": gas,
             "gasPrice": priority_gas_price(),
             "chainId": CHAIN_ID,
@@ -156,11 +154,11 @@ def make_trade(buy_token: str, sell_token: str, amount: int):
         approve(spender, sell_token, amount)
     tx = {
         "to": spender,
-        "nonce": w3.eth.get_transaction_count(w3.eth.default_account),
+        "nonce": w3.eth.get_transaction_count(account.address),
         "data": HexBytes(data),
         "gas": int(quote["gas"]),
         "gasPrice": int(quote["gas_price"]) + 3 * GWEI,
-        "chainId": 137,
+        "chainId": CHAIN_ID,
         "value": int(quote["value"]),
     }
     signed_txn = account.sign_transaction(tx)
