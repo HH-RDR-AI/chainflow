@@ -1,10 +1,13 @@
 import "@/src/scss/index.scss";
 import styles from "./layout.module.scss";
 import { Sora, IBM_Plex_Sans_Condensed } from "next/font/google";
+import { headers } from 'next/headers'
 import Navigation from "@/src/components/Navigation";
 
-import { Providers } from "./providers";
 import { CSSProperties } from "react";
+import Web3ModalProvider from "@/src/components/Web3ModalProvider";
+import { cookieToInitialState } from "wagmi";
+import { config } from "@/src/config";
 
 const fontSora = Sora({
   weight: ["400", "500"],
@@ -27,6 +30,8 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const initialState = cookieToInitialState(config, headers().get('cookie'))
+
   return (
     <html lang="en">
       <body
@@ -37,14 +42,17 @@ export default function RootLayout({
           } as CSSProperties
         }
       >
-        <Providers>
+
+        <Web3ModalProvider initialState={initialState}>
           <div className={styles.container}>
             <div className={styles.panel}>
               <Navigation />
             </div>
-            <div className={styles.content}>{children}</div>
+            <div className={styles.content}>{children}
+
+            </div>
           </div>
-        </Providers>
+        </Web3ModalProvider>
       </body>
     </html>
   );

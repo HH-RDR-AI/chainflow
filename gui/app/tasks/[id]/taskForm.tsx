@@ -6,14 +6,12 @@ import { FC, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { AbiFunction } from "abitype";
 import {
-  usePrepareSendTransaction,
   useSendTransaction,
-  useWaitForTransaction,
+  useWaitForTransactionReceipt,
   useAccount,
+  useEstimateGas,
 } from "wagmi";
-import { useConnectModal } from "@rainbow-me/rainbowkit";
 import Button from "@/src/components/Button";
-import ConnectButton from "@/src/components/ConnectButton";
 
 type TaskFormProps = {
   vars: unknown;
@@ -22,40 +20,41 @@ type TaskFormProps = {
 
 export const TaskForm: FC<TaskFormProps> = ({ vars, abi }) => {
   const { address } = useAccount();
-  const { openConnectModal } = useConnectModal();
 
   const { register, handleSubmit, formState, watch, reset } = useForm();
   const to = watch("_to");
   const value = watch("_value");
 
-  useEffect(() => {
-    if (!address && openConnectModal) {
-      openConnectModal();
-    }
-  }, [address]);
-
-  const { config } = usePrepareSendTransaction({
+  const { data: gas } = useEstimateGas({
     to: to,
     value: value,
     account: address,
   });
 
-  const { data, sendTransaction } = useSendTransaction(config);
+  const { data: hash, sendTransaction } = useSendTransaction();
 
-  const { isLoading, isSuccess } = useWaitForTransaction({
-    hash: data?.hash,
+  const { isLoading, isSuccess } = useWaitForTransactionReceipt({
+    hash,
   });
 
   if (!address) {
-    return <ConnectButton className={styles.connect} />;
+    return <w3m-button />;
   }
 
   return (
     <form
       className={styles.form}
       onSubmit={handleSubmit(
-        () =>
-          sendTransaction?.() || console.log("sendTransaction is not defined")
+        () => {
+          if (!sendTransaction) {
+            throw new Error("sendTransaction is not defined")
+          }
+          sendTransaction({
+            gas: gas || undefined,
+            to: to,
+            value: value,
+          })
+        }
       )}
     >
       {abi.inputs.map((abiParam, idx) => {

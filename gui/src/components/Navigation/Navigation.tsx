@@ -4,7 +4,6 @@ import Link from "next/link";
 import { FaDatabase, FaHome, FaProjectDiagram, FaList } from "react-icons/fa";
 import { FaCodeBranch, FaUser } from "react-icons/fa6";
 import clsx from "clsx";
-import ConnectButton from "@/src/components/ConnectButton";
 
 export const Navigation: FC = () => {
   return (
@@ -45,7 +44,7 @@ export const Navigation: FC = () => {
       <nav className={styles.personal}>
         <ul className={styles.list}>
           <li className={styles.item}>
-            <ConnectButton />
+            <w3m-button />
           </li>
         </ul>
       </nav>
