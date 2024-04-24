@@ -11,10 +11,10 @@ export const fetchEngine = async (
 ): Promise<Response> => {
   const hostUrl =
     typeof window === "undefined"
-      ? "https://chainflow-engine.dexguru.biz/engine-rest"
+      ? "http://localhost:8080/engine-rest"
       : "/dashboard/api/engine";
 
-  return fetch(`${hostUrl}/${input}`, init);
+  return fetch(`${hostUrl}/${input}`, {...init, cache: 'no-cache',});
 };
 
 export const getInstances = async (id?: string): Promise<ProcessInstance[]> => {
@@ -197,4 +197,22 @@ export const completeTask = async (
   }
 
   return res.status;
+};
+
+export const startNewInstance = async (process: ProcessDefinition) => {
+  const res = await fetchEngine(`process-definition/key/${process.key}/start`, {
+    method: 'POST',headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+
+    })
+  });
+
+      if (!res.ok) {
+        return;
+      }
+
+      const resBody = await res.json();
+      console.log(resBody)
 };

@@ -1,5 +1,5 @@
 const camundaURL =
-  "https://chainflow-engine.dexguru.biz/engine-rest/process-definition/key";
+  "http://localhost:8080/engine-rest/process-definition/key";
 
 const definitionId = args[0];
 const data = args[1];

@@ -10,7 +10,7 @@ const nextConfig = {
     return [
       {
         source: "/api/engine/:path*",
-        destination: "https://chainflow-engine.dexguru.biz/engine-rest/:path*",
+        destination: "http://localhost:8080/engine-rest/:path*",
       }
     ];
   },
@@ -18,7 +18,7 @@ const nextConfig = {
     if (!isServer) {
       config.externals.push({ bufferutil: "bufferutil", "utf-8-validate": "utf-8-validate" });
     }
-
+    config.externals.push("pino-pretty", "encoding");
     return config;
   },
 };

@@ -8,7 +8,7 @@ const handler = async (req: Request, { params }: any) => {
     .map(([key, value]) => `${key}=${value}`)
     .join("&");
 
-  const url = `https://chainflow-engine.dexguru.biz/engine-rest/${requestUrl}${
+  const url = `http://localhost:8080/engine-rest/${requestUrl}${
     query ? `?${query}` : ""
   }`;
 
@@ -46,7 +46,7 @@ const handler = async (req: Request, { params }: any) => {
 
 export const GET = async (req: Request, { params }: any) => {
   const res = await fetch(
-    "https://chainflow-engine.dexguru.biz/engine-rest/process-instance/24a2babc-70e5-11ee-b04b-c25fdcea4e8d/suspended",
+    "http://localhost:8080/engine-rest/process-instance/24a2babc-70e5-11ee-b04b-c25fdcea4e8d/suspended",
     {
       method: "PUT",
       headers: {

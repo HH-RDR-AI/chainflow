@@ -2,21 +2,17 @@
 
 import { ProcessInstance } from "@/app/processes/types";
 import { FC } from "react";
-import { FaPlay } from "react-icons/fa6";
+import { FaPlay, FaTrash } from "react-icons/fa6";
 import Button from "../Button";
 import { fetchEngine } from "@/src/utils/processUtils";
 
-export const InstanceSuspender: FC<{ instance: ProcessInstance }> = ({
+export const InstanceRemover: FC<{ instance: ProcessInstance }> = ({
   instance,
 }) => {
-  if (instance.suspended) {
-    return null;
-  }
 
-  const makeSuspended = async (id: string, state: boolean) => {
-    const res = await fetchEngine(`process-instance/${id}/suspended`, {
-      method: "PUT",
-      body: JSON.stringify({ suspended: state }),
+  const onDelete = async () => {
+    const res = await fetchEngine(`process-instance/${instance.id}?skipCustomListeners=true&skipIoMappings=true`, {
+      method: "DELETE"
     });
 
     if (!res.ok) {
@@ -38,11 +34,9 @@ export const InstanceSuspender: FC<{ instance: ProcessInstance }> = ({
 
   return (
     <Button
-      icon={<FaPlay />}
-      caption="Resume"
-      onClick={() => {
-        makeSuspended(instance.id, false);
-      }}
+      icon={<FaTrash />}
+      caption="Delete"
+      onClick={onDelete}
     />
   );
 };

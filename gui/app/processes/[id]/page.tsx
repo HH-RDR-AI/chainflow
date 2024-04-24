@@ -1,11 +1,10 @@
-import { getDefinition, getInstances } from "@/src/utils/processUtils";
+import { getDefinition, getInstances, startNewInstance } from "@/src/utils/processUtils";
 import styles from "./page.module.scss";
 import Viewer from "@/src/components/Viewer";
 import Link from "next/link";
-import { FaPlay } from "react-icons/fa6";
-import InstanceSuspender from "@/src/components/InstanceSuspender";
-import Button from "@/src/components/Button";
 import Panel from "@/src/components/Panel";
+import InstanceRemover from "@/src/components/InstanceRemover";
+import InstanceStarter from "@/src/components/InstanceStarter";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +45,7 @@ export default async function InstancesPage({
 
           <Panel
             title="Instances"
-            tools={<Button caption="New Instance" icon={<FaPlay />} disabled />}
+            tools={<InstanceStarter process={process}/>}
           >
             <div className={styles.instances}>
               <table className={styles.instancesTable}>
@@ -68,7 +67,7 @@ export default async function InstancesPage({
                           {instance.suspended ? "Suspended" : "Active"}
                         </td>
                         <td className={styles.instancesTD}>
-                          <InstanceSuspender instance={instance} />
+                          <InstanceRemover instance={instance} />
                         </td>
                       </tr>
                     );

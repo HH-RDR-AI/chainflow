@@ -10,10 +10,10 @@ export const useWagmiConfig = () => {
     rpcUrls: {
       ...polygonMumbai.rpcUrls,
       default: {
-        http: ["https://endpoints.omniatech.io/v1/matic/mumbai/public"],
+        http: ["https://polygon-mumbai-bor-rpc.publicnode.com	"],
       },
       public: {
-        http: ["https://endpoints.omniatech.io/v1/matic/mumbai/public"],
+        http: ["https://polygon-mumbai-bor-rpc.publicnode.com	"],
       },
     },
   };
