@@ -7,7 +7,7 @@ import Navigation from "@/src/components/Navigation";
 import { CSSProperties } from "react";
 import Web3ModalProvider from "@/src/components/Web3ModalProvider";
 import { cookieToInitialState } from "wagmi";
-import { config } from "@/src/config";
+import { config } from "@/src/config/wagmi";
 
 const fontSora = Sora({
   weight: ["400", "500"],

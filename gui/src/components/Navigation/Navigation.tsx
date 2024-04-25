@@ -44,7 +44,7 @@ export const Navigation: FC = () => {
       <nav className={styles.personal}>
         <ul className={styles.list}>
           <li className={styles.item}>
-            <w3m-button />
+            <w3m-button balance="hide" size="sm" />
           </li>
         </ul>
       </nav>
