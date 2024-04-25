@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1hqbnv9" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.21.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
   <bpmn:process id="artworks_add_select" name="Create/Select Artwork" isExecutable="true">
-    <bpmn:startEvent id="StartArtworksCreation" name="Start Artworks Creation" camunda:initiator="user_id">
+    <bpmn:startEvent id="StartArtworksCreation" name="Start Artworks Creation" camunda:initiator="camunda_user_id">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="event_id" label="event_id" type="string" />
@@ -21,7 +21,7 @@
     <bpmn:endEvent id="Event_0z4tqxu">
       <bpmn:incoming>Flow_015vjzz</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:userTask id="qr_generation" name="Generate QR Code" camunda:assignee="${user_id}">
+    <bpmn:userTask id="qr_generation" name="Generate QR Code" camunda:assignee="${camunda_user_id}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="event_id" label="event_id" type="string" defaultValue="${event_id}" />
@@ -33,7 +33,7 @@
       <bpmn:incoming>Flow_1mirtdx</bpmn:incoming>
       <bpmn:outgoing>Flow_1u2nmkv</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:userTask id="choose_add_artwork" name="User to Choose Artwork/Add" camunda:assignee="${user_id}">
+    <bpmn:userTask id="choose_add_artwork" name="User to Choose Artwork/Add" camunda:assignee="${camunda_user_id}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="art_name" label="art_name" type="string" />

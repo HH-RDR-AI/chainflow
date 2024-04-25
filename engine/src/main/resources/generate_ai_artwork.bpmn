@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1xmhpzc" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.21.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
   <bpmn:process id="generate_ai_artwork" name="Generate AI Artwork" isExecutable="true" camunda:historyTimeToLive="180">
-    <bpmn:startEvent id="StartEvent_1" name="QR Code Scanned" camunda:initiator="user_id">
+    <bpmn:startEvent id="StartEvent_1" name="QR Code Scanned" camunda:initiator="camunda_user_id">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="art_id" label="art_id" type="string" defaultValue="1" />
@@ -35,7 +35,7 @@
       <bpmn:outgoing>Flow_000r22m</bpmn:outgoing>
       <bpmn:errorEventDefinition id="ErrorEventDefinition_1t0ufp7" errorRef="Error_1apevhq" />
     </bpmn:boundaryEvent>
-    <bpmn:userTask id="Activity_093cgpj" name="User Task To Review Samples" camunda:assignee="${user_id}">
+    <bpmn:userTask id="Activity_093cgpj" name="User Task To Review Samples" camunda:assignee="${camunda_user_id}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="is_approved" label="is_approved" type="boolean" defaultValue="true" />
@@ -130,6 +130,12 @@
   <bpmn:error id="Error_1apevhq" name="FaceSwapFailure" errorCode="FaceSwapFailure" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="generate_ai_artwork">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="142" y="302" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="139" y="345" width="46" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0qqapg4_di" bpmnElement="Activity_13umafv">
         <dc:Bounds x="940" y="440" width="100" height="80" />
         <bpmndi:BPMNLabel />
@@ -178,12 +184,6 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1ijo9sz_di" bpmnElement="Gateway_1ijo9sz" isMarkerVisible="true">
         <dc:Bounds x="225" y="295" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="142" y="302" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="139" y="345" width="46" height="27" />
-        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1j7xdmc_di" bpmnElement="TextAnnotation_1j7xdmc">
         <dc:Bounds x="1030" y="140" width="100" height="30" />

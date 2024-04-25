@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1hqbnv9" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.21.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
   <bpmn:process id="events_add_select" name="Create/Select Event" isExecutable="true">
-    <bpmn:startEvent id="Event_09lcly3" camunda:initiator="user_id">
+    <bpmn:startEvent id="Event_09lcly3" camunda:initiator="camunda_user_id">
       <bpmn:extensionElements>
-        <camunda:formData />
+        <camunda:formData>
+          <camunda:formField id="reference_id" label="reference_id" type="string" />
+        </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_0qpb068</bpmn:outgoing>
     </bpmn:startEvent>
@@ -14,7 +16,7 @@
       <bpmn:incoming>Flow_1quc0pi</bpmn:incoming>
       <bpmn:outgoing>Flow_1lvyf75</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:userTask id="choose_add_event" name="User to Choose Event/Add Event" camunda:assignee="${user_id}">
+    <bpmn:userTask id="choose_add_event" name="User to Choose Event/Add Event" camunda:assignee="${camunda_user_id}">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="event_name" label="event_name" type="string" />

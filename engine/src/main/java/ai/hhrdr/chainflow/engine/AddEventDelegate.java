@@ -29,7 +29,7 @@ public class AddEventDelegate implements JavaDelegate {
         String eventName = (String) execution.getVariable("event_name");
         String eventDescription = (String) execution.getVariable("event_description");
         String imgEventThumbnail = (String) execution.getVariable("img_event_cover");
-        String userId = (String) execution.getVariable("user_id");
+        String userId = (String) execution.getVariable("camunda_user_id");
 
 
         JSONObject json = new JSONObject();
