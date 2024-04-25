@@ -2,7 +2,6 @@
 
 import { FC, useRef, useEffect } from "react";
 
-import "camunda-bpmn-js/dist/assets/camunda-platform-modeler.css";
 import BpmnModeler from "camunda-bpmn-js/lib/camunda-platform/Modeler";
 
 import styles from "./Modeler.module.scss";

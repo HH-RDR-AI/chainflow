@@ -1,0 +1,22 @@
+.container {
+  flex: 1 0 auto;
+  display: flex;
+  flex-flow: column;
+  gap: 8px;
+}
+
+.dashboard {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.definition {
+  display: block;
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.list {
+  margin: -16px;
+}

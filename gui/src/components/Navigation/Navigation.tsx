@@ -1,3 +1,5 @@
+"use client";
+
 import { FC } from "react";
 import styles from "./Navigation.module.scss";
 import Link from "next/link";
@@ -5,8 +7,11 @@ import { FaDatabase, FaHome, FaProjectDiagram, FaList } from "react-icons/fa";
 import { FaCodeBranch, FaUser } from "react-icons/fa6";
 import clsx from "clsx";
 import ConnectButton from "@/src/components/ConnectButton";
+import { usePathname } from "next/navigation";
 
 export const Navigation: FC = () => {
+  const pathname = usePathname();
+
   return (
     <div className={styles.container}>
       <Link className={styles.link} href="/">
@@ -17,7 +22,12 @@ export const Navigation: FC = () => {
       <nav className={styles.sections}>
         <ul className={styles.list}>
           <li className={styles.item}>
-            <Link href="/modeler" className={styles.link}>
+            <Link
+              href="/modeler"
+              className={clsx(styles.link, {
+                [styles.active]: pathname.startsWith("/modeler"),
+              })}
+            >
               <span className={styles.icon}>
                 <FaProjectDiagram />
               </span>
@@ -25,7 +35,12 @@ export const Navigation: FC = () => {
             </Link>
           </li>
           <li className={styles.item}>
-            <Link href="/processes" className={styles.link}>
+            <Link
+              href="/processes"
+              className={clsx(styles.link, {
+                [styles.active]: pathname.startsWith("/processes"),
+              })}
+            >
               <span className={styles.icon}>
                 <FaDatabase />
               </span>
@@ -33,7 +48,12 @@ export const Navigation: FC = () => {
             </Link>
           </li>
           <li className={styles.item}>
-            <Link href="/tasks" className={styles.link}>
+            <Link
+              href="/tasks"
+              className={clsx(styles.link, {
+                [styles.active]: pathname.startsWith("/tasks"),
+              })}
+            >
               <span className={styles.icon}>
                 <FaList />
               </span>

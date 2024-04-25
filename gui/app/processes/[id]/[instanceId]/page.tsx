@@ -52,23 +52,28 @@ export default async function InstancePage({
         </aside>
         <main className={styles.content}>
           <Viewer process={instance.definitionId} className={styles.viewer} />
-          <div className={styles.variables}>
-            <table className={styles.variablesTable}>
-              <tbody className={styles.variablesTBody}>
+          <Panel title="Variables" className={styles.variables}>
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Type</th>
+                  <th>Value</th>
+                </tr>
+              </thead>
+              <tbody>
                 {Object.entries(variables).map(([varKey, varValue]) => {
                   return (
-                    <tr className={styles.variablesTBody} key={varKey}>
-                      <th className={styles.variablesTH}>{varKey}</th>
-                      <td className={styles.variablesTD}>{varValue.type}</td>
-                      <td className={styles.variablesTD}>
-                        {JSON.stringify(varValue.value)}
-                      </td>
+                    <tr key={varKey}>
+                      <th>{varKey}</th>
+                      <td>{varValue.type}</td>
+                      <td>{`${varValue.value}`}</td>
                     </tr>
                   );
                 })}
               </tbody>
             </table>
-          </div>
+          </Panel>
         </main>
       </div>
     </div>
@@ -79,6 +84,6 @@ async function getData(id: string) {
   return {
     instance: await getInstance(id),
     variables: await getVariables(id),
-    tasks: await getTasks(null, null, id),
+    tasks: await getTasks(null, id),
   };
 }
