@@ -1,3 +1,3 @@
-import { InstanceStarter } from "./InstanceStarter";
+import { InstanceStarter } from './InstanceStarter'
 
-export default InstanceStarter;
+export default InstanceStarter

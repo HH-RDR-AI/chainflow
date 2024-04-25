@@ -1,3 +1,3 @@
-import { InstanceRemover } from "./InstanceRemover";
+import { InstanceRemover } from './InstanceRemover'
 
-export default InstanceRemover;
+export default InstanceRemover

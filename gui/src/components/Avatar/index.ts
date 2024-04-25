@@ -1,10 +1,11 @@
-import dynamic from "next/dynamic";
-import JazzIcon from "./JazzIcon";
-import { AvatarProps, AvatarType } from "./types";
-import Avatar from "./Avatar";
+import dynamic from 'next/dynamic'
 
-export type { AvatarProps, AvatarType };
+import Avatar from './Avatar'
+import JazzIcon from './JazzIcon'
+import { AvatarProps, AvatarType } from './types'
 
-export { JazzIcon };
-export * from "./utils";
-export default Avatar;
+export type { AvatarProps, AvatarType }
+
+export { JazzIcon }
+export * from './utils'
+export default Avatar

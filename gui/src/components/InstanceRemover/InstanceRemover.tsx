@@ -1,42 +1,39 @@
-"use client";
+'use client'
 
-import { ProcessInstance } from "@/app/processes/types";
-import { FC } from "react";
-import { FaPlay, FaTrash } from "react-icons/fa6";
-import Button from "../Button";
-import { fetchEngine } from "@/src/utils/processUtils";
+import { FC } from 'react'
 
-export const InstanceRemover: FC<{ instance: ProcessInstance }> = ({
-  instance,
-}) => {
+import { FaPlay, FaTrash } from 'react-icons/fa6'
 
+import { ProcessInstance } from '@/app/processes/types'
+import { fetchEngine } from '@/src/utils/processUtils'
+
+import Button from '../Button'
+
+export const InstanceRemover: FC<{ instance: ProcessInstance }> = ({ instance }) => {
   const onDelete = async () => {
-    const res = await fetchEngine(`process-instance/${instance.id}?skipCustomListeners=true&skipIoMappings=true`, {
-      method: "DELETE"
-    });
+    const res = await fetchEngine(
+      `process-instance/${instance.id}?skipCustomListeners=true&skipIoMappings=true`,
+      {
+        method: 'DELETE',
+      }
+    )
 
     if (!res.ok) {
-      const json = await res.json();
+      const json = await res.json()
       if (json?.body?.message) {
-        alert(json?.body?.message);
+        alert(json?.body?.message)
       }
 
-      console.log(`Failed to deploy data: ${res.statusText} [${res.status}]`);
-      return;
+      console.log(`Failed to deploy data: ${res.statusText} [${res.status}]`)
+      return
     }
 
     if (window === undefined) {
-      return;
+      return
     }
 
-    window.location.reload();
-  };
+    window.location.reload()
+  }
 
-  return (
-    <Button
-      icon={<FaTrash />}
-      caption="Delete"
-      onClick={onDelete}
-    />
-  );
-};
+  return <Button icon={<FaTrash />} caption="Delete" onClick={onDelete} />
+}
