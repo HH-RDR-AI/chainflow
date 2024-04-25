@@ -6,7 +6,7 @@ export const fetchEngine = async (
   init?: RequestInit
 ): Promise<Response> => {
   const hostUrl =
-    typeof window === 'undefined' ? 'http://localhost:8080/engine-rest' : '/dashboard/api/engine'
+    typeof window === 'undefined' ? process.env.CAMUNDA_URL : '/dashboard/api/engine'
 
   return fetch(`${hostUrl}/${input}`, { ...init, cache: 'no-cache' })
 }

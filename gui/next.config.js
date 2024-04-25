@@ -8,7 +8,7 @@ const nextConfig = {
     return [
       {
         source: '/api/engine/:path*',
-        destination: 'http://localhost:8080/engine-rest/:path*',
+        destination: `${process.env.CAMUNDA_URL}/:path*`,
       },
     ]
   },
@@ -18,6 +18,9 @@ const nextConfig = {
     }
     config.externals.push('pino-pretty', 'encoding')
     return config
+  },
+  env: {
+    CAMUNDA_URL: process.env.CAMUNDA_URL,
   },
 }
 

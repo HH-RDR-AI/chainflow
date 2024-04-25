@@ -16,4 +16,4 @@ chainflow-transaction-status-worker:
     ENVIRONMENT: "stage"
     TOPIC_NAME: "CheckTransactionConfirmed"
     WEB3_URL: "https://rpc.ankr.com/polygon_mumbai"
-    CAMUNDA_URL: "http://localhost:8080/engine-rest"
+    CAMUNDA_URL: "https://chainflow-engine.dexguru.biz/engine-rest"

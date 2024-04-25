@@ -18,7 +18,7 @@ class Config(BaseSettings):
     CORS_CREDENTIALS: bool = True
     CORS_METHODS: List[str] = ['*']
     CORS_HEADERS: List[str] = ['*']
-    CAMUNDA_URL: str = 'http://localhost:8080/engine-rest'
+    CAMUNDA_URL: str = 'https://chainflow-engine.dexguru.biz/engine-rest'
     CAMUNDA_ADMIN_LOGIN: str = 'demo'
     CAMUNDA_ADMIN_PASSWORD: str = 'demo'
     CAMUNDA_USERS_GROUP_ID: str = 'camunda-admin'
