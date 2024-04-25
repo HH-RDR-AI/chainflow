@@ -10,6 +10,7 @@ import { fetchEngine } from '@/src/utils/processUtils'
 import styles from './Viewer.module.scss'
 
 import 'camunda-bpmn-js/dist/assets/camunda-platform-viewer.css'
+import Canvas from '@node_modules/diagram-js/lib/core/Canvas'
 
 export const Viewer: FC<{ process: string; className?: string }> = ({ process, className }) => {
   const refCanvas = useRef<HTMLDivElement>(null)
@@ -35,15 +36,15 @@ export const Viewer: FC<{ process: string; className?: string }> = ({ process, c
 
         const { bpmn20Xml } = await res.json()
         await viewer?.importXML(bpmn20Xml)
-        const canvas = viewer.get('canvas') as any
-        canvas.zoom('fit-viewport')
+        const canvas = refViewer.current?.get<Canvas>('canvas')
+        canvas?.zoom('fit-viewport')
       } catch (e) {
         console.error(e)
       }
     }
 
     getXml()
-  }, [refCanvas])
+  }, [process, refCanvas])
 
   return <div className={clsx(styles.container, className)} ref={refCanvas} />
 }

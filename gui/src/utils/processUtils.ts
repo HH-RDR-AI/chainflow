@@ -12,7 +12,7 @@ export const fetchEngine = async (
 }
 
 export const getInstances = async (id?: string): Promise<ProcessInstance[]> => {
-  const res = await fetchEngine(`process-instance${!!id ? `?processDefinitionId=${id}` : ''}`)
+  const res = await fetchEngine(`process-instance${id ? `?processDefinitionId=${id}` : ''}`)
 
   if (!res.ok) {
     // This will activate the closest `error.js` Error Boundary

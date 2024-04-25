@@ -1,4 +1,3 @@
-import { AbiFunction } from 'abitype'
 
 export type ProcessTask = {
   id: string
@@ -27,7 +26,7 @@ export type ProcessTask = {
 
 export type TaskVariables = {
   [variable: string]: {
-    value: any
+    value: unknown
     type: string
     valueInfo: {
       objectTypeName?: string

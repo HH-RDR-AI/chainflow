@@ -4,7 +4,7 @@ import { FC, useCallback } from 'react'
 
 import { FaPlay } from 'react-icons/fa6'
 
-import { ProcessDefinition, ProcessInstance } from '@/app/processes/types'
+import { ProcessDefinition } from '@/app/processes/types'
 import { startNewInstance } from '@/src/utils/processUtils'
 
 import Button from '../Button'

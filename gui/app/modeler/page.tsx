@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic'
 
-import { FC, Suspense } from 'react'
+import { Suspense } from 'react'
 
 import styles from './page.module.scss'
 

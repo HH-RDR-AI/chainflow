@@ -11,6 +11,7 @@ import Modeler from '@/src/components/Modeler'
 import Button from '../Button'
 
 import styles from './ModelerPage.module.scss'
+import Canvas from '@node_modules/diagram-js/lib/core/Canvas'
 
 const ModelerPage: FC<{ className?: string }> = ({ className }) => {
   const refFile = useRef<HTMLInputElement>(null)
@@ -31,14 +32,14 @@ const ModelerPage: FC<{ className?: string }> = ({ className }) => {
     reader.onload = async (e) => {
       const xml = e.target?.result
       await refModeler.current?.importXML(xml?.toString() || '')
-      const canvas = refModeler.current?.get('canvas') as any
+      const canvas = refModeler.current?.get<Canvas>('canvas')
       canvas?.zoom('fit-viewport')
     }
 
     reader.readAsText(e.target.files[0])
   }
 
-  const handleOpenClick: MouseEventHandler = (e) => {
+  const handleOpenClick: MouseEventHandler = () => {
     refFile.current?.click()
   }
 

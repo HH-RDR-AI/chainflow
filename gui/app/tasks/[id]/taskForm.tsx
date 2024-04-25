@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 
 import { AbiFunction } from 'abitype'
 import { useForm } from 'react-hook-form'
@@ -15,10 +15,10 @@ type TaskFormProps = {
   abi: AbiFunction
 }
 
-export const TaskForm: FC<TaskFormProps> = ({ vars, abi }) => {
+export const TaskForm: FC<TaskFormProps> = ({ abi }) => {
   const { address } = useAccount()
 
-  const { register, handleSubmit, formState, watch, reset } = useForm()
+  const { register, handleSubmit, formState, watch } = useForm()
   const to = watch('_to')
   const value = watch('_value')
 
@@ -30,7 +30,7 @@ export const TaskForm: FC<TaskFormProps> = ({ vars, abi }) => {
 
   const { data: hash, sendTransaction } = useSendTransaction()
 
-  const { isLoading, isSuccess } = useWaitForTransactionReceipt({
+  const { isLoading } = useWaitForTransactionReceipt({
     hash,
   })
 

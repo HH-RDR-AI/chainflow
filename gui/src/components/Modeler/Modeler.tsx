@@ -29,7 +29,7 @@ export const Modeler: FC<{ onInit: (modeler: BpmnModeler) => void }> = ({ onInit
     refModeler.current = modeler
 
     onInit?.(modeler)
-  }, [refCanvas])
+  }, [onInit, refCanvas])
 
   return (
     <div className={styles.container}>

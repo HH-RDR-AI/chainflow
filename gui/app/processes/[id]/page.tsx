@@ -4,7 +4,7 @@ import InstanceRemover from '@/src/components/InstanceRemover'
 import InstanceStarter from '@/src/components/InstanceStarter'
 import Panel from '@/src/components/Panel'
 import Viewer from '@/src/components/Viewer'
-import { getDefinition, getInstances, startNewInstance } from '@/src/utils/processUtils'
+import { getDefinition, getInstances } from '@/src/utils/processUtils'
 
 import styles from './page.module.scss'
 

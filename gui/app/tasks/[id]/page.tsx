@@ -1,5 +1,4 @@
 import Panel from '@/src/components/Panel'
-import { Tasks } from '@/src/components/Tasks/Tasks'
 import { getTaskVariables, getTasks } from '@/src/utils/processUtils'
 
 import { TaskForm } from './taskForm'
@@ -16,7 +15,7 @@ export default async function TaskPage({ params: { id } }: { params: { id: strin
   const task = tasks[0]
 
   const formVars = await getTaskVariables(task.id)
-  const abi = JSON.parse(formVars?.abi?.value || '{}')
+  const abi = formVars?.abi?.value && JSON.parse(`${formVars?.abi?.value}`)
 
   return (
     <div className={styles.container}>

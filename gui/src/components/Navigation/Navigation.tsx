@@ -2,9 +2,7 @@ import Link from 'next/link'
 
 import { FC } from 'react'
 
-import clsx from 'clsx'
 import { FaDatabase, FaHome, FaList, FaProjectDiagram } from 'react-icons/fa'
-import { FaCodeBranch, FaUser } from 'react-icons/fa6'
 
 import styles from './Navigation.module.scss'
 

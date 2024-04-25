@@ -2,7 +2,7 @@
 
 import { FC } from 'react'
 
-import { FaPlay, FaTrash } from 'react-icons/fa6'
+import { FaTrash } from 'react-icons/fa6'
 
 import { ProcessInstance } from '@/app/processes/types'
 import { fetchEngine } from '@/src/utils/processUtils'

@@ -2,15 +2,14 @@
 
 import { FC, useEffect, useState } from 'react'
 
-import { useConnectModal } from '@rainbow-me/rainbowkit'
 import { AbiFunction } from 'abitype'
 import clsx from 'clsx'
 import { useForm } from 'react-hook-form'
 import {
   useAccount,
-  usePrepareSendTransaction,
+  useEstimateGas,
   useSendTransaction,
-  useWaitForTransaction,
+  useWaitForTransactionReceipt,
 } from 'wagmi'
 
 import { ProcessDefinition, ProcessInstance } from '@/app/processes/types'
@@ -21,7 +20,6 @@ import {
   getInstances,
   getTaskVariables,
   getTasks,
-  setTaskVariables,
 } from '@/src/utils/processUtils'
 
 import Button from '../Button'
@@ -30,7 +28,6 @@ import styles from './Tasks.module.scss'
 
 export const Tasks: FC<{ className?: string }> = ({ className }) => {
   const { address } = useAccount()
-  const { openConnectModal } = useConnectModal()
   const [currentProcess, setCurrentProcess] = useState<string | null>(null)
   const [currentInstance, setCurrentInstance] = useState<string | null>(null)
   const [currentTask, setCurrentTask] = useState<string | null>(null)
@@ -45,31 +42,24 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
   const to = watch('_to')
   const value = watch('_value')
 
-  useEffect(() => {
-    if (!address && openConnectModal) {
-      openConnectModal()
-    }
-  }, [address])
-
-  const { config } = usePrepareSendTransaction({
+  const { data: gas } = useEstimateGas({
     to: to,
     value: value,
     account: address,
   })
 
-  const { data, sendTransaction } = useSendTransaction(config)
+  const { data: hash, sendTransaction } = useSendTransaction()
 
-  const { isLoading, isSuccess } = useWaitForTransaction({
-    hash: data?.hash,
+  const { isLoading, } = useWaitForTransactionReceipt({
+    hash
   })
 
   useEffect(() => {
-    if (!currentTask || !data?.hash) {
+    if (!currentTask || !hash) {
       return
     }
-    const transactionHash = data.hash
-    const transactionInput = config.data || '0x'
-    const value = config.value
+    const transactionHash = hash
+    const transactionInput = '0x'
     const variables = {
       transactionHash: {
         value: transactionHash,
@@ -92,7 +82,7 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
         reset()
       }
     })
-  }, [data?.hash])
+  }, [currentTask, hash, reset, value])
   useEffect(() => {
     const getData = async () => {
       setProcesses(await getDefinitions())
@@ -128,7 +118,7 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
       const formVars = await getTaskVariables(currentTask)
       setFormVars(formVars)
       if (formVars.abi) {
-        setAbi(JSON.parse(formVars.abi.value))
+        setAbi(JSON.parse(`${formVars.abi.value}`))
       }
     }
 
@@ -220,7 +210,17 @@ export const Tasks: FC<{ className?: string }> = ({ className }) => {
         {!!formVars && abi && (
           <form
             onSubmit={handleSubmit(
-              () => sendTransaction?.() || console.log('sendTransaction is not defined')
+              () => {
+                if (!sendTransaction) {
+                  throw new Error('sendTransaction is not defined')
+                }
+                sendTransaction({
+                  gas: gas || undefined,
+                  to: to,
+                  value: value,
+                }
+                )
+              }
             )}>
             {abi.inputs.map((abiParam, idx) => {
               return (
