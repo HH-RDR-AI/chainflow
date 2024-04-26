@@ -1,4 +1,8 @@
 /** @type {import('next').NextConfig} */
+
+console.log('process.env.CAMUNDA_URL', process.env.CAMUNDA_URL)
+const CAMUNDA_URL = process.env.CAMUNDA_URL
+
 const nextConfig = {
   basePath: '/dashboard',
   experimental: {
@@ -8,7 +12,7 @@ const nextConfig = {
     return [
       {
         source: '/api/engine/:path*',
-        destination: `${process.env.CAMUNDA_URL}/:path*`,
+        destination: `${CAMUNDA_URL}/:path*`,
       },
     ]
   },
@@ -20,7 +24,7 @@ const nextConfig = {
     return config
   },
   env: {
-    CAMUNDA_URL: process.env.CAMUNDA_URL,
+    CAMUNDA_URL: CAMUNDA_URL,
   },
 }
 
