@@ -50,7 +50,7 @@ html {
   padding: 0;
   min-width: 320px;
 
-  background: $color-bg-100;
+  background: $color-bg-120;
   color: $color-text;
 
   font-family: "IBM Plex Sans Condensed", sans-serif;
@@ -78,6 +78,17 @@ body {
   color: $color-text;
 }
 
+blockquote {
+  margin: 0 auto;
+  padding: 0;
+  border: 1px #12b886 solid;
+  border-radius: 16px;
+  padding: 16px 24px;
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 32px;
+}
+
 a {
   transition: all 0.25s ease;
   text-decoration: none;
@@ -87,6 +98,14 @@ a {
   &:focus {
     color: $color-style-purple-hover;
   }
+}
+
+.purple {
+  color: #6046ff;
+}
+
+.green {
+  color: #12b886;
 }
 
 small {

@@ -8,8 +8,8 @@ description: "GURU is building the AI orchestration network. L3 which allows dAp
 # start: Banner config
 banner:
   type: network
-  title: GURU AI
-  subtitle: Building The <b>AI</b> Orchestration <b>Network</b>
+  title: Building The AI Orchestration Network
+  subtitle: DexGuru Network
 
   actions:
     - {
@@ -17,15 +17,15 @@ banner:
         url: https://webforms.pipedrive.com/f/c6vRxuvEjYqAxWSu1hN3xF2Cm5KyUtB66yKiko2wxKvPIs2J5R6mPJUV3oMdjnoHpF,
         type: book,
       }
-    - { title: Participate in LBP, url: https://dex.guru, type: primary }
-
-  text: "GPT Revolution Happened Now What? GURU is building the AI orchestration network. L3 which allows dApps to natively embed orchestrated AI Agents and earn Network participant rewards. Ecosystem incentives and coordinates different parties to run autonomous agents and compute nodes independently and creates markets for them."
+    - { title: Participate in LBP, url: https://dex.guru, type: secondary }
 
 partners:
   show: true
 ---
 
-{% include section.html pretitle="GURU Framework and Network" title="Scaling dApps Ecosystem" img="/assets/img/content/scaling.svg" %}
+{% include achievements.html %}
+
+{% include section.html pretitle="GURU Framework and Network" title="Scaling dApps Ecosystem" img="/assets/img/content/scaling.svg" bg="light" %}
 
 <!-- REVOLUTION SECTION -->
 
@@ -45,9 +45,14 @@ For Application developers it’s became expected that they embed GPT mechanics,
 
 <!-- / REVOLUTION SECTION -->
 
+{% include innovations.html %}
 {% include vision.html %}
+{% include tokenomics.html %}
+{% include section.html title="Roadmap" img="/assets/img/content/roadmap.svg" bg="roadmap"  %}
 
-{% include howworks.html %}
+{% include adopters.html %}
+
+{% include section.html title="GURU Network Ecosystem Markets" subtitle="Market Analysis for GURU Network" img="/assets/img/content/market.svg" %}
 
 <!-- ORCHESTRATOR SECTION -->
 
@@ -86,15 +91,5 @@ GURU Wallet and Wallet SDK serves as a window into GURU Network participation, a
 <!-- / SDK SECTION -->
 
 {% include network.html  %}
-
-{% include section.html pretitle="GURU Network" title="Tokenomics" img="/assets/img/content/tokenomics.svg" bg="dark" %}
-
-{% include section.html pretitle="GURU Network" title="Ecosystem Markets" img="/assets/img/content/market.svg" bg="light" %}
-
-{% include adopters.html %}
-
-{% include section.html title="Go to Market Strategy" img="/assets/img/content/strategy.svg" bg="light" %}
-
-{% include section.html title="Roadmap" img="/assets/img/content/roadmap.svg" bg="dark"  %}
 
 {% include distribution.html  %}
