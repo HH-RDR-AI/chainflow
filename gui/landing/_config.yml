@@ -88,7 +88,7 @@ menu:
   - { title: Ecosytem, url: "#ecosystem" }
 
 aside:
-  - { title: GURU Whitepaper, url: /assets/img/whitepapper_dexguru_network.pdf }
+  - { title: GURU Whitepaper, url: /assets/img/guru_network_whitepaper.pdf }
 
 # Generate social links in footer.
 social_links:
