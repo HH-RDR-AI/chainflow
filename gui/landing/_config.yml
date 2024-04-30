@@ -1,7 +1,7 @@
-title: GURU Network – Unleashing the Future of AI Focused Decentralized Applications
+title: GURU Network – The AI Orchestration Network
 author:
   name: guru_network
-  email: team@chanflow.dexguru.biz
+  email: evgeny@dex.guru
 
 # The `>` after `description:` means to ignore line-breaks until next key.
 # If you want to omit the line-break after the end of text, use `>-` instead.
@@ -85,10 +85,24 @@ menu:
           },
         ],
     }
+  - {
+    title: Resources,
+    url: "/resources",
+    dropdown:
+      [
+        {
+          items:
+            [
+              { title: "Building The AI Orchestration Network: Litepaper", url: "/assets/img/litepapper_dexguru_network.pdf" },
+              { title: "Building The AI Orchestration Network: Blockchain Business Process Automation Architecture Whitepaper", url: "/assets/img/guru_network_architecture_whitepaper.pdf" },
+            ],
+        },
+      ],
+  }
   - { title: Ecosytem, url: "#ecosystem" }
 
 aside:
-  - { title: GURU Whitepaper, url: /assets/img/guru_network_whitepaper.pdf }
+  - { title: Flow Orchestraror App, url: https://warehouse.dex.guru }
 
 # Generate social links in footer.
 social_links:

@@ -9,7 +9,7 @@ description: "GURU is building the AI orchestration network. L3 which allows dAp
 banner:
   type: network
   title: Building The AI Orchestration Network
-  subtitle: DexGuru Network
+  subtitle: GURU L3  allows dApps and retail Operators to natively embed orchestrated AI Agents and earn Network participant rewards.
 
   actions:
     - {
@@ -44,9 +44,8 @@ For Application developers it’s became expected that they embed GPT mechanics,
 <!-- /  {% include section.html pretitle="GPT Revolution" title="Happened Now What?" text=content  img="/assets/img/content/revolution.svg" align="left" bg="light" animate=true %} -->
 
 <!-- / REVOLUTION SECTION -->
-
-{% include innovations.html %}
 {% include vision.html %}
+{% include innovations.html %}
 {% include tokenomics.html %}
 {% include section.html title="Roadmap" img="/assets/img/content/roadmap.svg" bg="roadmap"  %}
 
@@ -68,7 +67,7 @@ Orchestrator is in a core of GURU Framework Ecosystem powering up all connection
 
 {% endcapture %}
 
-{% include section.html pretitle="Flow Orchestrator" title="Processes as a service" text=content  img="/assets/img/content/revolution.svg" align="left" bg="dark" %}
+<!-- {% include section.html pretitle="Flow Orchestrator" title="Processes as a service" text=content  img="/assets/img/content/revolution.svg" align="left" bg="dark" %} -->
 
 <!-- / ORCHESTRATOR SECTION -->
 
@@ -86,10 +85,10 @@ GURU Wallet and Wallet SDK serves as a window into GURU Network participation, a
 
 {% endcapture %}
 
-{% include section.html pretitle="GURU Wallet SDK" title="Gateway To Participate" text=content img="/assets/img/content/sdk.svg" align="right"  %}
+<!-- {% include section.html pretitle="GURU Wallet SDK" title="Gateway To Participate" text=content img="/assets/img/content/sdk.svg" align="right"  %} -->
 
 <!-- / SDK SECTION -->
 
-{% include network.html  %}
+<!-- {% include network.html  %} -->
 
-{% include distribution.html  %}
+<!-- {% include distribution.html  %} -->
