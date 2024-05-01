@@ -68,6 +68,26 @@ menu:
                 },
               ],
           },
+          {
+            items:
+              [
+                {
+                  title: "GURU Network: AI Processor as a Service",
+                  url: /network.html,
+                },
+
+                {
+                  title: GURU Wallet SDK,
+                  description: "Gateway To Participate",
+                  url: /sdk.html,
+                },
+
+                {
+                  title: Tokenomics Allocation and Distribution,
+                  url: /distribution.html,
+                },
+              ],
+          },
         ],
     }
   - {
@@ -86,20 +106,28 @@ menu:
         ],
     }
   - {
-    title: Resources,
-    url: "/resources",
-    dropdown:
-      [
-        {
-          items:
-            [
-              { title: "Building The AI Orchestration Network: Litepaper", url: "/assets/img/litepapper_dexguru_network.pdf" },
-              { title: "Building The AI Orchestration Network: Blockchain Business Process Automation Architecture Whitepaper", url: "/assets/img/guru_network_architecture_whitepaper.pdf" },
-            ],
-        },
-      ],
-  }
+      title: Resources,
+      url: "/resources",
+      dropdown:
+        [
+          {
+            title: "Building The AI Orchestration Network",
+            items:
+              [
+                {
+                  title: "Litepaper",
+                  url: "/assets/img/litepapper_dexguru_network.pdf",
+                },
+                {
+                  title: "Blockchain Business Process Automation Architecture Whitepaper",
+                  url: "/assets/img/guru_network_architecture_whitepaper.pdf",
+                },
+              ],
+          },
+        ],
+    }
   - { title: Ecosytem, url: "#ecosystem" }
+  - { title: Docs, url: https://docs.dex.guru/ }
 
 aside:
   - { title: Flow Orchestraror App, url: https://warehouse.dex.guru }
