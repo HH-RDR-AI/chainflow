@@ -303,6 +303,8 @@ p > img:only-child {
 .page__body {
   flex: 1 0 auto;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 .page__content {
   width: 100%;

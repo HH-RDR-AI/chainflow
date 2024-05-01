@@ -41,9 +41,8 @@ For Application developers it’s became expected that they embed GPT mechanics,
 
 {% endcapture %}
 
-<!-- /  {% include section.html pretitle="GPT Revolution" title="Happened Now What?" text=content  img="/assets/img/content/revolution.svg" align="left" bg="light" animate=true %} -->
-
 <!-- / REVOLUTION SECTION -->
+
 {% include vision.html %}
 {% include innovations.html %}
 {% include tokenomics.html %}
@@ -52,24 +51,6 @@ For Application developers it’s became expected that they embed GPT mechanics,
 {% include adopters.html %}
 
 {% include section.html title="GURU Network Ecosystem Markets" subtitle="Market Analysis for GURU Network" img="/assets/img/content/market.svg" %}
-
-<!-- ORCHESTRATOR SECTION -->
-
-{% capture content %}
-
-Orchestrator is in a core of GURU Framework Ecosystem powering up all connection and financial means of GURU Network:
-
-- Provides single execution context for variety of environments (on-chain/off-chain/user/AI interactions)
-- Seamlessly orchestrate multi-steps LLM/AI models using orchestration snippets catalog
-- Reuse Published BPA Definitions
-- Distribute Execution when working in pair with GURU Wallet, which allows remote execution from FlowOrchestration on particular actions.
-- EventBus exposed on GURU Network as an Oracle
-
-{% endcapture %}
-
-<!-- {% include section.html pretitle="Flow Orchestrator" title="Processes as a service" text=content  img="/assets/img/content/revolution.svg" align="left" bg="dark" %} -->
-
-<!-- / ORCHESTRATOR SECTION -->
 
 <!-- SDK SECTION -->
 
@@ -84,11 +65,3 @@ GURU Wallet and Wallet SDK serves as a window into GURU Network participation, a
 - GURU Ecosystem role: Cornerstone component in realizing Guru Labs' vision for a decentralized, efficient, and user-centric digital world.
 
 {% endcapture %}
-
-<!-- {% include section.html pretitle="GURU Wallet SDK" title="Gateway To Participate" text=content img="/assets/img/content/sdk.svg" align="right"  %} -->
-
-<!-- / SDK SECTION -->
-
-<!-- {% include network.html  %} -->
-
-<!-- {% include distribution.html  %} -->
