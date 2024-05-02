@@ -2,14 +2,14 @@
 layout: base
 permalink: /
 type: network
-title: GURU - The AI Orchestration Network
-description: "GURU is building the AI orchestration network. L3 which allows dApps to natively embed orchestrated AI Agents and earn Network participant rewards."
+title: GURU Enlightenment Network - Multi-Chain AI Compute Layer
+description: Base Layer 3 allows dApps and retail users to natively embed orchestrated AI Agents into their routines and earn Network participant rewards.
 # --------------------------
 # start: Banner config
 banner:
   type: network
-  title: Building The AI Orchestration Network
-  subtitle: GURU L3  allows dApps and retail Operators to natively embed orchestrated AI Agents and earn Network participant rewards.
+  title: Building a Multi-Chain AI Compute Layer
+  subtitle: Base Layer 3 allows dApps and retail users to natively embed orchestrated AI Agents into their routines and earn Network participant rewards.
 
   actions:
     - {

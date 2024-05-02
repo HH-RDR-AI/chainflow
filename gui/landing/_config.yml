@@ -41,26 +41,25 @@ menu:
               [
                 {
                   icon: dna,
-                  title: Block Explorer as-a-service,
-                  description: Affordable Etherscan alternative
-                    for EVM compatible chains,
+                  title: Guru Network Analytics Driven Block Explorer,
+                  description: Orchestration Network Explorer,
                   url: https://b2b.dex.guru/explorer,
                 },
 
                 {
                   icon: floppy,
-                  title: Data Warehouse,
+                  title: Guru Network Data Warehouse,
                   description: "For most data-intensive
                     applications like analytics,
                     AI,
                     ML,
                     etc.",
-                  url: https://b2b.dex.guru/data-warehouse,
+                  url: https://warehouse.dex.guru,
                 },
 
                 {
                   icon: yoga,
-                  title: Trading Terminal,
+                  title: DeFi Trading Terminal,
                   description: We provide users with real-time data,
                   trading charts,
                   and various features to help them make informed decisions when trading cryptocurrencies.,
@@ -111,7 +110,7 @@ menu:
       dropdown:
         [
           {
-            title: "Building The AI Orchestration Network",
+            title: "Guru Multi-Chain AI Compute Layer",
             items:
               [
                 {
@@ -119,7 +118,7 @@ menu:
                   url: "/assets/img/litepapper_dexguru_network.pdf",
                 },
                 {
-                  title: "BBPA Architecture Whitepaper",
+                  title: "Interoperability Architecture Whitepaper",
                   url: "/assets/img/guru_network_architecture_whitepaper.pdf",
                 },
               ],
