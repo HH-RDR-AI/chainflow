@@ -17,7 +17,6 @@ banner:
         url: https://webforms.pipedrive.com/f/c6vRxuvEjYqAxWSu1hN3xF2Cm5KyUtB66yKiko2wxKvPIs2J5R6mPJUV3oMdjnoHpF,
         type: book,
       }
-    - { title: Participate in LBP, url: https://dex.guru, type: secondary }
 
 partners:
   show: true
