@@ -41,14 +41,14 @@ menu:
               [
                 {
                   icon: dna,
-                  title: Guru Network Analytics Driven Block Explorer,
-                  description: Orchestration Network Explorer,
+                  title: Guru Block Explorer,
+                  description: Analitics Driven Block Explorer for GEN,
                   url: https://b2b.dex.guru/explorer,
                 },
 
                 {
                   icon: floppy,
-                  title: Guru Network Data Warehouse,
+                  title: GEN Data Warehouse,
                   description: "For most data-intensive
                     applications like analytics,
                     AI,
@@ -59,7 +59,7 @@ menu:
 
                 {
                   icon: yoga,
-                  title: DeFi Trading Terminal,
+                  title: GEN DeFi Trading Terminal,
                   description: We provide users with real-time data,
                   trading charts,
                   and various features to help them make informed decisions when trading cryptocurrencies.,
@@ -71,18 +71,20 @@ menu:
             items:
               [
                 {
-                  title: "GURU Network: AI Processor as a Service",
+                  title: "GEN AI Processor as a Service",
+                  description: We provide users with real-time data,
                   url: /network.html,
                 },
 
                 {
-                  title: GURU Wallet SDK,
+                  title: GEN Wallet,
                   description: "Gateway To Participate",
                   url: /sdk.html,
                 },
 
                 {
-                  title: Tokenomics Allocation and Distribution,
+                  title: $GURU Tokenomics, Allocation and Distribution,
+                  description: "$GURU Token Network Utility",
                   url: /distribution.html,
                 },
               ],

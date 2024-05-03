@@ -9,7 +9,7 @@ description: Base Layer 3 allows dApps and retail users to natively embed orches
 banner:
   type: network
   title: Building a Multi-Chain AI Compute Layer
-  subtitle: Base Layer 3 allows dApps and retail users to natively embed orchestrated AI Agents into their routines and earn Network participant rewards.
+  subtitle: Base Layer 3 allows dApps and retail users to natively embed orchestrated AI Agents<br> into their routines and earn Network participant rewards.
 
   actions:
     - {
@@ -24,7 +24,7 @@ partners:
 
 {% include achievements.html %}
 
-{% include section.html pretitle="GURU Framework and Network" title="Scaling dApps Ecosystem" img="/assets/img/content/scaling.svg" bg="light" %}
+{% include section.html pretitle="Guru Network(GEN) and Flow Orchestrator" title="Scaling dApps Ecosystem" img="/assets/img/content/scaling.svg" bg="light" %}
 
 <!-- REVOLUTION SECTION -->
 
