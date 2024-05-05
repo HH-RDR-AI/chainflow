@@ -21,7 +21,7 @@ camunda.bpm:
     enabled: true
     tenant-check-enabled: true
   webapp:
-    index-redirect-enabled: false
+    index-redirect-enabled: true
 #  default-serialization-format: application/json
 server.port: 8080
 
