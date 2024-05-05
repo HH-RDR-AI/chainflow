@@ -1,5 +1,5 @@
 # Step 1: Build the application in a Maven container with Corretto 11
-FROM maven:3.8.2-jdk-11-slim AS build
+FROM maven:3.8.1-jdk-11-slim AS build
 
 # Set the working directory in the Docker container
 WORKDIR /app
