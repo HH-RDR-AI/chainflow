@@ -1,20 +1,18 @@
-import datetime
 import os
+from datetime import datetime, timedelta
 
-import pandas as pd
 import requests
 from camunda.external_task.external_task import ExternalTask, TaskResult
 from camunda.external_task.external_task_worker import ExternalTaskWorker
-from ta.trend import SMAIndicator
 
-TOPIC_NAME = os.getenv('TOPIC_NAME', "strategy_execution")
+# Camunda and Warehouse API Configuration
 CAMUNDA_URL = os.getenv('CAMUNDA_URL', 'http://localhost:8080/engine-rest')
-WAREHOUSE_API_KEY = os.getenv('WAREHOUSE_API_KEY', 'LcpfV5xdJ3Cw5o4SF3vWzXTC9HJFkrRCztg3Riov')
-WAREHOUSE_REST_URL = os.getenv('WAREHOUSE_REST_URL', 'https://api.dev.dex.guru/wh/copy_of_202_candles_for_token_in_pool')
+WAREHOUSE_API_KEY = os.getenv('WAREHOUSE_API_KEY', '1BMAM0szRy7HBrrAiyye5hTBRPhBwqSJwAkY1w3b')
+WAREHOUSE_REST_URL = os.getenv('WAREHOUSE_REST_URL', 'https://api.dev.dex.guru/wh')
 
 NETWORK = "canto"
 
-# configuration for the Client
+# Default External Worker Configuration
 default_config = {
     "maxTasks": 1,
     "lockDuration": 10000,
@@ -25,63 +23,105 @@ default_config = {
 }
 
 
-def check_sma_crossovers(data):
-    # Convert data into a DataFrame
-    df = pd.DataFrame(data)
-    df['candle_datetime'] = pd.to_datetime(df['candle_datetime'])
-    df.sort_values('candle_datetime', inplace=True)
-
-    # Calculate SMA for 3 and 7 periods using ta library
-    sma3 = SMAIndicator(df['close'], window=3)
-    df['SMA3'] = sma3.sma_indicator()
-    sma7 = SMAIndicator(df['close'], window=7)
-    df['SMA7'] = sma7.sma_indicator()
-
-    # Identify crossovers
-    # SMA3 crosses above SMA7
-    df['cross_above'] = (df['SMA3'] > df['SMA7']) & (df['SMA3'].shift(1) < df['SMA7'].shift(1))
-    # SMA3 crosses below SMA7
-    df['cross_below'] = (df['SMA3'] < df['SMA7']) & (df['SMA3'].shift(1) > df['SMA7'].shift(1))
-
-    return df[['candle_datetime', 'SMA3', 'SMA7', 'cross_above', 'cross_below']]
-
-
-def handle_task(task: ExternalTask) -> TaskResult:
+def handle_sma_task(task: ExternalTask) -> TaskResult:
+    """Handle tasks related to SMA Indicator calculations."""
     variables = task.get_variables()
     token_address = variables.get('token_address')
-    is_backtesting = variables.get('is_backtesting')
+    datetime_start = variables.get('datetime_start')
+    datetime_end = variables.get('datetime_end')
+    sma_period = variables.get('sma_period')
 
-    if not is_backtesting:
-        now = datetime.datetime.utcnow()
+    if not datetime_end:
+        now = datetime.utcnow()
         datetime_end = now.strftime("%Y-%m-%d %H:%M")
-        datetime_start = (now - datetime.timedelta(days=30)).strftime("%Y-%m-%d %H:%M")
+        datetime_start = (now - timedelta(days=30)).strftime("%Y-%m-%d %H:%M")
 
-    body = {"parameters": {
-                "network": NETWORK,
-                "token_address": token_address,
-                "datetime_start": datetime_start,
-                "datetime_end": datetime_end}}
-    resp = requests.post(
-        f"{WAREHOUSE_REST_URL}?api_key={WAREHOUSE_API_KEY}",
+    # Prepare the request body for the warehouse API
+    body = {
+        "parameters": {
+            "network": NETWORK,
+            "token_address": token_address,
+            "datetime_start": datetime_start,
+            "datetime_end": datetime_end,
+            "window": sma_period
+        }
+    }
+    # Make an HTTP request to fetch SMA indicators
+    response = requests.post(
+        f"{WAREHOUSE_REST_URL}/close_price_sma?api_key={WAREHOUSE_API_KEY}",
         json=body
     )
 
-    candles = resp.json()
+    sma_data = response.json()
+    variables[f'sma_{sma_period}'] = sma_data
 
-    indicators = check_sma_crossovers(candles)
-    if not indicators.empty:
-        last_signal = indicators.iloc[-1]
+    # ## TESTING
+    # if f'sma_{sma_period}' == 'sma_5':
+    #     variables[f'sma_{sma_period}'] = [{'indicator': 0}, {'indicator': 100}]
+    # else:
+    #     variables[f'sma_{sma_period}'] = [{'indicator': 50}, {'indicator': 50}]
 
-        if last_signal['cross_below']:
-            return task.complete(global_variables=variables, local_variables={'trading_signal': 'buy'})
-
-        if last_signal['cross_above']:
-            return task.complete(global_variables=variables, local_variables={'trading_signal': 'sell'})
-
-    return task.complete(global_variables=variables, local_variables={'trading_signal': ''})
+    return task.complete(global_variables=variables)
 
 
+def handle_rsi_task(task: ExternalTask) -> TaskResult:
+    """Handle tasks related to RSI Indicator calculations."""
+    variables = task.get_variables()
+    token_address = variables.get('token_address')
+    datetime_start = variables.get('datetime_start')
+    datetime_end = variables.get('datetime_end')
+    sma_period = variables.get('sma_period')
+
+    if not datetime_end:
+        now = datetime.utcnow()
+        datetime_end = now.strftime("%Y-%m-%d %H:%M")
+        datetime_start = (now - timedelta(days=30)).strftime("%Y-%m-%d %H:%M")
+
+    # Prepare the request body for the warehouse API
+    body = {
+        "parameters": {
+            "network": NETWORK,
+            "token_address": token_address,
+            "datetime_start": datetime_start,
+            "datetime_end": datetime_end,
+            "window": sma_period
+        }
+    }
+
+    # Make an HTTP request to fetch RSI indicators
+    response = requests.post(
+        f"{WAREHOUSE_REST_URL}/rsi_indicator?api_key={WAREHOUSE_API_KEY}",
+        json=body
+    )
+
+    rsi_data = response.json()
+    variables['rsi_data'] = rsi_data
+    return task.complete(global_variables=variables)
+
+
+# Subscribe each worker to their respective topics
 if __name__ == '__main__':
-    ExternalTaskWorker(worker_id="trading_strategy_worker",
-                       base_url=CAMUNDA_URL,
-                       config=default_config).subscribe([TOPIC_NAME], handle_task)
+    # Start the SMA Indicator worker
+    # sma_worker = ExternalTaskWorker(
+    #     worker_id="sma_indicator_worker",
+    #     base_url=CAMUNDA_URL,
+    #     config=default_config
+    # )
+    # sma_worker.subscribe(['get_sma_indicator'], handle_sma_task)
+    #
+    # # Start the RSI Indicator worker
+    # rsi_worker = ExternalTaskWorker(
+    #     worker_id="rsi_indicator_worker",
+    #     base_url=CAMUNDA_URL,
+    #     config=default_config
+    # )
+    # rsi_worker.subscribe(['get_rsi_indicator'], handle_rsi_task)
+
+    worker = ExternalTaskWorker(
+        worker_id="indicator_worker",
+        base_url=CAMUNDA_URL,
+        config=default_config
+    )
+
+    # worker.subscribe(['get_sma_indicator'], handle_sma_task)
+    worker.subscribe(['get_rsi_indicator'], handle_rsi_task)
