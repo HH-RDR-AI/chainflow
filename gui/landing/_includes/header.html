@@ -1,12 +1,30 @@
-{%- if page.type -%} {% assign page_type = page.type %} {%- else -%} {% assign
-page_type = "dexguru" %}{%- endif -%}
+<!-- Wrapper -->
+<div id="wrapper">
 
-<header class="page-header">
-  <div class="page-header__logo">
-    <span class="logo"> {%- include logo/{{ page_type }}.html -%} </span>
-  </div>
-  <nav class="page-header__menu">{%- include menu.html menu=site.menu -%}</nav>
-  <div class="page-header__aside">
-    {%- include menu.html menu=site.aside -%}
-  </div>
+<!-- Header -->
+<header id="header"{% if page.layout == "landing" %} class="alt style2"{% endif %}{% if page.layout == "home" %} class="alt"{% endif %}>
+	<a href="{{ "" | absolute_url }}/" class="logo"><strong>{{ site.title }}</strong> <span>{{ site.subtitle }}</span></a>
+	<nav>
+		<a href="#menu">Menu</a>
+	</nav>
 </header>
+
+<!-- Menu -->
+<nav id="menu">
+	<ul class="links">
+        {% for page in site.pages %}
+		    {% if page.layout == "home" %}
+		        <li><a href="{{ "" | absolute_url }}/">{{ page.title }}</a></li>
+	    	{% endif %}
+		{% endfor %}
+		{% for page in site.html_pages %}
+		    {% if page.layout != "home" and page.nav-menu == true %}
+		        <li><a href="{{ page.url | absolute_url }}">{{ page.title }}</a></li>
+		    {% endif %}
+		{% endfor %}
+	</ul>
+	<ul class="actions vertical">
+		<li><a href="#" class="button special fit">Get Started</a></li>
+		<li><a href="#" class="button fit">Log In</a></li>
+	</ul>
+</nav>

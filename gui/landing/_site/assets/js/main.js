@@ -1,302 +1,352 @@
-const observeStickies = () => {
-  const stickies = document.querySelectorAll('.page__header')
+/*
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+*/
 
-  if (!stickies?.length) {
-    return
-  }
+(function($) {
 
-  var observer = new IntersectionObserver(
-    ([el]) => {
-      el?.target.__sticker.classList.toggle('stuck', el.intersectionRatio === 0)
-    },
-    {
-      threshold: 1,
-    }
-  )
+	skel.breakpoints({
+		xlarge: '(max-width: 1680px)',
+		large: '(max-width: 1280px)',
+		medium: '(max-width: 980px)',
+		small: '(max-width: 736px)',
+		xsmall: '(max-width: 480px)',
+		xxsmall: '(max-width: 360px)'
+	});
 
-  stickies.forEach((el) => {
-    const stickyChecker = document.createElement('div')
-    stickyChecker.style.position = 'absolute'
-    stickyChecker.style.visibility = 'hidden'
-    stickyChecker.__sticker = el
+	/**
+	 * Applies parallax scrolling to an element's background image.
+	 * @return {jQuery} jQuery object.
+	 */
+	$.fn._parallax = (skel.vars.browser == 'ie' || skel.vars.browser == 'edge' || skel.vars.mobile) ? function() { return $(this) } : function(intensity) {
 
-    el.before(stickyChecker)
+		var	$window = $(window),
+			$this = $(this);
 
-    observer.observe(stickyChecker)
-  })
-}
+		if (this.length == 0 || intensity === 0)
+			return $this;
 
-const instrumentsFilter = () => {
-  const instruments = document.querySelector('.instruments')
-  const items = instruments?.querySelectorAll('.instruments__item')
-  const filter = instruments?.querySelector('.instruments-filter__filters')
-  const taggedElements = instruments?.querySelectorAll('.instruments .instruments__item')
+		if (this.length > 1) {
 
-  if (!instruments || !items?.length || !filter || !taggedElements?.length) {
-    return
-  }
+			for (var i=0; i < this.length; i++)
+				$(this[i])._parallax(intensity);
 
-  const tags = [...taggedElements].map((el) => el.dataset.tag)
-  const uniqueTags = [...new Set(tags)]
+			return $this;
 
-  uniqueTags.forEach((tag) => {
-    const button = document.createElement('button')
-    button.className = 'instruments-filter__filter'
-    button.innerHTML = tag
-    button.dataset.tag = tag
-    filter.append(button)
-    button.onclick = () => {
-      filterTag(tag)
-    }
-  })
+		}
 
-  const filterItems = filter.querySelectorAll('.instruments-filter__filter')
+		if (!intensity)
+			intensity = 0.25;
 
-  const filterTag = (tag) => {
-    filterItems.forEach((item) => {
-      item.classList.remove('active')
+		$this.each(function() {
 
-      if (item.dataset.tag === tag) {
-        item.classList.add('active')
-      }
-    })
+			var $t = $(this),
+				on, off;
 
-    items.forEach((item) => {
-      item.classList.remove('hide')
+			on = function() {
 
-      if (tag && item.dataset.tag !== tag) {
-        item.classList.add('hide')
-      }
-    })
-  }
+				$t.css('background-position', 'center 100%, center 100%, center 0px');
 
-  filterItems[0].onclick = () => filterTag()
-}
+				$window
+					.on('scroll._parallax', function() {
 
-const menuToggler = () => {
-  const toggle = document.querySelector('.page-header-menu__toggle')
+						var pos = parseInt($window.scrollTop()) - parseInt($t.position().top);
 
-  if (!toggle) {
-    return
-  }
+						$t.css('background-position', 'center ' + (pos * (-1 * intensity)) + 'px');
 
-  toggle.onclick = (e) => {
-    const el = e.target.closest('.page-header-menu')
-    el?.classList.toggle('show')
-    document.documentElement.classList[[...el?.classList].includes('show') ? 'add' : 'remove'](
-      'open-menu'
-    )
-  }
+					});
 
-  window.addEventListener('click', (e) => {
-    if (e.target.closest('.page-header-links__link')) {
-      e.target.closest('.page-header-menu')?.classList.remove('show')
-    }
-  })
-}
+			};
 
-const explorersUpdate = async () => {
-  const elements = document.querySelectorAll('.block-explorers .block-explorer[data-chain-id]')
+			off = function() {
 
-  if (!elements?.length) {
-    return
-  }
+				$t
+					.css('background-position', '');
 
-  const doUpdate = async (el) => {
-    const chainId = el.dataset.chainId
+				$window
+					.off('scroll._parallax');
 
-    if (!chainId) {
-      return
-    }
+			};
 
-    const promise = await fetch('https://explorer-graph-prod.dexguru.biz/graphql', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        query: `query GetLandingChainConfig {
-                    chainConfig(chainId: ${chainId} ) {
-                      chain
-                      chainColor
-                      icon
-                      shortName
-                      name
-                    }
-                    chainStats(chainId: ${chainId}) {
-                      activeAddressesCount
-                      lastBlockNumber
-                      mediumGasPrice
-                      nativeTokenPriceUsd
-                      nativeTokenPriceUsd24hDelta
-                      smartContractsCount
-                      transactionsCount
-                      transactionsPerSecond
-                      volume24hDeltaUsd
-                      volume24hUsd
-                    }
-                  }`,
-      }),
-    })
+			skel.on('change', function() {
 
-    setTimeout(doUpdate, 5 * 60 * 1000)
+				if (skel.breakpoint('medium').active)
+					(off)();
+				else
+					(on)();
 
-    const { data } = await promise.json()
+			});
 
-    if (!data) {
-      return
-    }
+		});
 
-    el.classList.remove('block-explorer--loading')
+		$window
+			.off('load._parallax resize._parallax')
+			.on('load._parallax resize._parallax', function() {
+				$window.trigger('scroll');
+			});
 
-    el.style.cssText = `--color-chain: ${data.chainConfig.chainColor}`
+		return $(this);
 
-    const icon = el.querySelector('.block-explorer__img')
-    const title = el.querySelector('.block-explorer__title .name')
-    const lastBlock = el.querySelector('.block-explorer-properties__item--last .value')
-    const addresses = el.querySelector('.block-explorer-properties__item--addresses .value')
-    const contracts = el.querySelector('.block-explorer-properties__item--contracts .value')
-    const txs = el.querySelector('.block-explorer-properties__item--txs')
-    const txsValue = txs?.querySelector('.value')
-    const txsRate = txs?.querySelector('.rate')
-    const price = el.querySelector('.block-explorer-properties__item--price')
-    const priceValue = price?.querySelector('.value')
-    const priceDelta = price?.querySelector('.delta')
+	};
 
-    const stats = data?.chainStats
+	$(function() {
 
-    if (icon) {
-      icon.src = data?.chainConfig?.icon
-    }
+		var	$window = $(window),
+			$body = $('body'),
+			$wrapper = $('#wrapper'),
+			$header = $('#header'),
+			$banner = $('#banner');
 
-    if (title) {
-      title.innerHTML = `${data?.chainConfig?.name} ${data?.chainConfig?.chain}`
-    }
+		// Disable animations/transitions until the page has loaded.
+			$body.addClass('is-loading');
 
-    if (lastBlock) {
-      lastBlock.innerHTML = stats?.lastBlockNumber.toLocaleString('en-US')
-    }
+			window.setTimeout(function() {
+				$body.removeClass('is-loading');
+			}, 200);
 
-    if (addresses) {
-      addresses.innerHTML = parseInt(stats?.activeAddressesCount || '').toLocaleString('en-US')
-    }
+		// Clear transitioning state on unload/hide.
+			$window.on('unload pagehide', function() {
+				window.setTimeout(function() {
+					$('.is-transitioning').removeClass('is-transitioning');
+				}, 250);
+			});
 
-    if (contracts) {
-      contracts.innerHTML = parseInt(stats?.smartContractsCount | '').toLocaleString('en-US')
-    }
+		// Fix: Enable IE-only tweaks.
+			if (skel.vars.browser == 'ie' || skel.vars.browser == 'edge')
+				$body.addClass('is-ie');
 
-    if (txsValue) {
-      txsValue.innerHTML = stats?.transactionsCount.toLocaleString('en-US')
-    }
+		// Fix: Placeholder polyfill.
+			$('form').placeholder();
 
-    if (txsRate) {
-      txsRate.innerHTML = stats?.transactionsPerSecond
-        ? `${parseFloat(stats?.transactionsPerSecond || 0).toLocaleString('en-US', {
-            notation: 'compact',
-          })}&nbsp;txs/sec`
-        : ''
-    }
+		// Prioritize "important" elements on medium.
+			skel.on('+medium -medium', function() {
+				$.prioritize(
+					'.important\\28 medium\\29',
+					skel.breakpoint('medium').active
+				);
+			});
 
-    if (priceValue) {
-      priceValue.innerHTML = parseFloat(stats?.nativeTokenPriceUsd || 0).toLocaleString('en-US', {})
-    }
+		// Scrolly.
+			$('.scrolly').scrolly({
+				offset: function() {
+					return $header.height() - 2;
+				}
+			});
 
-    if (priceDelta) {
-      const value = parseFloat(stats?.nativeTokenPriceUsd24hDelta || 0)
+		// Tiles.
+			var $tiles = $('.tiles > article');
 
-      priceDelta.innerHTML = value.toLocaleString('en-US', {
-        notation: 'compact',
-        style: 'percent',
-        signDisplay: 'exceptZero',
-      })
+			$tiles.each(function() {
 
-      priceDelta.classList.remove('delta--positive', 'delta--negative')
+				var $this = $(this),
+					$image = $this.find('.image'), $img = $image.find('img'),
+					$link = $this.find('.link'),
+					x;
 
-      priceDelta.classList.add(
-        value > 0 ? 'delta--positive' : value < 0 ? 'delta--negative' : 'delta--zero'
-      )
-    }
-  }
+				// Image.
 
-  elements.forEach(async (el) => {
-    doUpdate(el)
-  })
-}
+					// Set image.
+						$this.css('background-image', 'url(' + $img.attr('src') + ')');
 
-const doChainsWidget = () => {
-  const dataStr = localStorage.getItem('lastChainsData')
-  const data = JSON.parse(dataStr)
+					// Set position.
+						if (x = $img.data('position'))
+							$image.css('background-position', x);
 
-  if (!data?.length) {
-    return
-  }
+					// Hide original.
+						$image.hide();
 
-  const parent = document.querySelector('.chains-widget__body')
+				// Link.
+					if ($link.length > 0) {
 
-  if (!parent) {
-    return
-  }
+						$x = $link.clone()
+							.text('')
+							.addClass('primary')
+							.appendTo($this);
+						
+						$x.attr('aria-label', $link.text());
 
-  const content = data.map((el) => {
-    return `<div class="chains-widget-entry"><img class="chains-widget-entry__icon" src="${el.logo_uri}" /> <strong class="chains-widget-entry__title">${el.description}</strong></div>`
-  })
+						$link = $link.add($x);
 
-  parent.innerHTML = `<ul class="chains-widget__list"><li class="chains-widget__item">${content.join(
-    '</li><li class="chains-widget__item">'
-  )}</li></ul>`
-}
+						$link.on('click', function(event) {
 
-const chainsWidget = async () => {
-  doChainsWidget()
+							var href = $link.attr('href');
 
-  const promise = await fetch('https://api.dex.guru/v3/chain/')
-  const { data } = await promise.json()
+							// Prevent default.
+								event.stopPropagation();
+								event.preventDefault();
 
-  if (!data) {
-    return
-  }
+							// Start transitioning.
+								$this.addClass('is-transitioning');
+								$wrapper.addClass('is-transitioning');
 
-  localStorage.setItem('lastChainsData', JSON.stringify(data))
-  doChainsWidget()
-}
+							// Redirect.
+								window.setTimeout(function() {
 
-const bannerGuruCandles = (count = 10) => {
-  const parent = document.querySelector('.banner-guru__ripples')
+									if ($link.attr('target') == '_blank')
+										window.open(href);
+									else
+										location.href = href;
 
-  if (count < 1 || !parent) {
-    return
-  }
+								}, 500);
 
-  const drawCandle = () => {
-    const candles = parent.querySelectorAll('.banner-guru__candle')
+						});
 
-    if (candles.length >= count) {
-      return
-    }
+					}
 
-    const candle = document.createElement('div')
-    candle.className = `banner-guru__candle banner-guru__candle--${
-      Math.random() - 0.5 > 0 ? 'positive' : 'negative'
-    }`
-    candle.style.cssText = `--candle-pos-left: ${
-      Math.random() * 100
-    }%; --candle-pos-top: ${Math.random() * 50 + 25}%; --candle-size: ${Math.random() * 32 + 32}px`
+			});
 
-    parent.appendChild(candle)
-  }
+		// Header.
+			if (skel.vars.IEVersion < 9)
+				$header.removeClass('alt');
 
-  window.addEventListener('animationend', (e) => {
-    if (e.target.closest('.banner-guru__candle')) {
-      e.target.remove()
-    }
-  })
+			if ($banner.length > 0
+			&&	$header.hasClass('alt')) {
 
-  setInterval(drawCandle, 500)
-}
+				$window.on('resize', function() {
+					$window.trigger('scroll');
+				});
 
-window.addEventListener('load', () => {
-  // observeStickies();
-  menuToggler()
-  instrumentsFilter()
-  explorersUpdate()
-  bannerGuruCandles(20)
-  chainsWidget()
-})
+				$window.on('load', function() {
+
+					$banner.scrollex({
+						bottom:		$header.height() + 10,
+						terminate:	function() { $header.removeClass('alt'); },
+						enter:		function() { $header.addClass('alt'); },
+						leave:		function() { $header.removeClass('alt'); $header.addClass('reveal'); }
+					});
+
+					window.setTimeout(function() {
+						$window.triggerHandler('scroll');
+					}, 100);
+
+				});
+
+			}
+
+		// Banner.
+			$banner.each(function() {
+
+				var $this = $(this),
+					$image = $this.find('.image'), $img = $image.find('img');
+
+				// Parallax.
+					$this._parallax(0.275);
+
+				// Image.
+					if ($image.length > 0) {
+
+						// Set image.
+							$this.css('background-image', 'url(' + $img.attr('src') + ')');
+
+						// Hide original.
+							$image.hide();
+
+					}
+
+			});
+
+		// Menu.
+			var $menu = $('#menu'),
+				$menuInner;
+
+			$menu.wrapInner('<div class="inner"></div>');
+			$menuInner = $menu.children('.inner');
+			$menu._locked = false;
+
+			$menu._lock = function() {
+
+				if ($menu._locked)
+					return false;
+
+				$menu._locked = true;
+
+				window.setTimeout(function() {
+					$menu._locked = false;
+				}, 350);
+
+				return true;
+
+			};
+
+			$menu._show = function() {
+
+				if ($menu._lock())
+					$body.addClass('is-menu-visible');
+
+			};
+
+			$menu._hide = function() {
+
+				if ($menu._lock())
+					$body.removeClass('is-menu-visible');
+
+			};
+
+			$menu._toggle = function() {
+
+				if ($menu._lock())
+					$body.toggleClass('is-menu-visible');
+
+			};
+
+			$menuInner
+				.on('click', function(event) {
+					event.stopPropagation();
+				})
+				.on('click', 'a', function(event) {
+
+					var href = $(this).attr('href');
+
+					event.preventDefault();
+					event.stopPropagation();
+
+					// Hide.
+						$menu._hide();
+
+					// Redirect.
+						window.setTimeout(function() {
+							window.location.href = href;
+						}, 250);
+
+				});
+
+			$menu
+				.appendTo($body)
+				.on('click', function(event) {
+
+					event.stopPropagation();
+					event.preventDefault();
+
+					$body.removeClass('is-menu-visible');
+
+				})
+				.append('<a class="close" href="#menu">Close</a>');
+
+			$body
+				.on('click', 'a[href="#menu"]', function(event) {
+
+					event.stopPropagation();
+					event.preventDefault();
+
+					// Toggle.
+						$menu._toggle();
+
+				})
+				.on('click', function(event) {
+
+					// Hide.
+						$menu._hide();
+
+				})
+				.on('keydown', function(event) {
+
+					// Hide on escape.
+						if (event.keyCode == 27)
+							$menu._hide();
+
+				});
+
+	});
+
+})(jQuery);

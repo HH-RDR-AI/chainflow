@@ -1,14 +1,18 @@
----
-layout: base
----
-<article class="post">
+<!DOCTYPE html>
+<!--
+	Forty by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html>
 
-  <header class="post-header">
-    <h1 class="post-title">{{ page.title | escape }}</h1>
-  </header>
+{% include head.html %}
 
-  <div class="post-content">
-    {{ content }}
-  </div>
+<body>
+    <script type="text/javascript">document.body.classList.add("is-loading");</script>
 
-</article>
+    {% include header.html %} {{ content }} {% include footer.html %}
+
+</body>
+
+</html>
