@@ -17,7 +17,9 @@ public class PingMinecraftServerDelegate implements JavaDelegate {
     @Override
     public void execute(DelegateExecution execution) throws Exception {
         String serverUrl = (String) execution.getVariable("server_url");
+        String serverId = (String) execution.getVariable("server_id");
         boolean serverAlive = false;
+        boolean isServerId = (serverId != null && !serverId.isEmpty());
 
         LOGGER.info("\n\n  ... PingMinecraftServerDelegate invoked by "
                 + "activityName='" + execution.getCurrentActivityName() + "'"
@@ -48,5 +50,6 @@ public class PingMinecraftServerDelegate implements JavaDelegate {
         }
 
         execution.setVariable("server_alive", serverAlive);
+        execution.setVariable("is_server_id", isServerId);
     }
 }

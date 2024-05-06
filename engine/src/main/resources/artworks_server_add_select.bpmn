@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1r8nzfc" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.18.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
-  <bpmn:process id="server_add_select" name="Select/Create Server" isExecutable="true" camunda:historyTimeToLive="180">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1r8nzfc" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.22.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
+  <bpmn:process id="artworks_server_add_select" name="Select/Create Server" isExecutable="true" camunda:historyTimeToLive="180">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_1l695hz</bpmn:outgoing>
     </bpmn:startEvent>
@@ -13,6 +13,7 @@
           <camunda:formField id="server_url" label="server_url" type="string" />
           <camunda:formField id="server_id" label="server_id" type="string" />
           <camunda:formField id="server_alive" label="server_alive" type="boolean" defaultValue="false" />
+          <camunda:formField id="is_server_id" label="is_server_id" type="boolean" defaultValue="false" />
         </camunda:formData>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1l695hz</bpmn:incoming>
@@ -27,7 +28,7 @@
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_1ks1nmq" sourceRef="add_select_server" targetRef="Activity_05bg7tc" />
     <bpmn:sequenceFlow id="Flow_1e0q65s" sourceRef="Gateway_02ev101" targetRef="Activity_1rgosbf">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${server_id}</bpmn:conditionExpression>
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!is_server_id}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:exclusiveGateway id="Gateway_0o09cdt">
       <bpmn:incoming>Flow_1pcv2nw</bpmn:incoming>
@@ -54,10 +55,7 @@
     <bpmn:sequenceFlow id="Flow_0t1a41u" sourceRef="Gateway_0o09cdt" targetRef="Event_038kwis" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="server_add_select">
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="152" y="222" width="36" height="36" />
-      </bpmndi:BPMNShape>
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="artworks_server_add_select">
       <bpmndi:BPMNShape id="Activity_1ljv5d8_di" bpmnElement="add_select_server">
         <dc:Bounds x="290" y="200" width="100" height="80" />
         <bpmndi:BPMNLabel />
@@ -78,8 +76,11 @@
       <bpmndi:BPMNShape id="Event_038kwis_di" bpmnElement="Event_038kwis">
         <dc:Bounds x="1142" y="222" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="162" y="222" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1l695hz_di" bpmnElement="Flow_1l695hz">
-        <di:waypoint x="188" y="240" />
+        <di:waypoint x="198" y="240" />
         <di:waypoint x="290" y="240" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ks1nmq_di" bpmnElement="Flow_1ks1nmq">
