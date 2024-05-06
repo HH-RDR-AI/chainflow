@@ -1,30 +1,30 @@
 ---
 layout: base
 permalink: /
-title: ChainFlow
-description: "Bridging Real World Assets (RWAs) On-Chain with Business Process Automation (BPA)"
+title: Web3 Auto
+description: "Orchestrating Multi Chain Web3"
 # --------------------------
 # start: Banner config
 banner:
   type: chainflow
-  title: ChainFlow
-  subtitle:  Bridging Real World Assets (RWAs) On-Chain<br /> with Business Process Automation (BPA)
+  title: Web3 Automation
+  subtitle:  Orchestrating Multi Chain Web3 
 
   actions:
     - {
-        title: Book a Demo,
-        url: https://webforms.pipedrive.com/f/c6vRxuvEjYqAxWSu1hN3xF2Cm5KyUtB66yKiko2wxKvPIs2J5R6mPJUV3oMdjnoHpF,
+        title: Web3 Auto App,
+        url: https://app.web3auto.guru,
         type: book,
       }
 
-  text: "Seamlessly integrate real-world assets with business process automation and harness the power of decentralized finance."
+  text: "Blockchain is still very manual, causing errors and costly mistakes try now."
 
 features:
   title: Key Features
   items:
     - {
         title: "Business Process Editor",
-        text: "Craft and visualize your business processes with our intuitive BPMN editor. Tailor each step, decision point, and flow to match your unique business needs. Deploy your modeled processes directly to the ChainFlow business process definitions marketplace, making them available for execution and collaboration.",
+        text: "Craft and visualize your business processes with our intuitive BPMN editor. Tailor each step, decision point, and flow to match your unique business needs. Deploy your modeled processes directly to the Web3 Automation business process definitions marketplace, making them available for execution and collaboration.",
         img: "/assets/img/features/warehouse/collaboration.svg",
       }
     - {
@@ -39,7 +39,7 @@ features:
       }
 
 cta:
-  text: Bridging the gap between Real World Assets (RWAs) and the blockchain, ChainFlow seamlessly integrates Business Process Automation (BPA) into the decentralized world. Dive into a revolutionary marketplace where investors can choose businesses based on transparent on-chain/off-chain activities, detailed BPMN references, and calculated risk ratios. Unlock the potential of RWAs with ChainFlow and be part of the next-gen business transformation.
+  text: Bridging the gap between Real World Assets (RWAs) and the blockchain, Web3 Automation seamlessly integrates Business Process Automation (BPA) into the decentralized world. Dive into a revolutionary marketplace where investors can choose businesses based on transparent on-chain/off-chain activities, detailed BPMN references, and calculated risk ratios. Unlock the potential of RWAs with Web3 Automation and be part of the next-gen business transformation.
   actions:
     - {
         title: Book a Demo,
