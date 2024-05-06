@@ -1,0 +1,46 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [],
+		"devdoc": {
+			"details": "Provides information about the current execution context, including the sender of the transaction and its data. While these are generally available via msg.sender and msg.data, they should not be accessed in such a direct manner, since when dealing with meta-transactions the account sending and paying for execution may not be the actual sender (as far as an application is concerned). This contract is only required for intermediate, library-like contracts.",
+			"kind": "dev",
+			"methods": {},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"mainnet/0xBE223020724CC3e2999f5dCeDA3120484FdBfef7/PicCraftNFT.sol": "Context"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"mainnet/0xBE223020724CC3e2999f5dCeDA3120484FdBfef7/PicCraftNFT.sol": {
+			"keccak256": "0xd1c3722f2183c596536bdb6086b18a8469db6a2c9c0ec2dc04edf0136af373cc",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d8927c97c6af201daa67c5b1c5442e44fdbe82144a7c30f7cc669cd5726633e6",
+				"dweb:/ipfs/QmQ9bza7yL1rZqUPMDteAZJ6TsJ3ZvpqhVc6XuYFKfSSQp"
+			]
+		}
+	},
+	"version": 1
+}

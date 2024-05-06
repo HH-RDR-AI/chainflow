@@ -1,0 +1,86 @@
+{
+	"compiler": {
+		"version": "0.8.7+commit.e28d00a7"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "operator",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "from",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "tokenId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "bytes",
+						"name": "data",
+						"type": "bytes"
+					}
+				],
+				"name": "onERC721Received",
+				"outputs": [
+					{
+						"internalType": "bytes4",
+						"name": "",
+						"type": "bytes4"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"details": "Interface for any contract that wants to support safeTransfers from ERC721 asset contracts.",
+			"kind": "dev",
+			"methods": {
+				"onERC721Received(address,address,uint256,bytes)": {
+					"details": "Whenever an {IERC721} `tokenId` token is transferred to this contract via {IERC721-safeTransferFrom} by `operator` from `from`, this function is called. It must return its Solidity selector to confirm the token transfer. If any other value is returned or the interface is not implemented by the recipient, the transfer will be reverted. The selector can be obtained in Solidity with `IERC721.onERC721Received.selector`."
+				}
+			},
+			"title": "ERC721 token receiver interface",
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"mainnet/0xBE223020724CC3e2999f5dCeDA3120484FdBfef7/PicCraftNFT.sol": "IERC721Receiver"
+		},
+		"evmVersion": "london",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"mainnet/0xBE223020724CC3e2999f5dCeDA3120484FdBfef7/PicCraftNFT.sol": {
+			"keccak256": "0xd1c3722f2183c596536bdb6086b18a8469db6a2c9c0ec2dc04edf0136af373cc",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://d8927c97c6af201daa67c5b1c5442e44fdbe82144a7c30f7cc669cd5726633e6",
+				"dweb:/ipfs/QmQ9bza7yL1rZqUPMDteAZJ6TsJ3ZvpqhVc6XuYFKfSSQp"
+			]
+		}
+	},
+	"version": 1
+}
