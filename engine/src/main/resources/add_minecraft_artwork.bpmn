@@ -1,116 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1pz8yq9" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.18.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1pz8yq9" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.20.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
   <bpmn:process id="artworks_minecraft" name="Add Minecraft Artwork" isExecutable="true" camunda:historyTimeToLive="180">
-    <bpmn:startEvent id="StartEvent_1" name="Start" camunda:initiator="user_id">
+    <bpmn:startEvent id="StartEvent_1" name="Start" camunda:initiator="camunda_user_id">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="img_art_thumbnail" label="img_art_thumbnail" type="string" />
           <camunda:formField id="art_name" label="Art Name" type="string" />
           <camunda:formField id="art_description" label="Art Description" type="string" />
-          <camunda:formField id="server_id" label="Server UUID" type="string" />
-          <camunda:formField id="coordinates" label="Coordinates (X,Y,Z)" type="string" />
         </camunda:formData>
       </bpmn:extensionElements>
-      <bpmn:outgoing>Flow_1vx85re</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0f5e8fr</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:serviceTask id="Activity_0tvlm5r" name="Add Artwork" camunda:class="ai.hhrdr.chainflow.engine.AddArtworkDelegate">
       <bpmn:extensionElements />
-      <bpmn:incoming>Flow_0t8f16s</bpmn:incoming>
+      <bpmn:incoming>Flow_0090scl</bpmn:incoming>
       <bpmn:outgoing>Flow_0pysvh6</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_1vx85re" sourceRef="StartEvent_1" targetRef="Gateway_1hprvnt" />
     <bpmn:serviceTask id="Activity_0j3zi9e" name="Call Minecraft Plugin" camunda:class="ai.hhrdr.chainflow.engine.mc.CallMinecraftPluginDelegate">
-      <bpmn:incoming>Flow_0pysvh6</bpmn:incoming>
+      <bpmn:incoming>Flow_1bl38t6</bpmn:incoming>
       <bpmn:outgoing>Flow_074dmsf</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_0pysvh6" sourceRef="Activity_0tvlm5r" targetRef="Activity_0j3zi9e" />
+    <bpmn:sequenceFlow id="Flow_0pysvh6" sourceRef="Activity_0tvlm5r" targetRef="Activity_1ldqql2" />
     <bpmn:endEvent id="Event_0l3632j">
       <bpmn:incoming>Flow_074dmsf</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_074dmsf" sourceRef="Activity_0j3zi9e" targetRef="Event_0l3632j" />
-    <bpmn:exclusiveGateway id="Gateway_1hprvnt">
-      <bpmn:incoming>Flow_1vx85re</bpmn:incoming>
-      <bpmn:outgoing>Flow_00gcb20</bpmn:outgoing>
-      <bpmn:outgoing>Flow_1r2kyon</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_00gcb20" sourceRef="Gateway_1hprvnt" targetRef="Gateway_1030oqf" />
-    <bpmn:sequenceFlow id="Flow_1r2kyon" sourceRef="Gateway_1hprvnt" targetRef="Activity_15mmx8o">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${!server_id}</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:callActivity id="Activity_15mmx8o" name="Get Server_ID" calledElement="server_add_select">
+    <bpmn:sequenceFlow id="Flow_0f5e8fr" sourceRef="StartEvent_1" targetRef="Activity_1g449wn" />
+    <bpmn:sequenceFlow id="Flow_0090scl" sourceRef="Activity_1g449wn" targetRef="Activity_0tvlm5r" />
+    <bpmn:userTask id="Activity_1g449wn" name="Choose Server And Coordinates" camunda:assignee="${camunda_user_id}">
       <bpmn:extensionElements>
-        <camunda:in source="server_id" target="server_id" />
-        <camunda:out source="server_id" target="server_id" />
+        <camunda:formData>
+          <camunda:formField id="server_id" label="server_id" type="string" />
+          <camunda:formField id="coordinates" label="coordinates" type="string" defaultValue="0,0,0" />
+        </camunda:formData>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1r2kyon</bpmn:incoming>
-      <bpmn:outgoing>Flow_1yj524u</bpmn:outgoing>
-    </bpmn:callActivity>
-    <bpmn:exclusiveGateway id="Gateway_1030oqf">
-      <bpmn:incoming>Flow_00gcb20</bpmn:incoming>
-      <bpmn:incoming>Flow_1yj524u</bpmn:incoming>
-      <bpmn:outgoing>Flow_0t8f16s</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_0t8f16s" sourceRef="Gateway_1030oqf" targetRef="Activity_0tvlm5r" />
-    <bpmn:sequenceFlow id="Flow_1yj524u" sourceRef="Activity_15mmx8o" targetRef="Gateway_1030oqf" />
+      <bpmn:incoming>Flow_0f5e8fr</bpmn:incoming>
+      <bpmn:outgoing>Flow_0090scl</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:serviceTask id="Activity_1ldqql2" name="NFT Minting Task For User" camunda:class="ai.hhrdr.chainflow.engine.LoggerDelegate">
+      <bpmn:incoming>Flow_0pysvh6</bpmn:incoming>
+      <bpmn:outgoing>Flow_1bl38t6</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1bl38t6" sourceRef="Activity_1ldqql2" targetRef="Activity_0j3zi9e" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="artworks_minecraft">
-      <bpmndi:BPMNShape id="Activity_0j3zi9e_di" bpmnElement="Activity_0j3zi9e">
-        <dc:Bounds x="770" y="197" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0l3632j_di" bpmnElement="Event_0l3632j">
-        <dc:Bounds x="1002" y="219" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="152" y="219" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="158" y="262" width="24" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1hprvnt_di" bpmnElement="Gateway_1hprvnt" isMarkerVisible="true">
-        <dc:Bounds x="225" y="212" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0nfwsyf_di" bpmnElement="Activity_15mmx8o">
-        <dc:Bounds x="320" y="80" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1030oqf_di" bpmnElement="Gateway_1030oqf" isMarkerVisible="true">
-        <dc:Bounds x="465" y="212" width="50" height="50" />
+        <dc:Bounds x="952" y="99" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0tvlm5r_di" bpmnElement="Activity_0tvlm5r">
-        <dc:Bounds x="600" y="197" width="100" height="80" />
+        <dc:Bounds x="440" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1y617s4_di" bpmnElement="Activity_1g449wn">
+        <dc:Bounds x="260" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="99" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="158" y="142" width="24" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0j3zi9e_di" bpmnElement="Activity_0j3zi9e">
+        <dc:Bounds x="790" y="77" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0x48yp8" bpmnElement="Activity_1ldqql2">
+        <dc:Bounds x="610" y="77" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0pysvh6_di" bpmnElement="Flow_0pysvh6">
-        <di:waypoint x="700" y="237" />
-        <di:waypoint x="770" y="237" />
+        <di:waypoint x="540" y="117" />
+        <di:waypoint x="610" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_074dmsf_di" bpmnElement="Flow_074dmsf">
-        <di:waypoint x="870" y="237" />
-        <di:waypoint x="1002" y="237" />
+        <di:waypoint x="890" y="117" />
+        <di:waypoint x="952" y="117" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1vx85re_di" bpmnElement="Flow_1vx85re">
-        <di:waypoint x="188" y="237" />
-        <di:waypoint x="225" y="237" />
+      <bpmndi:BPMNEdge id="Flow_0090scl_di" bpmnElement="Flow_0090scl">
+        <di:waypoint x="360" y="117" />
+        <di:waypoint x="440" y="117" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_00gcb20_di" bpmnElement="Flow_00gcb20">
-        <di:waypoint x="275" y="237" />
-        <di:waypoint x="465" y="237" />
+      <bpmndi:BPMNEdge id="Flow_0f5e8fr_di" bpmnElement="Flow_0f5e8fr">
+        <di:waypoint x="188" y="117" />
+        <di:waypoint x="260" y="117" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1r2kyon_di" bpmnElement="Flow_1r2kyon">
-        <di:waypoint x="250" y="212" />
-        <di:waypoint x="250" y="120" />
-        <di:waypoint x="320" y="120" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1yj524u_di" bpmnElement="Flow_1yj524u">
-        <di:waypoint x="420" y="120" />
-        <di:waypoint x="490" y="120" />
-        <di:waypoint x="490" y="212" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0t8f16s_di" bpmnElement="Flow_0t8f16s">
-        <di:waypoint x="515" y="237" />
-        <di:waypoint x="600" y="237" />
+      <bpmndi:BPMNEdge id="Flow_1bl38t6_di" bpmnElement="Flow_1bl38t6">
+        <di:waypoint x="710" y="117" />
+        <di:waypoint x="790" y="117" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
