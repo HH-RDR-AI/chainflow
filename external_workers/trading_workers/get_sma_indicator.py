@@ -1,3 +1,4 @@
+import base64
 import os
 from datetime import datetime, timedelta
 
@@ -7,6 +8,8 @@ from camunda.external_task.external_task_worker import ExternalTaskWorker
 
 # Camunda and Warehouse API Configuration
 CAMUNDA_URL = os.getenv('CAMUNDA_URL', 'http://localhost:8080/engine-rest')
+CAMUNDA_USERNAME = os.getenv('CAMUNDA_USERNAME', 'demo')
+CAMUNDA_PASSWORD = os.getenv('CAMUNDA_PASSWORD', 'demo')
 WAREHOUSE_API_KEY = os.getenv('WAREHOUSE_API_KEY', '1BMAM0szRy7HBrrAiyye5hTBRPhBwqSJwAkY1w3b')
 WAREHOUSE_REST_URL = os.getenv('WAREHOUSE_REST_URL', 'https://api.dev.dex.guru/wh')
 
@@ -14,12 +17,13 @@ NETWORK = "canto"
 
 # Default External Worker Configuration
 default_config = {
+    "auth_basic": {"username": CAMUNDA_USERNAME, "password": CAMUNDA_PASSWORD},
     "maxTasks": 1,
     "lockDuration": 10000,
     "asyncResponseTimeout": 5000,
     "retries": 3,
     "retryTimeout": 15000,
-    "sleepSeconds": 30
+    "sleepSeconds": 30,
 }
 
 
