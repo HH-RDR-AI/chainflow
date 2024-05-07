@@ -37,6 +37,6 @@ Orchestrator is in a core of GURU Framework Ecosystem powering up all connection
 
 {% endcapture %}
 
-{% include section.html pretitle="Flow Orchestrator" title="Processes as a service" text=content  img="/assets/img/content/revolution.svg" align="left" bg="dark" %}
+{% include section.html pretitle="Flow Orchestrator" title="Processes as a service" text=content  img="/assets/img/content/revolution.svg" align="left" %}
 
 <!-- / ORCHESTRATOR SECTION -->

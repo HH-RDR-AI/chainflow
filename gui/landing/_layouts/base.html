@@ -16,8 +16,32 @@
         {%- if page.cta -%} {% include cta.html %} {%- endif -%}
         {%- if page.chainsWidget -%} {% include chainsWidget.html %} {%- endif -%}
         {%- if page.partners -%} {% include partners.html %} {%- endif -%}
+
+        {%- if site.social_links -%}
+          <div class="section section--light section--community">
+            <div class="section__header">
+              <h2 class="section__title">Join Community</h2>
+              <span class="section__subtitle"
+                >Lorem ipsum dolor sit amet consectetur. Vitae sit nec ante aenean pretium
+                placerat vel.
+              </span>
+            </div>
+            <div class="section__body">
+              <div class="socials">
+                <ul class="socials__list">
+                  {%- for entry in site.social_links -%}
+                  <li class="socials__item">
+                    {%- include social-item.html item = entry -%}
+                  </li>
+                  {%- endfor -%}
+                </ul>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
     </div>
-      <div class="page__footer">{%- include footer.html -%}</div>
+
+      {%- include footer.html -%}
     </div>
 
     <script src="{{ "/assets/js/main.js" | relative_url }}?v={{ build_version }}"></script>
