@@ -52,11 +52,11 @@ def handle_sma_task(task: ExternalTask) -> TaskResult:
     sma_data = response.json()
     variables[f'sma_{sma_period}'] = sma_data
 
-    # ## TESTING
-    if f'sma_{sma_period}' == 'sma_5':
-        variables[f'sma_{sma_period}'] = [{'indicator': 0}, {'indicator': 100}]
-    else:
-        variables[f'sma_{sma_period}'] = [{'indicator': 50}, {'indicator': 50}]
+    # # ## TESTING
+    # if f'sma_{sma_period}' == 'sma_5':
+    #     variables[f'sma_{sma_period}'] = [{'indicator': 0}, {'indicator': 100}]
+    # else:
+    #     variables[f'sma_{sma_period}'] = [{'indicator': 50}, {'indicator': 50}]
 
     return task.complete(global_variables=variables)
 
