@@ -1,21 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0cb2o62" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.15.2" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.19.0">
   <bpmn:process id="rsi_trading_bot" name="RSI Trading Bot" isExecutable="true" camunda:historyTimeToLive="180">
-    <bpmn:startEvent id="Event_0tf4w4q" name="Start Profits Cur Strategy" camunda:initiator="camunda_user_id">
-      <bpmn:extensionElements>
-        <camunda:formData>
-          <camunda:formField id="wallet_address" label="Wallet address" type="string" />
-          <camunda:formField id="token_address" label="Token" type="string">
-            <camunda:validation />
-          </camunda:formField>
-          <camunda:formField id="stop_loss" label="Stop loss %" type="long" defaultValue="2" />
-          <camunda:formField id="take_profit" label="Take profit %" type="long" defaultValue="5" />
-          <camunda:formField id="order_amount_usd" label="Order amount usd" type="long" defaultValue="50" />
-          <camunda:formField id="initial_portfolio_usd" label="Initial portfolio usd" type="long" defaultValue="10000" />
-        </camunda:formData>
-      </bpmn:extensionElements>
-      <bpmn:outgoing>Flow_1w72lmq</bpmn:outgoing>
-    </bpmn:startEvent>
     <bpmn:subProcess id="Activity_16zk69e">
       <bpmn:incoming>Flow_1w72lmq</bpmn:incoming>
       <bpmn:startEvent id="Event_1gkcimn">
@@ -173,8 +158,23 @@ if (currentPrice &gt; 0) {
       <bpmn:outgoing>Flow_0bk8z46</bpmn:outgoing>
       <bpmn:messageEventDefinition id="MessageEventDefinition_020nup7" messageRef="Message_0x3jh71" />
     </bpmn:boundaryEvent>
-    <bpmn:sequenceFlow id="Flow_1w72lmq" sourceRef="Event_0tf4w4q" targetRef="Activity_16zk69e" />
+    <bpmn:sequenceFlow id="Flow_1w72lmq" sourceRef="StartEvent_1" targetRef="Activity_16zk69e" />
     <bpmn:sequenceFlow id="Flow_0bk8z46" sourceRef="Event_0u9kink" targetRef="Event_0g0gpbv" />
+    <bpmn:startEvent id="StartEvent_1" name="Start Profits Cur Strategy" camunda:initiator="camunda_user_id">
+      <bpmn:extensionElements>
+        <camunda:formData>
+          <camunda:formField id="wallet_address" label="Wallet address" type="string" />
+          <camunda:formField id="token_address" label="Token" type="string">
+            <camunda:validation />
+          </camunda:formField>
+          <camunda:formField id="stop_loss" label="Stop loss %" type="long" defaultValue="2" />
+          <camunda:formField id="take_profit" label="Take profit %" type="long" defaultValue="5" />
+          <camunda:formField id="order_amount_usd" label="Order amount usd" type="long" defaultValue="50" />
+          <camunda:formField id="is_testing" label="Testing (dry run)" type="boolean" defaultValue="true" />
+        </camunda:formData>
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_1w72lmq</bpmn:outgoing>
+    </bpmn:startEvent>
     <bpmn:textAnnotation id="TextAnnotation_0txubkq">
       <bpmn:text>User Inputs his wallet_address and token_address, and tick time  to manage as a process start parameters</bpmn:text>
     </bpmn:textAnnotation>
@@ -184,8 +184,8 @@ if (currentPrice &gt; 0) {
     <bpmn:textAnnotation id="TextAnnotation_12b7umq">
       <bpmn:text>exit strategy signal</bpmn:text>
     </bpmn:textAnnotation>
-    <bpmn:association id="Association_1eml2r8" associationDirection="None" sourceRef="Event_0tf4w4q" targetRef="TextAnnotation_0txubkq" />
     <bpmn:association id="Association_03w6cfn" sourceRef="Event_0u9kink" targetRef="TextAnnotation_12b7umq" />
+    <bpmn:association id="Association_1g3z3pr" sourceRef="TextAnnotation_0txubkq" targetRef="StartEvent_1" />
   </bpmn:process>
   <bpmn:message id="Message_0x3jh71" name="StopStrategyEvent" />
   <bpmn:escalation id="Escalation_1shzjom" name="Escalation_3l2h2qr" escalationCode="signal_message" />
@@ -195,10 +195,10 @@ if (currentPrice &gt; 0) {
   <bpmn:escalation id="Escalation_3l2h2qr" name="Escalation_3l2h2qr" escalationCode="signal_message" />
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="rsi_trading_bot">
-      <bpmndi:BPMNShape id="BPMNShape_1csg4j9" bpmnElement="Event_0tf4w4q">
-        <dc:Bounds x="672" y="132" width="36" height="36" />
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="852" y="142" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="650" y="86" width="79" height="27" />
+          <dc:Bounds x="830" y="96" width="79" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0xrwbqv" bpmnElement="Activity_16zk69e" isExpanded="true">
@@ -413,6 +413,10 @@ if (currentPrice &gt; 0) {
         <dc:Bounds x="1610" y="340" width="99.99715391621127" height="40.072859744990886" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1g3z3pr_di" bpmnElement="Association_1g3z3pr">
+        <di:waypoint x="330" y="181" />
+        <di:waypoint x="852" y="161" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNShape id="BPMNShape_07dpe6m" bpmnElement="Event_0u9kink">
         <dc:Bounds x="1852" y="452" width="36" height="36" />
         <bpmndi:BPMNLabel>
@@ -420,16 +424,12 @@ if (currentPrice &gt; 0) {
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_1utoal3" bpmnElement="Flow_1w72lmq">
-        <di:waypoint x="690" y="168" />
-        <di:waypoint x="690" y="470" />
+        <di:waypoint x="870" y="180" />
+        <di:waypoint x="870" y="470" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0rdhxy3" bpmnElement="Flow_0bk8z46">
         <di:waypoint x="1870" y="452" />
         <di:waypoint x="1870" y="328" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="BPMNEdge_0lmt58t" bpmnElement="Association_1eml2r8">
-        <di:waypoint x="672" y="150" />
-        <di:waypoint x="330" y="150" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0ggnzxw" bpmnElement="Association_03w6cfn">
         <di:waypoint x="1854" y="461" />
