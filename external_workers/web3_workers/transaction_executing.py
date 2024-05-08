@@ -14,6 +14,8 @@ from external_workers.web3_workers.errors import QuoteError
 
 TOPIC_NAME = os.getenv("TOPIC_NAME", "web3_execution")
 CAMUNDA_URL = os.getenv("CAMUNDA_URL", "http://localhost:8080/engine-rest")
+CAMUNDA_USERNAME = os.getenv('CAMUNDA_USERNAME', 'demo')
+CAMUNDA_PASSWORD = os.getenv('CAMUNDA_PASSWORD', 'demo')
 WEB3_URL = os.getenv("WEB3_URL", "http://rpc-gw-stage.dexguru.biz/full/1")
 PRIVATE_KEY = os.getenv(
     "PRIVATE_KEY", "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
@@ -31,6 +33,7 @@ with open(Path(__file__).parent / "erc20_abi.json") as fh:
 
 # configuration for the Client
 default_config = {
+    "auth_basic": {"username": CAMUNDA_USERNAME, "password": CAMUNDA_PASSWORD},
     "maxTasks": 1,
     "lockDuration": 10000,
     "asyncResponseTimeout": 5000,

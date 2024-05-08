@@ -9,6 +9,8 @@ from ta.trend import SMAIndicator
 
 TOPIC_NAME = os.getenv('TOPIC_NAME', "strategy_execution")
 CAMUNDA_URL = os.getenv('CAMUNDA_URL', 'http://localhost:8080/engine-rest')
+CAMUNDA_USERNAME = os.getenv('CAMUNDA_USERNAME', 'demo')
+CAMUNDA_PASSWORD = os.getenv('CAMUNDA_PASSWORD', 'demo')
 WAREHOUSE_API_KEY = os.getenv('WAREHOUSE_API_KEY', 'LcpfV5xdJ3Cw5o4SF3vWzXTC9HJFkrRCztg3Riov')
 WAREHOUSE_REST_URL = os.getenv('WAREHOUSE_REST_URL', 'https://api.dev.dex.guru/wh/copy_of_202_candles_for_token_in_pool')
 
@@ -16,6 +18,7 @@ NETWORK = "canto"
 
 # configuration for the Client
 default_config = {
+    "auth_basic": {"username": CAMUNDA_USERNAME, "password": CAMUNDA_PASSWORD},
     "maxTasks": 1,
     "lockDuration": 10000,
     "asyncResponseTimeout": 5000,
