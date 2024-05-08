@@ -16,6 +16,11 @@ banner:
         url: https://app.web3auto.guru,
         type: book,
       }
+    - {
+        title: Web3 Auto Telegram Bot,
+        url: https://t.me/web3auto_guru_bot,
+        type: book,
+      }
 
   text: "Blockchain is still very manual, causing errors and costly mistakes try now."
 
