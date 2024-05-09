@@ -1,6 +1,6 @@
 import os
 
-TOPIC_NAME = os.getenv("TOPIC_NAME", "CheckTransactionConfirmed")
+TOPIC_NAME = os.getenv("TOPIC_NAME", "CrossChainArbitrage")
 WEB3_URL = os.getenv("WEB3_URL", "https://telcoin.rpc.dex.guru/archive/2017")
 CAMUNDA_URL = os.getenv("CAMUNDA_URL", "http://localhost:8080/engine-rest")
 PRIVATE_KEY = os.getenv(

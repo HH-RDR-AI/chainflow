@@ -40,41 +40,25 @@ def get_router_contract(router_address: ChecksumAddress):
     return router_contract
 
 
-# def handle_task(task: ExternalTask) -> TaskResult:
-#     variables = task.get_variables()
-#     tx_hash = variables.get("transactionHash")
-#     txn_input = variables.get("transactionInput")
-#     txn_value = variables.get("value")
-#
-#     if txn_input:
-#         txn_input = bytes.fromhex(txn_input[2:])
-#
-#     if not tx_hash:
-#         return task.failure(
-#             "Transaction hash not provided",
-#             "Transaction hash is missing from the variables",
-#             3,
-#             15000,
-#         )
-#
-#     is_transaction_same = check_transaction_data(tx_hash, txn_value, txn_input)
-#
-#     if not is_transaction_same:
-#         return task.failure(
-#             "Transaction not confirmed",
-#             "The transaction has not been confirmed on the blockchain",
-#             3,
-#             15000,
-#         )
-#
-#     transaction_success = check_transaction_status(tx_hash)
-#     if not transaction_success:
-#         return task.bpmn_error(
-#             "transaction_failed_onchain",
-#             "Transaction receipt status is not success in blockchain",
-#             variables,
-#         )
-#     return task.complete(variables)
+def handle_task(task: ExternalTask) -> TaskResult:
+    variables = task.get_variables()
+    target_token_address = variables.get("targetTokenAddress")
+    target_price = variables.get("targetPrice")
+    target_pool_address = variables.get("targetPoolAddress")
+    target_token_is_native = variables.get("targetTokenIsNative")
+
+    if not target_token_address or not target_price or not target_pool_address:
+        return task.failure(
+            "Missing variables",
+            "The required variables are missing from the task",
+            0,
+            15000,
+        )
+
+    tx_hash = fix_price_to_target(
+        target_token_address, target_price, target_pool_address, target_token_is_native
+    )
+    return task.complete({"transactionHash": tx_hash})
 
 
 def get_pool_reserves(pool_contract, target_token_address):
@@ -214,14 +198,6 @@ def execute_swap(
 
 
 if __name__ == "__main__":
-    # ExternalTaskWorker(
-    #     worker_id="1", base_url=CAMUNDA_URL, config=CAMUNDA_CLIENT_CONFIG
-    # ).subscribe([TOPIC_NAME], handle_task)
-    print(
-        fix_price_to_target(
-            "0x80D1f6DAFC9c13E9d19aEDF75e3c1E2586d4a2a5",
-            0.003407,
-            "0xe2005c7718f3849f39c65b8ea93c7a7030aec463",
-            True,
-        )
-    )
+    ExternalTaskWorker(
+        worker_id="1", base_url=CAMUNDA_URL, config=CAMUNDA_CLIENT_CONFIG
+    ).subscribe([TOPIC_NAME], handle_task)
