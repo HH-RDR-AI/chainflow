@@ -128,7 +128,7 @@ menu:
         ],
     }
   - { title: Ecosytem, url: "#ecosystem" }
-  - { title: Docs, url: https://docs.dex.guru/ }
+  - { title: Docs, url: https://docs.gurunetwork.ai/ }
 
 aside:
   - { title: Flow Orchestraror App, url: https://warehouse.dex.guru }
