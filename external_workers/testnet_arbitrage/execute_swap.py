@@ -1,8 +1,8 @@
 import json
 from collections import namedtuple
 from functools import cache
-from pathlib import Path
 from math import sqrt
+from pathlib import Path
 from time import time
 from typing import Literal
 
@@ -40,12 +40,28 @@ def get_router_contract(router_address: ChecksumAddress):
     return router_contract
 
 
+@cache
+def get_pool_tokens(pool_contract):
+    return (
+        w3.to_checksum_address(pool_contract.functions.token0().call()),
+        w3.to_checksum_address(pool_contract.functions.token1().call()),
+    )
+
+
+@cache
+def get_token_decimals(token_address: ChecksumAddress) -> int:
+    with open(Path(__file__).parent / "erc20_abi.json") as f:
+        erc20_contract = w3.eth.contract(
+            address=w3.to_checksum_address(token_address), abi=json.load(f)
+        )
+    return erc20_contract.functions.decimals().call()
+
+
 def handle_task(task: ExternalTask) -> TaskResult:
     variables = task.get_variables()
     target_token_address = variables.get("targetTokenAddress")
     target_price = variables.get("targetPrice")
     target_pool_address = variables.get("targetPoolAddress")
-    target_token_is_native = variables.get("targetTokenIsNative")
 
     if not target_token_address or not target_price or not target_pool_address:
         return task.failure(
@@ -56,7 +72,7 @@ def handle_task(task: ExternalTask) -> TaskResult:
         )
 
     tx_hash = fix_price_to_target(
-        target_token_address, target_price, target_pool_address, target_token_is_native
+        target_token_address, target_price, target_pool_address
     )
     return task.complete({"transactionHash": tx_hash})
 
@@ -76,27 +92,9 @@ def get_pool_reserves(pool_contract, target_token_address):
     return Reserves(target_token_reserve, other_token_reserve)
 
 
-@cache
-def get_pool_tokens(pool_contract):
-    return (
-        w3.to_checksum_address(pool_contract.functions.token0().call()),
-        w3.to_checksum_address(pool_contract.functions.token1().call()),
-    )
-
-
-@cache
-def get_token_decimals(token_address: ChecksumAddress) -> int:
-    with open(Path(__file__).parent / "erc20_abi.json") as f:
-        erc20_contract = w3.eth.contract(
-            address=w3.to_checksum_address(token_address), abi=json.load(f)
-        )
-    return erc20_contract.functions.decimals().call()
-
-
 def calculate_swap_amounts(
     target_price, reserves, action: Literal["buy", "sell"]
 ) -> float:
-
     k = reserves.target_token_reserve * reserves.other_token_reserve
     target_token_target_reserve = sqrt(k / target_price)
     other_token_target_reserve = k / target_token_target_reserve
@@ -113,7 +111,6 @@ def fix_price_to_target(
     target_token_address: str,
     target_price: float,
     target_pool_address: str,
-    target_token_is_native: bool,
 ):
     target_pool_address = w3.to_checksum_address(target_pool_address)
     target_token_address = w3.to_checksum_address(target_token_address)
@@ -142,19 +139,22 @@ def fix_price_to_target(
         amount = calculate_swap_amounts(target_price, reserves, action)
         path = [pool_tokens[target_token_index], pool_tokens[1 - target_token_index]]
 
-    tx_hash = execute_swap(amount, path, target_token_is_native, action)
+    tx_hash = execute_swap(target_token_address, amount, path, action)
     return tx_hash
 
 
 def execute_swap(
+    target_token_address: str,
     amount: float,
     path: list[str],
-    target_token_is_native: bool,
     action: Literal["buy", "sell"],
 ):
     t_now = time()
     deadline = int(t_now + 2 * 60)  # 2 minutes
     router_contract = get_router_contract(ROUTER_ADDRESS)
+    target_token_is_native = (
+        router_contract.functions.WETH().call() == target_token_address
+    )
     amount = int(amount)
     if target_token_is_native:
         if action == "buy":
