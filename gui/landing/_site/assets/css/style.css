@@ -449,11 +449,6 @@ html.open-menu {
     overflow: auto;
   }
 }
-@media (max-width: 640px) {
-  .page-header-menu__list {
-    margin: 0 calc(0px - var(--page-side-padding));
-  }
-}
 .page-header-menu__item {
   margin: 0;
   padding: 0;
