@@ -143,6 +143,11 @@ def fix_price_to_target(
     return tx_hash
 
 
+@cache
+def token_is_native(token_address: str):
+    return token_address == w3.eth.contract.functions.WETH().call()
+
+
 def execute_swap(
     target_token_address: str,
     amount: float,
@@ -152,11 +157,8 @@ def execute_swap(
     t_now = time()
     deadline = int(t_now + 2 * 60)  # 2 minutes
     router_contract = get_router_contract(ROUTER_ADDRESS)
-    target_token_is_native = (
-        router_contract.functions.WETH().call() == target_token_address
-    )
     amount = int(amount)
-    if target_token_is_native:
+    if token_is_native(target_token_address):
         if action == "buy":
             tx_hash = router_contract.functions.swapExactTokensForETH(
                 amount, 0, path, account.address, deadline
