@@ -11,7 +11,7 @@ from camunda.external_task.external_task_worker import ExternalTaskWorker
 from eth_typing import ChecksumAddress
 from web3 import Web3
 
-from external_workers.testnet_arbitrage.config import (
+from config import (
     WEB3_URL,
     CAMUNDA_URL,
     TOPIC_NAME,
@@ -59,9 +59,9 @@ def get_token_decimals(token_address: ChecksumAddress) -> int:
 
 def handle_task(task: ExternalTask) -> TaskResult:
     variables = task.get_variables()
-    target_token_address = variables.get("targetTokenAddress")
-    target_price = variables.get("targetPrice")
-    target_pool_address = variables.get("targetPoolAddress")
+    target_token_address = variables.get("token_address")
+    target_price = variables.get("target_price")
+    target_pool_address = variables.get("pool_address")
 
     if not target_token_address or not target_price or not target_pool_address:
         return task.failure(
@@ -74,7 +74,7 @@ def handle_task(task: ExternalTask) -> TaskResult:
     tx_hash = fix_price_to_target(
         target_token_address, target_price, target_pool_address
     )
-    return task.complete({"transactionHash": tx_hash})
+    return task.complete({"transactionHash": tx_hash.hex()})
 
 
 def get_pool_reserves(pool_contract, target_token_address):
