@@ -136,5 +136,5 @@ aside:
 # Generate social links in footer.
 social_links:
   - { platform: twitter, user_url: "https://twitter.com/xgurunetwork" }
-  - { platform: telegram, user_url: "https://t.me/gurunetwork_ai" }
+  - { platform: telegram, user_url: "https://t.me/dexguru" }
   - { platform: discord, user_url: "https://discord.gg/dPW8fzwzz9" }
