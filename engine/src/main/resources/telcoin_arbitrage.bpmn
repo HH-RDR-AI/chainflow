@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1amw9xt" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.15.2" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1amw9xt" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.20.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.20.0">
   <bpmn:process id="TelcoinArbitrage" name="TelcoinArbitrage" isExecutable="true" camunda:historyTimeToLive="180">
-    <bpmn:startEvent id="StartEvent_1" camunda:initiator="camunda_user_id">
+    <bpmn:startEvent id="start_tel_testnet_arbitrage" name="Start Tel Testnet Arbitrage" camunda:initiator="camunda_user_id">
       <bpmn:extensionElements>
         <camunda:formData>
           <camunda:formField id="token_address" label="Target token address" type="string" defaultValue="0x80d1f6dafc9c13e9d19aedf75e3c1e2586d4a2a5" />
@@ -53,7 +53,7 @@
     <bpmn:sequenceFlow id="Flow_0t8ajho" sourceRef="Activity_0ef52lm" targetRef="Gateway_0x8i6s6" />
     <bpmn:sequenceFlow id="Flow_1cgsyqj" sourceRef="Activity_15govpe" targetRef="Gateway_0x8i6s6" />
     <bpmn:sequenceFlow id="Flow_0y1rjni" sourceRef="Event_0yssuii" targetRef="Gateway_115d2bw" />
-    <bpmn:sequenceFlow id="Flow_04o5ic0" sourceRef="StartEvent_1" targetRef="Event_0yssuii" />
+    <bpmn:sequenceFlow id="Flow_04o5ic0" sourceRef="start_tel_testnet_arbitrage" targetRef="Event_0yssuii" />
     <bpmn:scriptTask id="Activity_1bd8cj1" name="Calculate price delta" scriptFormat="javascript">
       <bpmn:incoming>Flow_1qebca7</bpmn:incoming>
       <bpmn:outgoing>Flow_11gryoz</bpmn:outgoing>
@@ -97,16 +97,25 @@ execution.setVariable('price_delta', priceDelta);</bpmn:script>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="TelcoinArbitrage">
-      <bpmndi:BPMNShape id="TextAnnotation_083xe73_di" bpmnElement="TextAnnotation_083xe73">
-        <dc:Bounds x="1640" y="210" width="290" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="start_tel_testnet_arbitrage">
         <dc:Bounds x="192" y="82" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="172" y="125" width="79" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_17hjsn1_di" bpmnElement="Activity_15govpe">
         <dc:Bounds x="640" y="540" width="100" height="80" />
         <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0re019j_di" bpmnElement="Activity_1s57yv7">
+        <dc:Bounds x="1510" y="360" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0fu707s_di" bpmnElement="Event_0yssuii">
+        <dc:Bounds x="1292" y="202" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1229" y="236" width="62" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1as7vrs_di" bpmnElement="Activity_0ef52lm">
         <dc:Bounds x="640" y="360" width="100" height="80" />
@@ -114,6 +123,16 @@ execution.setVariable('price_delta', priceDelta);</bpmn:script>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_01maz37_di" bpmnElement="Gateway_115d2bw">
         <dc:Bounds x="425" y="468" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1l3spku_di" bpmnElement="Activity_1bd8cj1">
+        <dc:Bounds x="1010" y="360" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_00vbyqk_di" bpmnElement="Gateway_0x8i6s6">
+        <dc:Bounds x="845" y="375" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0ylm00v_di" bpmnElement="Gateway_0ylm00v" isMarkerVisible="true">
+        <dc:Bounds x="1285" y="375" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_0nuxj3r_di" bpmnElement="TextAnnotation_0nuxj3r">
         <dc:Bounds x="510" y="271" width="170" height="58" />
@@ -123,30 +142,10 @@ execution.setVariable('price_delta', priceDelta);</bpmn:script>
         <dc:Bounds x="410" y="670" width="220" height="84" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_00vbyqk_di" bpmnElement="Gateway_0x8i6s6">
-        <dc:Bounds x="845" y="375" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0re019j_di" bpmnElement="Activity_1s57yv7">
-        <dc:Bounds x="1510" y="360" width="100" height="80" />
+      <bpmndi:BPMNShape id="TextAnnotation_083xe73_di" bpmnElement="TextAnnotation_083xe73">
+        <dc:Bounds x="1640" y="210" width="290" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0ylm00v_di" bpmnElement="Gateway_0ylm00v" isMarkerVisible="true">
-        <dc:Bounds x="1285" y="375" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0fu707s_di" bpmnElement="Event_0yssuii">
-        <dc:Bounds x="1292" y="202" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1229" y="236" width="62" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1l3spku_di" bpmnElement="Activity_1bd8cj1">
-        <dc:Bounds x="1010" y="360" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_12hruwj_di" bpmnElement="Association_12hruwj">
-        <di:waypoint x="1591" y="360" />
-        <di:waypoint x="1645" y="290" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1qebca7_di" bpmnElement="Flow_1qebca7">
         <di:waypoint x="895" y="400" />
         <di:waypoint x="1010" y="400" />
@@ -189,14 +188,6 @@ execution.setVariable('price_delta', priceDelta);</bpmn:script>
         <di:waypoint x="1310" y="100" />
         <di:waypoint x="1310" y="202" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_0b6aocx_di" bpmnElement="Association_0b6aocx">
-        <di:waypoint x="640" y="391" />
-        <di:waypoint x="576" y="329" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_17u4yee_di" bpmnElement="Association_17u4yee">
-        <di:waypoint x="646" y="619" />
-        <di:waypoint x="588" y="670" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11gryoz_di" bpmnElement="Flow_11gryoz">
         <di:waypoint x="1110" y="400" />
         <di:waypoint x="1285" y="400" />
@@ -211,6 +202,18 @@ execution.setVariable('price_delta', priceDelta);</bpmn:script>
       <bpmndi:BPMNEdge id="Flow_02e3upy_di" bpmnElement="Flow_02e3upy">
         <di:waypoint x="1310" y="375" />
         <di:waypoint x="1310" y="238" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_0b6aocx_di" bpmnElement="Association_0b6aocx">
+        <di:waypoint x="640" y="391" />
+        <di:waypoint x="576" y="329" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_17u4yee_di" bpmnElement="Association_17u4yee">
+        <di:waypoint x="646" y="619" />
+        <di:waypoint x="588" y="670" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_12hruwj_di" bpmnElement="Association_12hruwj">
+        <di:waypoint x="1591" y="360" />
+        <di:waypoint x="1645" y="290" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
