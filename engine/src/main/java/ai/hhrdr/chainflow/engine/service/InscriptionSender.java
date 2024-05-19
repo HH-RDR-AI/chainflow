@@ -30,7 +30,7 @@ public class InscriptionSender implements DisposableBean {
 
     @PostConstruct
     public void init() {
-        executorService = Executors.newFixedThreadPool(10);  // Suitable number based on your load
+        executorService = Executors.newFixedThreadPool(10);  // TODO: move to env
     }
 
     public void send(HistoryEvent event, String camundaEventType) {

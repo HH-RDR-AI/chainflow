@@ -20,9 +20,7 @@ public class CustomHistoryConfiguration extends DefaultHistoryConfiguration {
 
     @Override
     public void preInit(SpringProcessEngineConfiguration configuration) {
-        super.preInit(configuration); // Call the parent method to keep existing configurations
-
-        // Register the composite history event handler
+        super.preInit(configuration);
         configuration.getCustomHistoryEventHandlers().add(compositeHistoryEventHandler);
     }
 }
