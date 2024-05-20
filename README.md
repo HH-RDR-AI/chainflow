@@ -76,13 +76,13 @@ for applications, enhancing user engagement and process management.
 
 ## Project Structure
 
-guru-framework/
-│
-├── contracts/ # Smart contracts for blockchain interactions
-├── engine/ # Core BBPA engine for process automation
-├── external_workers/ # Individual agents for non-custodial execution and compute
-├── gui/ # User interface components
-└── README.md # This file
+guru-framework/    
+│    
+├── contracts/ # Smart contracts for blockchain interactions    
+├── engine/ # Core BBPA engine for process automation    
+├── external_workers/ # Individual agents for non-custodial execution and compute    
+├── gui/ # User interface components    
+└── README.md # This file    
 
 ## Getting Started
 
@@ -90,8 +90,8 @@ To begin using the Guru Framework, clone the repository and follow the setup ins
 directory.
 
 ```bash
-git clone https://github.com/your-guru-framework-repo.git
-cd guru-framework
+git clone https://github.com/HH-RDR-AI/chainflow.git
+cd chainflow
 ```
 
 ## Prerequisites
